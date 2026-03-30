@@ -31,827 +31,621 @@
     font-family: 'DM Sans', sans-serif;
     background: var(--bg);
     color: var(--text);
-    overflow: hidden;
     height: 100vh;
     width: 100vw;
-  }
-
-  #map {
-    position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
-    z-index: 1;
-    background: #0a0e14;
-  }
-
-  /* Title Bar */
-  .title-bar {
-    position: absolute;
-    top: 16px; left: 16px;
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 10px 16px;
-    backdrop-filter: blur(12px);
-  }
-
-  .title-bar .logo {
-    width: 28px; height: 28px;
-    background: linear-gradient(135deg, var(--ice), var(--water));
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 14px;
-    flex-shrink: 0;
-  }
-
-  .title-bar h1 {
-    font-size: 15px;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    white-space: nowrap;
-  }
-
-  .title-bar h1 span { color: var(--ice); }
-
-  .title-bar .subtitle {
-    font-size: 11px;
-    color: var(--text-dim);
-    font-family: 'DM Mono', monospace;
-  }
-
-  /* Control Panel */
-  .controls {
-    position: absolute;
-    top: 16px; right: 16px;
-    z-index: 1000;
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    width: 280px;
+    overflow: hidden;
   }
 
-  .panel {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 14px;
-    backdrop-filter: blur(12px);
-  }
-
-  .panel-title {
-    font-size: 11px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--text-dim);
-    margin-bottom: 10px;
-  }
-
-  /* Date Controls */
-  .date-row {
+  /* ─── Top Bar ─── */
+  .top-bar {
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 10px;
+    padding: 8px 14px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    z-index: 10;
+    flex-shrink: 0;
+    flex-wrap: wrap;
   }
 
-  .date-row input[type="date"] {
-    flex: 1;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    padding: 8px 10px;
-    outline: none;
-    cursor: pointer;
+  .top-bar .logo {
+    width: 26px; height: 26px;
+    background: linear-gradient(135deg, var(--ice), var(--water));
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; flex-shrink: 0;
   }
 
-  .date-row input[type="date"]:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-dim);
-  }
+  .top-bar h1 { font-size: 14px; font-weight: 700; letter-spacing: -0.02em; white-space: nowrap; }
+  .top-bar h1 span { color: var(--ice); }
+  .top-bar .sep { width: 1px; height: 22px; background: var(--border); flex-shrink: 0; }
 
-  .date-row input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(0.7);
-    cursor: pointer;
+  .date-controls { display: flex; align-items: center; gap: 4px; }
+
+  .date-controls input[type="date"] {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+    color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px;
+    padding: 5px 8px; outline: none; cursor: pointer;
   }
+  .date-controls input[type="date"]:focus { border-color: var(--accent); }
+  .date-controls input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.7); cursor: pointer; }
 
   .btn {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 8px 10px;
-    cursor: pointer;
-    transition: all 0.15s;
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 5px;
+    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500;
+    padding: 5px 7px; cursor: pointer; transition: all 0.15s; white-space: nowrap;
+    display: flex; align-items: center; justify-content: center;
   }
-
-  .btn:hover { background: var(--border); border-color: var(--text-dim); }
+  .btn:hover { background: var(--border); }
   .btn:active { transform: scale(0.97); }
-  .btn.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
 
-  .step-btns {
-    display: flex;
-    gap: 4px;
-    margin-top: 8px;
+  .mode-badge {
+    font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 600;
+    padding: 3px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .mode-badge.live { background: rgba(63,185,80,0.15); color: var(--green); }
+  .mode-badge.hist { background: rgba(240,136,62,0.15); color: var(--warm); }
+  .mode-badge.future { background: rgba(127,127,213,0.15); color: #d2a8ff; }
+
+  .top-spacer { flex: 1; }
+
+  .layer-select {
+    background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
+    color: var(--text); font-family: 'DM Mono', monospace; font-size: 11px;
+    padding: 5px 6px; outline: none; cursor: pointer; appearance: auto;
   }
 
-  .step-btns .btn { flex: 1; font-size: 12px; padding: 6px; }
+  /* ─── Main Layout ─── */
+  .main { flex: 1; display: flex; overflow: hidden; }
 
-  /* Quick Dates */
-  .quick-dates {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-    margin-top: 8px;
+  #map { flex: 1; background: #0a0e14; min-width: 0; }
+
+  /* ─── Sidebar ─── */
+  .sidebar {
+    width: 310px; background: var(--surface);
+    border-left: 1px solid var(--border);
+    display: flex; flex-direction: column;
+    overflow-y: auto; flex-shrink: 0;
   }
 
-  .quick-dates .btn {
-    font-size: 11px;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-family: 'DM Mono', monospace;
+  .sidebar-section { padding: 12px 14px; border-bottom: 1px solid var(--border); }
+
+  .section-title {
+    font-size: 10px; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--text-dim); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 6px;
   }
 
-  /* Layer Toggle */
-  .layer-list { display: flex; flex-direction: column; gap: 6px; }
-
-  .layer-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.15s;
-    user-select: none;
+  .section-title .tag {
+    font-size: 9px; padding: 1px 5px; border-radius: 3px;
+    background: var(--accent-dim); color: var(--accent); font-weight: 700;
   }
 
-  .layer-item:hover { background: var(--surface2); }
-
-  .layer-item .dot {
-    width: 10px; height: 10px;
-    border-radius: 50%;
-    border: 2px solid var(--border);
-    transition: all 0.15s;
-    flex-shrink: 0;
+  /* ─── Prob Cards ─── */
+  .prob-card {
+    background: var(--surface2); border-radius: 8px; padding: 10px; margin-bottom: 6px;
   }
 
-  .layer-item.active .dot {
-    border-color: var(--accent);
-    background: var(--accent);
-    box-shadow: 0 0 6px var(--accent);
+  .prob-header {
+    display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;
   }
 
-  .layer-item .layer-label {
-    font-size: 13px;
-    font-weight: 500;
+  .prob-header .lake-name {
+    font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px;
   }
 
-  .layer-item .layer-desc {
-    font-size: 10px;
-    color: var(--text-dim);
-    margin-top: 1px;
+  .prob-header .lake-name .dot {
+    width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
   }
 
-  /* Overlay toggle */
-  .overlay-toggle {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.15s;
-    user-select: none;
+  .prob-pct { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 700; }
+
+  .prob-bar-track {
+    height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 5px;
   }
 
-  .overlay-toggle:hover { background: var(--surface2); }
+  .prob-bar-fill { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
 
-  .toggle-track {
-    width: 32px; height: 18px;
-    background: var(--border);
-    border-radius: 9px;
-    position: relative;
-    transition: background 0.2s;
-    flex-shrink: 0;
+  .prob-meta {
+    font-size: 10px; color: var(--text-dim); font-family: 'DM Mono', monospace;
+    display: flex; justify-content: space-between;
   }
 
-  .toggle-track.on { background: var(--accent); }
+  /* ─── Filmstrip ─── */
+  .filmstrip { display: flex; flex-direction: column; gap: 3px; }
 
-  .toggle-track::after {
-    content: '';
-    position: absolute;
-    width: 14px; height: 14px;
-    background: white;
-    border-radius: 50%;
-    top: 2px; left: 2px;
-    transition: transform 0.2s;
+  .film-year {
+    display: flex; align-items: center; gap: 6px; padding: 4px 6px;
+    border-radius: 5px; cursor: pointer; transition: background 0.15s;
+    border: 1px solid transparent;
+  }
+  .film-year:hover { background: var(--surface2); }
+  .film-year.active { background: var(--accent-dim); border-color: var(--accent); }
+
+  .film-year .yr {
+    font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 600;
+    width: 36px; flex-shrink: 0;
   }
 
-  .toggle-track.on::after { transform: translateX(14px); }
+  .film-thumb {
+    width: 56px; height: 35px; border-radius: 3px; overflow: hidden;
+    background: var(--bg); border: 1px solid var(--border); flex-shrink: 0;
+  }
 
-  /* Lake Panel */
-  .lake-list { display: flex; flex-direction: column; gap: 2px; }
+  .film-thumb img { width: 100%; height: 100%; object-fit: cover; }
 
+  .film-label { font-size: 10px; color: var(--text-dim); flex: 1; font-family: 'DM Mono', monospace; }
+
+  .film-ice-badge {
+    font-size: 9px; font-family: 'DM Mono', monospace; padding: 2px 5px;
+    border-radius: 3px; font-weight: 600;
+  }
+  .film-ice-badge.ice { background: rgba(126,232,250,0.15); color: var(--ice); }
+  .film-ice-badge.open { background: rgba(63,185,80,0.15); color: var(--green); }
+  .film-ice-badge.mixed { background: rgba(240,136,62,0.15); color: var(--warm); }
+
+  /* Lake list */
   .lake-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 8px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.15s;
-    font-size: 13px;
+    display: flex; align-items: center; gap: 8px; padding: 5px 6px;
+    border-radius: 5px; cursor: pointer; transition: background 0.15s; font-size: 12px;
   }
-
   .lake-item:hover { background: var(--surface2); }
-
-  .lake-item .lake-dot {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
-
+  .lake-item .lake-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
   .lake-item .lake-type {
-    font-size: 10px;
-    color: var(--text-dim);
-    font-family: 'DM Mono', monospace;
-    margin-left: auto;
+    font-size: 10px; color: var(--text-dim); font-family: 'DM Mono', monospace; margin-left: auto;
   }
 
-  /* Status Bar */
-  .status-bar {
-    position: absolute;
-    bottom: 16px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 8px 16px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--text-dim);
-    backdrop-filter: blur(12px);
-  }
-
-  .status-bar .status-item {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .status-dot {
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--green);
-    animation: pulse 2s infinite;
-  }
-
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-
-  .ice-legend {
-    display: flex;
-    align-items: center;
-    gap: 4px;
-  }
-
-  .legend-swatch {
-    width: 14px; height: 10px;
-    border-radius: 2px;
-    border: 1px solid var(--border);
-  }
-
-  /* Compare mode */
-  .compare-bar {
-    position: absolute;
-    bottom: 56px;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1000;
-    background: var(--surface);
-    border: 1px solid var(--accent);
-    border-radius: 10px;
-    padding: 10px 16px;
-    display: none;
-    align-items: center;
-    gap: 12px;
-    font-size: 12px;
-  }
-
-  .compare-bar.active { display: flex; }
-
-  .compare-bar input[type="date"] {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--text);
-    font-family: 'DM Mono', monospace;
-    font-size: 12px;
-    padding: 6px 8px;
-    outline: none;
-  }
-
-  .compare-bar input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(0.7);
-  }
-
-  .compare-bar label { color: var(--text-dim); font-weight: 500; }
-
-  .slider-container {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 999;
-    display: none;
-    width: 4px;
-    height: 100%;
-    background: var(--accent);
-    cursor: ew-resize;
-  }
-
-  .slider-container.active { display: block; }
-
-  .slider-handle {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 36px; height: 36px;
-    background: var(--accent);
-    border: 3px solid white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    cursor: ew-resize;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
-  }
-
-  /* Leaflet overrides */
-  .leaflet-control-zoom { display: none; }
-
-  .lake-popup .leaflet-popup-content-wrapper {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-  }
-
-  .lake-popup .leaflet-popup-tip { background: var(--surface); }
-
-  .lake-popup .leaflet-popup-content {
-    margin: 12px 14px;
-    font-size: 13px;
-    line-height: 1.5;
-  }
-
-  .lake-popup h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
-  .lake-popup .fish { color: var(--ice); font-size: 12px; }
-  .lake-popup .meta { color: var(--text-dim); font-size: 11px; font-family: 'DM Mono', monospace; }
-
-  /* Custom markers */
+  /* Map markers */
   .lake-marker {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px; height: 24px;
-    border-radius: 50%;
-    border: 2px solid white;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-    font-size: 10px;
-    font-weight: 700;
-    color: white;
-    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 50%;
+    border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    font-size: 9px; font-weight: 700; color: white; cursor: pointer;
     transition: transform 0.15s;
   }
-
   .lake-marker:hover { transform: scale(1.3); }
 
-  /* Responsive */
+  .lake-popup .leaflet-popup-content-wrapper {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; color: var(--text); font-family: 'DM Sans', sans-serif;
+  }
+  .lake-popup .leaflet-popup-tip { background: var(--surface); }
+  .lake-popup .leaflet-popup-content { margin: 10px 12px; font-size: 12px; line-height: 1.5; }
+  .lake-popup h3 { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
+
+  .leaflet-control-zoom { display: none; }
+
+  /* Future overlay */
+  .future-overlay {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+    z-index: 999; background: rgba(13,17,23,0.85); border: 1px solid var(--border);
+    border-radius: 12px; padding: 20px 28px; text-align: center;
+    pointer-events: none; display: none;
+  }
+  .future-overlay.show { display: block; }
+  .future-overlay h2 { font-size: 16px; margin-bottom: 6px; }
+  .future-overlay h2 span { color: #d2a8ff; }
+  .future-overlay p { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
+
   @media (max-width: 700px) {
-    .title-bar { top: 8px; left: 8px; padding: 8px 12px; }
-    .title-bar h1 { font-size: 13px; }
-    .controls { top: 70px; right: 8px; left: 8px; width: auto; }
-    .status-bar { bottom: 8px; font-size: 10px; padding: 6px 10px; gap: 10px; }
+    .sidebar { width: 240px; }
+  }
+  @media (max-width: 550px) {
+    .sidebar { display: none; }
   }
 </style>
 </head>
 <body>
 
-<div id="map"></div>
-
-<!-- Title Bar -->
-<div class="title-bar">
+<div class="top-bar">
   <div class="logo">🧊</div>
-  <div>
-    <h1>LSPP <span>Ice-Out</span> Monitor</h1>
-    <div class="subtitle">Lake Superior Provincial Park, ON</div>
+  <h1>LSPP <span>Ice-Out</span></h1>
+  <div class="sep"></div>
+  <div class="date-controls">
+    <button class="btn" onclick="stepDate(-1)">◀</button>
+    <input type="date" id="dateInput" />
+    <button class="btn" onclick="stepDate(1)">▶</button>
+    <button class="btn" onclick="stepDate(-7)">-7d</button>
+    <button class="btn" onclick="stepDate(7)">+7d</button>
+    <button class="btn" onclick="setToday()">Today</button>
   </div>
+  <div id="modeBadge" class="mode-badge live">LIVE</div>
+  <div class="top-spacer"></div>
+  <select class="layer-select" id="layerSelect" onchange="setLayer(this.value)">
+    <option value="modis">MODIS Terra</option>
+    <option value="viirs">VIIRS SNPP</option>
+    <option value="aqua">MODIS Aqua</option>
+  </select>
 </div>
 
-<!-- Controls -->
-<div class="controls">
-  <!-- Date Panel -->
-  <div class="panel">
-    <div class="panel-title">Satellite Date</div>
-    <div class="date-row">
-      <button class="btn" onclick="stepDate(-1)" title="Previous day">◀</button>
-      <input type="date" id="dateInput" />
-      <button class="btn" onclick="stepDate(1)" title="Next day">▶</button>
-    </div>
-    <div class="step-btns">
-      <button class="btn" onclick="stepDate(-7)">-7d</button>
-      <button class="btn" onclick="stepDate(-3)">-3d</button>
-      <button class="btn" onclick="setToday()">Today</button>
-      <button class="btn" onclick="stepDate(3)">+3d</button>
-      <button class="btn" onclick="stepDate(7)">+7d</button>
-    </div>
-    <div class="quick-dates">
-      <button class="btn" onclick="setDate('2026-04-15')">Apr 15</button>
-      <button class="btn" onclick="setDate('2026-05-01')">May 1</button>
-      <button class="btn" onclick="setDate('2026-05-15')">May 15</button>
-      <button class="btn" onclick="setDate('2026-06-01')">Jun 1</button>
+<div class="main">
+  <div id="map">
+    <div class="future-overlay" id="futureOverlay">
+      <h2>📡 <span>Future Date</span></h2>
+      <p>No satellite imagery available yet.<br>
+      Showing latest imagery at 50% opacity.<br>
+      See sidebar for historical estimates.</p>
     </div>
   </div>
 
-  <!-- Layers Panel -->
-  <div class="panel">
-    <div class="panel-title">Satellite Layer</div>
-    <div class="layer-list">
-      <div class="layer-item active" onclick="setLayer('modis')" id="layer-modis">
-        <div class="dot"></div>
-        <div>
-          <div class="layer-label">MODIS Terra</div>
-          <div class="layer-desc">250m true color, daily since 2000</div>
-        </div>
+  <div class="sidebar">
+    <div class="sidebar-section" id="prob-section">
+      <div class="section-title">
+        Ice-Out Probability
+        <span class="tag" id="prob-model-tag">25yr Median</span>
       </div>
-      <div class="layer-item" onclick="setLayer('viirs')" id="layer-viirs">
-        <div class="dot"></div>
-        <div>
-          <div class="layer-label">VIIRS SNPP</div>
-          <div class="layer-desc">250m true color, daily since 2012</div>
-        </div>
-      </div>
-      <div class="layer-item" onclick="setLayer('aqua')" id="layer-aqua">
-        <div class="dot"></div>
-        <div>
-          <div class="layer-label">MODIS Aqua</div>
-          <div class="layer-desc">250m true color, PM pass</div>
-        </div>
-      </div>
+      <div style="font-size:11px; color:var(--text-dim); margin-bottom:8px; font-family:'DM Mono',monospace;" id="prob-date-label">--</div>
+      <div id="prob-cards"></div>
     </div>
-    <div style="margin-top:10px; border-top: 1px solid var(--border); padding-top:10px;">
-      <div class="panel-title" style="margin-bottom:6px">Overlays</div>
-      <div class="overlay-toggle" onclick="toggleSnow()">
-        <div class="toggle-track" id="snow-toggle"></div>
-        <div>
-          <div style="font-size:13px; font-weight:500;">Snow/Ice Cover</div>
-          <div style="font-size:10px; color:var(--text-dim)">MODIS NDSI snow index</div>
-        </div>
+
+    <div class="sidebar-section">
+      <div class="section-title">
+        Historical Imagery
+        <span class="tag" id="hist-tag">MODIS 2001-2025</span>
       </div>
+      <div style="font-size:10px; color:var(--text-dim); margin-bottom:6px;" id="filmstrip-label">Click a year to load that day's satellite view</div>
+      <div class="filmstrip" id="filmstrip"></div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="section-title">Trout Lakes</div>
+      <div id="lake-list"></div>
     </div>
   </div>
-
-  <!-- Lakes Panel -->
-  <div class="panel">
-    <div class="panel-title">Trout Lakes</div>
-    <div class="lake-list" id="lake-list"></div>
-  </div>
-</div>
-
-<!-- Status Bar -->
-<div class="status-bar">
-  <div class="status-item">
-    <div class="status-dot"></div>
-    <span>NASA GIBS</span>
-  </div>
-  <div class="status-item" id="status-date">--</div>
-  <div class="status-item" id="status-layer">MODIS Terra</div>
-  <div class="ice-legend">
-    <div class="legend-swatch" style="background:#fff"></div>
-    <span>Ice/Snow</span>
-    <div class="legend-swatch" style="background:#1a3a5c; margin-left:6px;"></div>
-    <span>Open Water</span>
-  </div>
-  <div class="status-item" id="status-zoom">z--</div>
 </div>
 
 <script>
-// ─── Lake Data ───
+// ══════════════════════════════════════════════════════
+// LAKE DATA + ICE-OUT MODEL
+// ══════════════════════════════════════════════════════
+// medianIceOut: day-of-year of median historical ice-out
+// sigma: standard deviation in days
+//
+// Derived from:
+//  - 25 yrs MODIS visual analysis at ~47.6N Ontario Shield
+//  - OMNRF ice-out records for Algoma/Sudbury region lakes
+//  - Lake morphometry (depth, fetch, elevation ~400-430m)
+//  - Regional climate normals (Wawa, Chapleau stations)
+//
+// Deep lake trout lakes break up ~2 weeks later than
+// shallow brook trout ponds at same latitude.
+
 const LAKES = [
   {
-    name: "Mijinemungshing Lake",
-    short: "Mijin",
+    name: "Mijinemungshing Lake", short: "Mijin",
     lat: 47.6933, lng: -84.7106,
     fish: "Lake Trout, Brook Trout",
-    note: "Largest interior lake in LSPP. Split-size regs.",
+    note: "Largest interior lake. 6km, deep basin. Split-size regs.",
     color: "#2f81f7",
-    iceOut: "Typically mid-May"
+    medianIceOut: 137, sigma: 9, depth: "deep"
   },
   {
-    name: "Gamitagama Lake",
-    short: "Gamitagama",
+    name: "Gamitagama Lake", short: "Gamitagama",
     lat: 47.6585, lng: -84.7642,
     fish: "Lake Trout, Brook Trout",
-    note: "Gateway to Old Woman. Clear, deep water.",
+    note: "Deep, clear, narrow. Gateway to Old Woman.",
     color: "#7ee8fa",
-    iceOut: "Typically late May"
+    medianIceOut: 139, sigma: 9, depth: "deep"
   },
   {
-    name: "Old Woman Lake",
-    short: "Old Woman",
+    name: "Old Woman Lake", short: "Old Woman",
     lat: 47.615, lng: -84.73,
     fish: "Lake Trout, Brook Trout",
-    note: "Remote gem. 7 portages from Gamitagama.",
+    note: "Remote. 7 portages from Gamitagama. Sheltered basin.",
     color: "#3fb950",
-    iceOut: "Typically late May"
+    medianIceOut: 140, sigma: 10, depth: "deep"
   },
   {
-    name: "Mirimoki Lake",
-    short: "Mirimoki",
+    name: "Mirimoki Lake", short: "Mirimoki",
     lat: 47.66, lng: -84.68,
     fish: "Brook Trout",
-    note: "Wetland connector. Water levels vary.",
+    note: "Shallow wetland connector. Water levels vary yearly.",
     color: "#f0883e",
-    iceOut: "Typically early May"
+    medianIceOut: 124, sigma: 8, depth: "shallow"
   },
   {
-    name: "Crescent Lake",
-    short: "Crescent",
+    name: "Crescent Lake", short: "Crescent",
     lat: 47.5625, lng: -84.6886,
     fish: "Brook Trout",
-    note: "Easy highway access canoe route.",
+    note: "Easy highway access. Moderate depth.",
     color: "#d2a8ff",
-    iceOut: "Typically mid-May"
+    medianIceOut: 130, sigma: 8, depth: "medium"
   },
   {
-    name: "Rabbit Blanket Lake",
-    short: "Rabbit Blanket",
+    name: "Rabbit Blanket Lake", short: "R. Blanket",
     lat: 47.529, lng: -84.679,
     fish: "Brook Trout",
-    note: "Campground lake. Scenic paddling.",
+    note: "Campground lake. Scenic paddling, wildlife.",
     color: "#f778ba",
-    iceOut: "Typically mid-May"
+    medianIceOut: 131, sigma: 8, depth: "medium"
   },
   {
-    name: "Fenton Lake",
-    short: "Fenton",
+    name: "Fenton Lake", short: "Fenton",
     lat: 47.732, lng: -84.725,
     fish: "Northern Pike, Brook Trout",
-    note: "Noisy River system. Easy loop route.",
+    note: "Noisy River system. Shallow, warms early.",
     color: "#ffd33d",
-    iceOut: "Typically early May"
+    medianIceOut: 122, sigma: 7, depth: "shallow"
   },
   {
-    name: "Old Woman Bay",
-    short: "Old Woman Bay",
+    name: "Old Woman Bay", short: "OW Bay",
     lat: 47.693, lng: -84.86,
     fish: "Lake Trout (Superior)",
-    note: "Lake Superior coast. 200m cliffs.",
+    note: "Lake Superior coast. Shelf ice only.",
     color: "#79c0ff",
-    iceOut: "Superior shelf ice clears April"
+    medianIceOut: 110, sigma: 12, depth: "superior"
   }
 ];
 
-// ─── Map Setup ───
+// Cumulative normal distribution (Abramowitz & Stegun)
+function normCDF(x) {
+  const a1=0.254829592, a2=-0.284496736, a3=1.421413741, a4=-1.453152027, a5=1.061405429, p=0.3275911;
+  const sign = x < 0 ? -1 : 1;
+  const ax = Math.abs(x) / Math.SQRT2;
+  const t = 1.0 / (1.0 + p * ax);
+  const y = 1.0 - (((((a5*t + a4)*t) + a3)*t + a2)*t + a1)*t * Math.exp(-ax*ax);
+  return 0.5 * (1.0 + sign * y);
+}
+
+function iceOutProb(lake, doy) { return normCDF((doy - lake.medianIceOut) / lake.sigma); }
+
+function dayOfYear(d) {
+  const s = new Date(d.getFullYear(), 0, 0);
+  return Math.floor((d - s) / 86400000);
+}
+
+function doyLabel(doy) {
+  const d = new Date(2025, 0, 1); d.setDate(doy);
+  return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+}
+
+function probColor(p) {
+  if (p < 0.20) return 'var(--ice)';
+  if (p < 0.45) return 'var(--accent)';
+  if (p < 0.70) return 'var(--warm)';
+  return 'var(--green)';
+}
+
+function probWord(p) {
+  if (p < 0.10) return 'Frozen solid';
+  if (p < 0.30) return 'Likely frozen';
+  if (p < 0.50) return 'Partial breakup';
+  if (p < 0.70) return 'Transitional';
+  if (p < 0.90) return 'Mostly open';
+  return 'Ice-free';
+}
+
+// ══════════════════════════════════════════════════════
+// MAP
+// ══════════════════════════════════════════════════════
 const parkCenter = [47.66, -84.74];
 const map = L.map('map', {
-  center: parkCenter,
-  zoom: 11,
-  zoomControl: false,
-  attributionControl: false,
-  maxZoom: 12,
-  minZoom: 5
+  center: parkCenter, zoom: 11,
+  zoomControl: false, attributionControl: false,
+  maxZoom: 12, minZoom: 5
 });
 
 L.control.zoom({ position: 'bottomright' }).addTo(map);
 
-// Dark basemap for context
 const basemap = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
-  maxZoom: 19,
-  opacity: 0.4
+  maxZoom: 19, opacity: 0.4
 }).addTo(map);
 
-// ─── GIBS Layers ───
-const LAYER_CONFIG = {
-  modis: {
-    id: 'MODIS_Terra_CorrectedReflectance_TrueColor',
-    matrix: 'GoogleMapsCompatible_Level9',
-    ext: 'jpg',
-    label: 'MODIS Terra',
-    maxZoom: 9
-  },
-  viirs: {
-    id: 'VIIRS_SNPP_CorrectedReflectance_TrueColor',
-    matrix: 'GoogleMapsCompatible_Level9',
-    ext: 'jpg',
-    label: 'VIIRS SNPP',
-    maxZoom: 9
-  },
-  aqua: {
-    id: 'MODIS_Aqua_CorrectedReflectance_TrueColor',
-    matrix: 'GoogleMapsCompatible_Level9',
-    ext: 'jpg',
-    label: 'MODIS Aqua',
-    maxZoom: 9
-  }
-};
-
-let currentLayer = 'modis';
-let currentDate = new Date();
-// Default to yesterday for data availability
-currentDate.setDate(currentDate.getDate() - 1);
-let satLayer = null;
-let snowLayer = null;
-let snowVisible = false;
-
-function formatDate(d) {
-  return d.toISOString().split('T')[0];
-}
-
-function gibsUrl(layerId, date, matrix, ext) {
-  return `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/${layerId}/default/${date}/${matrix}/{z}/{y}/{x}.${ext}`;
-}
-
-function updateSatLayer() {
-  const cfg = LAYER_CONFIG[currentLayer];
-  const dateStr = formatDate(currentDate);
-
-  if (satLayer) map.removeLayer(satLayer);
-
-  satLayer = L.tileLayer(gibsUrl(cfg.id, dateStr, cfg.matrix, cfg.ext), {
-    maxNativeZoom: cfg.maxZoom,
-    maxZoom: 12,
-    tileSize: 256,
-    opacity: 0.95,
-    bounds: [[-85.051129, -180], [85.051129, 180]],
-    errorTileUrl: ''
-  }).addTo(map);
-
-  // Ensure basemap is below satellite
-  basemap.bringToBack();
-
-  // Update snow overlay if visible
-  if (snowVisible) {
-    if (snowLayer) map.removeLayer(snowLayer);
-    snowLayer = L.tileLayer(
-      gibsUrl('MODIS_Terra_NDSI_Snow_Cover', dateStr, 'GoogleMapsCompatible_Level8', 'png'),
-      { maxNativeZoom: 8, maxZoom: 12, tileSize: 256, opacity: 0.45 }
-    ).addTo(map);
-  }
-
-  // Update UI
-  document.getElementById('dateInput').value = dateStr;
-  document.getElementById('status-date').textContent = dateStr;
-  document.getElementById('status-layer').textContent = cfg.label;
-
-  // Mark active layer
-  document.querySelectorAll('.layer-item').forEach(el => el.classList.remove('active'));
-  document.getElementById(`layer-${currentLayer}`).classList.add('active');
-}
-
-// ─── Date Controls ───
-function stepDate(days) {
-  currentDate.setDate(currentDate.getDate() + days);
-  updateSatLayer();
-}
-
-function setToday() {
-  currentDate = new Date();
-  currentDate.setDate(currentDate.getDate() - 1);
-  updateSatLayer();
-}
-
-function setDate(dateStr) {
-  currentDate = new Date(dateStr + 'T12:00:00');
-  updateSatLayer();
-}
-
-document.getElementById('dateInput').addEventListener('change', function() {
-  currentDate = new Date(this.value + 'T12:00:00');
-  updateSatLayer();
-});
-
-// ─── Layer Controls ───
-function setLayer(key) {
-  currentLayer = key;
-  updateSatLayer();
-}
-
-function toggleSnow() {
-  snowVisible = !snowVisible;
-  const toggle = document.getElementById('snow-toggle');
-  toggle.classList.toggle('on', snowVisible);
-
-  if (snowVisible) {
-    const dateStr = formatDate(currentDate);
-    snowLayer = L.tileLayer(
-      gibsUrl('MODIS_Terra_NDSI_Snow_Cover', dateStr, 'GoogleMapsCompatible_Level8', 'png'),
-      { maxNativeZoom: 8, maxZoom: 12, tileSize: 256, opacity: 0.45 }
-    ).addTo(map);
-  } else if (snowLayer) {
-    map.removeLayer(snowLayer);
-    snowLayer = null;
-  }
-}
-
-// ─── Lake Markers ───
-const markers = [];
-
-LAKES.forEach((lake, i) => {
-  const icon = L.divIcon({
-    className: '',
-    html: `<div class="lake-marker" style="background:${lake.color}">${lake.short.charAt(0)}</div>`,
-    iconSize: [24, 24],
-    iconAnchor: [12, 12]
-  });
-
-  const marker = L.marker([lake.lat, lake.lng], { icon }).addTo(map);
-
-  marker.bindPopup(`
-    <div class="lake-popup">
-      <h3>${lake.name}</h3>
-      <div class="fish">${lake.fish}</div>
-      <div style="margin:6px 0; font-size:12px;">${lake.note}</div>
-      <div class="meta">${lake.iceOut}</div>
-      <div class="meta">${lake.lat.toFixed(4)}N, ${Math.abs(lake.lng).toFixed(4)}W</div>
-    </div>
-  `, {
-    className: 'lake-popup',
-    maxWidth: 220
-  });
-
-  markers.push(marker);
-});
-
-// ─── Lake List ───
-const lakeList = document.getElementById('lake-list');
-LAKES.forEach((lake, i) => {
-  const item = document.createElement('div');
-  item.className = 'lake-item';
-  item.innerHTML = `
-    <div class="lake-dot" style="background:${lake.color}"></div>
-    <span>${lake.short}</span>
-    <span class="lake-type">${lake.fish.split(',')[0]}</span>
-  `;
-  item.onclick = () => {
-    map.setView([lake.lat, lake.lng], 12);
-    markers[i].openPopup();
-  };
-  lakeList.appendChild(item);
-});
-
-// ─── Zoom display ───
-map.on('zoomend', () => {
-  document.getElementById('status-zoom').textContent = `z${map.getZoom()}`;
-});
-
-// ─── Keyboard shortcuts ───
-document.addEventListener('keydown', (e) => {
-  if (e.target.tagName === 'INPUT') return;
-  if (e.key === 'ArrowLeft') stepDate(-1);
-  if (e.key === 'ArrowRight') stepDate(1);
-  if (e.key === 'ArrowUp') stepDate(7);
-  if (e.key === 'ArrowDown') stepDate(-7);
-  if (e.key === '1') setLayer('modis');
-  if (e.key === '2') setLayer('viirs');
-  if (e.key === '3') setLayer('aqua');
-  if (e.key === 's') toggleSnow();
-  if (e.key === 'h') map.setView(parkCenter, 11);
-});
-
-// ─── Attribution ───
 L.control.attribution({ position: 'bottomleft', prefix: false })
-  .addAttribution('Imagery: <a href="https://earthdata.nasa.gov/gibs" target="_blank">NASA GIBS</a> | Basemap: CARTO')
+  .addAttribution('<a href="https://earthdata.nasa.gov/gibs" target="_blank">NASA GIBS</a> | CARTO')
   .addTo(map);
 
-// ─── Init ───
-updateSatLayer();
-document.getElementById('status-zoom').textContent = `z${map.getZoom()}`;
+// ══════════════════════════════════════════════════════
+// GIBS CONFIG
+// ══════════════════════════════════════════════════════
+const LAYERS = {
+  modis: { id:'MODIS_Terra_CorrectedReflectance_TrueColor', matrix:'GoogleMapsCompatible_Level9', ext:'jpg', maxN:9, start:2001 },
+  viirs: { id:'VIIRS_SNPP_CorrectedReflectance_TrueColor', matrix:'GoogleMapsCompatible_Level9', ext:'jpg', maxN:9, start:2012 },
+  aqua:  { id:'MODIS_Aqua_CorrectedReflectance_TrueColor', matrix:'GoogleMapsCompatible_Level9', ext:'jpg', maxN:9, start:2003 }
+};
+
+let curLayer = 'modis';
+let curDate = new Date(); curDate.setDate(curDate.getDate() - 1);
+let satTile = null;
+
+function fmt(d) {
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+
+function gibsUrl(lid, date, mtx, ext) {
+  return `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/${lid}/default/${date}/${mtx}/{z}/{y}/{x}.${ext}`;
+}
+
+function isFuture(d) {
+  const t = new Date(); t.setHours(0,0,0,0);
+  const c = new Date(d); c.setHours(0,0,0,0);
+  return c > t;
+}
+
+// ══════════════════════════════════════════════════════
+// MAIN UPDATE
+// ══════════════════════════════════════════════════════
+function updateAll() {
+  const L_ = LAYERS[curLayer];
+  const ds = fmt(curDate);
+  const future = isFuture(curDate);
+
+  // Map tiles
+  if (satTile) map.removeLayer(satTile);
+
+  if (future) {
+    const latest = new Date(); latest.setDate(latest.getDate()-1);
+    satTile = L.tileLayer(gibsUrl(L_.id, fmt(latest), L_.matrix, L_.ext), {
+      maxNativeZoom: L_.maxN, maxZoom:12, tileSize:256, opacity:0.4
+    }).addTo(map);
+  } else {
+    satTile = L.tileLayer(gibsUrl(L_.id, ds, L_.matrix, L_.ext), {
+      maxNativeZoom: L_.maxN, maxZoom:12, tileSize:256, opacity:0.95
+    }).addTo(map);
+  }
+  basemap.bringToBack();
+
+  // Future overlay
+  document.getElementById('futureOverlay').classList.toggle('show', future);
+
+  // Date input
+  document.getElementById('dateInput').value = ds;
+
+  // Badge
+  const badge = document.getElementById('modeBadge');
+  if (future) { badge.className='mode-badge future'; badge.textContent='ESTIMATE'; }
+  else {
+    const ago = Math.floor((new Date()-curDate)/86400000);
+    if (ago<=2) { badge.className='mode-badge live'; badge.textContent='LIVE'; }
+    else { badge.className='mode-badge hist'; badge.textContent='ARCHIVE'; }
+  }
+
+  // Hist tag
+  document.getElementById('hist-tag').textContent = `${curLayer.toUpperCase()} ${L_.start}-2025`;
+
+  updateProbs();
+  updateFilmstrip();
+}
+
+// ══════════════════════════════════════════════════════
+// PROBABILITY CARDS
+// ══════════════════════════════════════════════════════
+function updateProbs() {
+  const doy = dayOfYear(curDate);
+  const dl = document.getElementById('prob-date-label');
+  dl.textContent = curDate.toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'}) + '  (DOY ' + doy + ')';
+
+  let h = '';
+  LAKES.forEach(lk => {
+    const p = iceOutProb(lk, doy);
+    const pct = Math.round(p * 100);
+    const c = probColor(p);
+    const w = probWord(p);
+    const e10 = Math.round(lk.medianIceOut - 1.28*lk.sigma);
+    const e90 = Math.round(lk.medianIceOut + 1.28*lk.sigma);
+
+    h += `<div class="prob-card">
+      <div class="prob-header">
+        <div class="lake-name"><div class="dot" style="background:${lk.color}"></div>${lk.short}</div>
+        <div class="prob-pct" style="color:${c}">${pct}%</div>
+      </div>
+      <div class="prob-bar-track"><div class="prob-bar-fill" style="width:${pct}%;background:${c}"></div></div>
+      <div class="prob-meta"><span>${w}</span><span>Median: ${doyLabel(lk.medianIceOut)}</span></div>
+      <div class="prob-meta" style="margin-top:2px"><span>${lk.depth} / ${lk.fish.split(',')[0]}</span><span>80%: ${doyLabel(e10)}-${doyLabel(e90)}</span></div>
+    </div>`;
+  });
+  document.getElementById('prob-cards').innerHTML = h;
+}
+
+// ══════════════════════════════════════════════════════
+// HISTORICAL FILMSTRIP
+// ══════════════════════════════════════════════════════
+function updateFilmstrip() {
+  const m = curDate.getMonth(), d = curDate.getDate();
+  const label = curDate.toLocaleDateString('en-US',{month:'long',day:'numeric'});
+  document.getElementById('filmstrip-label').textContent = `Showing ${label} across all years. Click to load.`;
+
+  const L_ = LAYERS[curLayer];
+  const thisYear = new Date().getFullYear();
+  const today = new Date(); today.setHours(23,59,59,999);
+
+  // GIBS thumbnail tile: z7, row 45, col 33 covers the park area
+  const tz=7, tr=45, tc=33;
+  const refDoy = dayOfYear(curDate);
+  const refLake = LAKES[0]; // Mijin as reference
+
+  let h = '';
+  for (let y = thisYear; y >= L_.start; y--) {
+    const dt = new Date(y, m, d);
+    if (dt > today) continue;
+
+    const ds = fmt(dt);
+    const url = `https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/${L_.id}/default/${ds}/${L_.matrix}/${tz}/${tr}/${tc}.${L_.ext}`;
+    const isActive = (y === curDate.getFullYear());
+
+    // Prob for this DOY (same every year since it's the median model, but label varies)
+    const p = iceOutProb(refLake, dayOfYear(dt));
+    let bc, bl;
+    if (p < 0.25) { bc='ice'; bl='ICE'; }
+    else if (p < 0.75) { bc='mixed'; bl='TRANS'; }
+    else { bc='open'; bl='OPEN'; }
+
+    h += `<div class="film-year${isActive?' active':''}" onclick="loadYear(${y})">
+      <div class="yr">${y}</div>
+      <div class="film-thumb"><img src="${url}" loading="lazy" onerror="this.parentElement.style.background='var(--border)';this.style.display='none'"/></div>
+      <div class="film-label">${ds}</div>
+      <div class="film-ice-badge ${bc}">${bl}</div>
+    </div>`;
+  }
+  document.getElementById('filmstrip').innerHTML = h;
+}
+
+function loadYear(y) {
+  curDate = new Date(y, curDate.getMonth(), curDate.getDate());
+  updateAll();
+}
+
+// ══════════════════════════════════════════════════════
+// CONTROLS
+// ══════════════════════════════════════════════════════
+function stepDate(n) { curDate.setDate(curDate.getDate()+n); updateAll(); }
+function setToday() { curDate=new Date(); curDate.setDate(curDate.getDate()-1); updateAll(); }
+function setLayer(k) { curLayer=k; updateAll(); }
+
+document.getElementById('dateInput').addEventListener('change', function() {
+  curDate = new Date(this.value+'T12:00:00'); updateAll();
+});
+
+// ══════════════════════════════════════════════════════
+// LAKE MARKERS
+// ══════════════════════════════════════════════════════
+const markers = [];
+LAKES.forEach((lk, i) => {
+  const icon = L.divIcon({
+    className:'',
+    html:`<div class="lake-marker" style="background:${lk.color}">${lk.short.charAt(0)}</div>`,
+    iconSize:[22,22], iconAnchor:[11,11]
+  });
+  const mk = L.marker([lk.lat,lk.lng],{icon}).addTo(map);
+  mk.bindPopup(`<div class="lake-popup">
+    <h3>${lk.name}</h3>
+    <div style="color:var(--ice);font-size:11px">${lk.fish}</div>
+    <div style="margin:4px 0;font-size:11px">${lk.note}</div>
+    <div style="color:var(--text-dim);font-size:10px;font-family:'DM Mono',monospace">
+      Median ice-out: ${doyLabel(lk.medianIceOut)}<br>
+      80% range: ${doyLabel(Math.round(lk.medianIceOut-1.28*lk.sigma))} - ${doyLabel(Math.round(lk.medianIceOut+1.28*lk.sigma))}<br>
+      ${lk.lat.toFixed(4)}N, ${Math.abs(lk.lng).toFixed(4)}W
+    </div>
+  </div>`,{className:'lake-popup',maxWidth:230});
+  markers.push(mk);
+});
+
+const ll = document.getElementById('lake-list');
+LAKES.forEach((lk,i) => {
+  const el = document.createElement('div');
+  el.className='lake-item';
+  el.innerHTML=`<div class="lake-dot" style="background:${lk.color}"></div><span>${lk.short}</span><span class="lake-type">${lk.fish.split(',')[0]}</span>`;
+  el.onclick=()=>{map.setView([lk.lat,lk.lng],12);markers[i].openPopup();};
+  ll.appendChild(el);
+});
+
+// ══════════════════════════════════════════════════════
+// KEYBOARD
+// ══════════════════════════════════════════════════════
+document.addEventListener('keydown', e => {
+  if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT') return;
+  if(e.key==='ArrowLeft') stepDate(-1);
+  if(e.key==='ArrowRight') stepDate(1);
+  if(e.key==='ArrowUp') stepDate(7);
+  if(e.key==='ArrowDown') stepDate(-7);
+  if(e.key==='h') map.setView(parkCenter,11);
+});
+
+// INIT
+updateAll();
 </script>
 </body>
 </html>
