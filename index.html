@@ -704,9 +704,11 @@ function updateSatLayer() {
   if (satLayer) map.removeLayer(satLayer);
 
   satLayer = L.tileLayer(gibsUrl(cfg.id, dateStr, cfg.matrix, cfg.ext), {
-    maxZoom: cfg.maxZoom,
+    maxNativeZoom: cfg.maxZoom,
+    maxZoom: 12,
     tileSize: 256,
     opacity: 0.95,
+    bounds: [[-85.051129, -180], [85.051129, 180]],
     errorTileUrl: ''
   }).addTo(map);
 
@@ -718,7 +720,7 @@ function updateSatLayer() {
     if (snowLayer) map.removeLayer(snowLayer);
     snowLayer = L.tileLayer(
       gibsUrl('MODIS_Terra_NDSI_Snow_Cover', dateStr, 'GoogleMapsCompatible_Level8', 'png'),
-      { maxZoom: 8, tileSize: 256, opacity: 0.45 }
+      { maxNativeZoom: 8, maxZoom: 12, tileSize: 256, opacity: 0.45 }
     ).addTo(map);
   }
 
@@ -769,7 +771,7 @@ function toggleSnow() {
     const dateStr = formatDate(currentDate);
     snowLayer = L.tileLayer(
       gibsUrl('MODIS_Terra_NDSI_Snow_Cover', dateStr, 'GoogleMapsCompatible_Level8', 'png'),
-      { maxZoom: 8, tileSize: 256, opacity: 0.45 }
+      { maxNativeZoom: 8, maxZoom: 12, tileSize: 256, opacity: 0.45 }
     ).addTo(map);
   } else if (snowLayer) {
     map.removeLayer(snowLayer);
