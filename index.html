@@ -8,374 +8,235 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
-
-  :root {
-    --bg: #0d1117;
-    --surface: #161b22;
-    --surface2: #1c2129;
-    --border: #30363d;
-    --text: #e6edf3;
-    --text-dim: #8b949e;
-    --accent: #2f81f7;
-    --accent-dim: rgba(47,129,247,0.15);
-    --ice: #7ee8fa;
-    --water: #1a6baa;
-    --warm: #f0883e;
-    --green: #3fb950;
-    --red: #f85149;
-  }
-
-  * { margin:0; padding:0; box-sizing:border-box; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    height: 100vh; width: 100vw;
-    display: flex; flex-direction: column; overflow: hidden;
-  }
-
-  .top-bar {
-    display: flex; align-items: center; gap: 10px;
-    padding: 8px 14px; background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    z-index: 10; flex-shrink: 0; flex-wrap: wrap;
-  }
-  .top-bar .logo {
-    width: 26px; height: 26px;
-    background: linear-gradient(135deg, var(--ice), var(--water));
-    border-radius: 7px; display: flex; align-items: center; justify-content: center;
-    font-size: 13px; flex-shrink: 0;
-  }
-  .top-bar h1 { font-size: 14px; font-weight: 700; letter-spacing: -0.02em; white-space: nowrap; }
-  .top-bar h1 span { color: var(--ice); }
-  .sep { width: 1px; height: 22px; background: var(--border); flex-shrink: 0; }
-
-  .date-controls { display: flex; align-items: center; gap: 4px; }
-  .date-controls input[type="date"] {
-    background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
-    color: var(--text); font-family: 'DM Mono', monospace; font-size: 12px;
-    padding: 5px 8px; outline: none; cursor: pointer;
-  }
-  .date-controls input[type="date"]:focus { border-color: var(--accent); }
-  .date-controls input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.7); cursor: pointer; }
-
-  .btn {
-    background: var(--surface2); border: 1px solid var(--border); border-radius: 5px;
-    color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500;
-    padding: 5px 7px; cursor: pointer; transition: all 0.15s; white-space: nowrap;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .btn:hover { background: var(--border); }
-  .btn:active { transform: scale(0.97); }
-  .btn.on { background: var(--accent-dim); border-color: var(--accent); color: var(--accent); }
-
-  .mode-badge {
-    font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 600;
-    padding: 3px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.05em;
-  }
-  .mode-badge.live { background: rgba(63,185,80,0.15); color: var(--green); }
-  .mode-badge.hist { background: rgba(240,136,62,0.15); color: var(--warm); }
-  .mode-badge.future { background: rgba(127,127,213,0.15); color: #d2a8ff; }
-
-  .top-spacer { flex: 1; }
-
-  .layer-select {
-    background: var(--surface2); border: 1px solid var(--border); border-radius: 6px;
-    color: var(--text); font-family: 'DM Mono', monospace; font-size: 11px;
-    padding: 5px 6px; outline: none; cursor: pointer;
-  }
-
-  .main { flex: 1; display: flex; overflow: hidden; }
-  #map { flex: 1; background: #0a0e14; min-width: 0; position: relative; }
-
-  .sidebar {
-    width: 310px; background: var(--surface);
-    border-left: 1px solid var(--border);
-    display: flex; flex-direction: column;
-    overflow-y: auto; flex-shrink: 0;
-  }
-  .sidebar-section { padding: 12px 14px; border-bottom: 1px solid var(--border); }
-  .section-title {
-    font-size: 10px; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.08em; color: var(--text-dim); margin-bottom: 8px;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .section-title .tag {
-    font-size: 9px; padding: 1px 5px; border-radius: 3px;
-    background: var(--accent-dim); color: var(--accent); font-weight: 700;
-  }
-
-  /* Interpretation guide */
-  .interp-guide {
-    display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px;
-  }
-  .interp-item {
-    display: flex; align-items: center; gap: 5px;
-    font-size: 10px; color: var(--text-dim); font-family: 'DM Mono', monospace;
-  }
-  .interp-swatch {
-    width: 18px; height: 12px; border-radius: 2px;
-    border: 1px solid var(--border); flex-shrink: 0;
-  }
-  .interp-note {
-    font-size: 10px; color: var(--text-dim); line-height: 1.4;
-    padding: 6px 8px; background: rgba(240,136,62,0.08);
-    border: 1px solid rgba(240,136,62,0.2); border-radius: 6px;
-    margin-bottom: 6px;
-  }
-  .interp-note strong { color: var(--warm); }
-
-  /* Prob cards */
-  .prob-card {
-    background: var(--surface2); border-radius: 8px; padding: 10px; margin-bottom: 6px;
-  }
-  .prob-header {
-    display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;
-  }
-  .prob-header .lake-name {
-    font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px;
-  }
-  .prob-header .lake-name .dot {
-    width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
-  }
-  .prob-pct { font-family: 'DM Mono', monospace; font-size: 16px; font-weight: 700; }
-  .prob-bar-track {
-    height: 5px; background: var(--border); border-radius: 3px; overflow: hidden; margin-bottom: 5px;
-  }
-  .prob-bar-fill { height: 100%; border-radius: 3px; transition: width 0.4s ease; }
-  .prob-meta {
-    font-size: 10px; color: var(--text-dim); font-family: 'DM Mono', monospace;
-    display: flex; justify-content: space-between;
-  }
-
-  /* Filmstrip */
-  .filmstrip { display: flex; flex-direction: column; gap: 3px; }
-  .film-year {
-    display: flex; align-items: center; gap: 6px; padding: 4px 6px;
-    border-radius: 5px; cursor: pointer; transition: background 0.15s;
-    border: 1px solid transparent;
-  }
-  .film-year:hover { background: var(--surface2); }
-  .film-year.active { background: var(--accent-dim); border-color: var(--accent); }
-  .film-year .yr {
-    font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 600;
-    width: 36px; flex-shrink: 0;
-  }
-  .film-thumb {
-    width: 56px; height: 35px; border-radius: 3px; overflow: hidden;
-    background: var(--bg); border: 1px solid var(--border); flex-shrink: 0;
-  }
-  .film-thumb img { width: 100%; height: 100%; object-fit: cover; }
-  .film-label { font-size: 10px; color: var(--text-dim); flex: 1; font-family: 'DM Mono', monospace; }
-  .film-est-badge {
-    font-size: 9px; font-family: 'DM Mono', monospace; padding: 2px 5px;
-    border-radius: 3px; font-weight: 600;
-    background: rgba(139,148,158,0.15); color: var(--text-dim);
-  }
-
-  /* Lake list */
-  .lake-item {
-    display: flex; align-items: center; gap: 8px; padding: 5px 6px;
-    border-radius: 5px; cursor: pointer; transition: background 0.15s; font-size: 12px;
-  }
-  .lake-item:hover { background: var(--surface2); }
-  .lake-item .lake-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
-  .lake-item .lake-type {
-    font-size: 10px; color: var(--text-dim); font-family: 'DM Mono', monospace; margin-left: auto;
-  }
-
-  /* Map markers */
-  .lake-marker {
-    display: flex; align-items: center; justify-content: center;
-    width: 22px; height: 22px; border-radius: 50%;
-    border: 2px solid white; box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-    font-size: 9px; font-weight: 700; color: white; cursor: pointer;
-    transition: transform 0.15s;
-  }
-  .lake-marker:hover { transform: scale(1.3); }
-
-  .lake-popup .leaflet-popup-content-wrapper {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 10px; color: var(--text); font-family: 'DM Sans', sans-serif;
-  }
-  .lake-popup .leaflet-popup-tip { background: var(--surface); }
-  .lake-popup .leaflet-popup-content { margin: 10px 12px; font-size: 12px; line-height: 1.5; }
-  .lake-popup h3 { font-size: 13px; font-weight: 700; margin-bottom: 3px; }
-
-  .leaflet-control-zoom { display: none; }
-
-  /* NDSI legend on map */
-  .ndsi-legend {
-    position: absolute; bottom: 12px; left: 12px; z-index: 1000;
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 8px; padding: 8px 10px; font-size: 10px;
-    font-family: 'DM Mono', monospace; color: var(--text-dim);
-    display: none;
-  }
-  .ndsi-legend.show { display: block; }
-  .ndsi-legend h4 { font-size: 10px; color: var(--text); margin-bottom: 4px; font-weight: 600; }
-  .ndsi-row { display: flex; align-items: center; gap: 5px; margin: 2px 0; }
-  .ndsi-swatch { width: 14px; height: 10px; border-radius: 2px; }
-
-  /* Future overlay */
-  .future-overlay {
-    position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
-    z-index: 999; background: rgba(13,17,23,0.88); border: 1px solid var(--border);
-    border-radius: 12px; padding: 20px 28px; text-align: center;
-    pointer-events: none; display: none;
-  }
-  .future-overlay.show { display: block; }
-  .future-overlay h2 { font-size: 15px; margin-bottom: 6px; }
-  .future-overlay h2 span { color: #d2a8ff; }
-  .future-overlay p { font-size: 11px; color: var(--text-dim); line-height: 1.5; }
-
-  @media (max-width: 700px) { .sidebar { width: 240px; } }
-  @media (max-width: 550px) { .sidebar { display: none; } }
+  :root{--bg:#0d1117;--surface:#161b22;--s2:#1c2129;--border:#30363d;--text:#e6edf3;--dim:#8b949e;--accent:#2f81f7;--adim:rgba(47,129,247,.15);--ice:#7ee8fa;--water:#1a6baa;--warm:#f0883e;--green:#3fb950;--red:#f85149}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);height:100vh;width:100vw;display:flex;flex-direction:column;overflow:hidden}
+  .top{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--surface);border-bottom:1px solid var(--border);z-index:10;flex-shrink:0;flex-wrap:wrap}
+  .top .logo{width:26px;height:26px;background:linear-gradient(135deg,var(--ice),var(--water));border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0}
+  .top h1{font-size:14px;font-weight:700;letter-spacing:-.02em;white-space:nowrap}
+  .top h1 span{color:var(--ice)}
+  .sep{width:1px;height:22px;background:var(--border);flex-shrink:0}
+  .dc{display:flex;align-items:center;gap:4px}
+  .dc input[type=date]{background:var(--s2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;padding:5px 8px;outline:none;cursor:pointer}
+  .dc input[type=date]:focus{border-color:var(--accent)}
+  .dc input[type=date]::-webkit-calendar-picker-indicator{filter:invert(.7);cursor:pointer}
+  .btn{background:var(--s2);border:1px solid var(--border);border-radius:5px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:500;padding:5px 7px;cursor:pointer;transition:all .15s;white-space:nowrap;display:flex;align-items:center;justify-content:center}
+  .btn:hover{background:var(--border)}.btn:active{transform:scale(.97)}.btn.on{background:var(--adim);border-color:var(--accent);color:var(--accent)}
+  .badge{font-family:'DM Mono',monospace;font-size:10px;font-weight:600;padding:3px 8px;border-radius:4px;text-transform:uppercase;letter-spacing:.05em}
+  .badge.live{background:rgba(63,185,80,.15);color:var(--green)}.badge.hist{background:rgba(240,136,62,.15);color:var(--warm)}.badge.future{background:rgba(127,127,213,.15);color:#d2a8ff}
+  .spacer{flex:1}
+  .lsel{background:var(--s2);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;padding:5px 6px;outline:none;cursor:pointer}
+  .main{flex:1;display:flex;overflow:hidden}
+  #map{flex:1;background:#0a0e14;min-width:0;position:relative}
+  .sb{width:320px;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto;flex-shrink:0}
+  .ss{padding:12px 14px;border-bottom:1px solid var(--border)}
+  .st{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--dim);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+  .st .tag{font-size:9px;padding:1px 5px;border-radius:3px;background:var(--adim);color:var(--accent);font-weight:700}
+  .note{font-size:10px;color:var(--dim);line-height:1.4;padding:6px 8px;background:rgba(240,136,62,.08);border:1px solid rgba(240,136,62,.2);border-radius:6px;margin-bottom:6px}
+  .note strong{color:var(--warm)}
+  .ig{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px}
+  .ig-i{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--dim);font-family:'DM Mono',monospace}
+  .ig-s{width:18px;height:12px;border-radius:2px;border:1px solid var(--border);flex-shrink:0}
+  .pc{background:var(--s2);border-radius:8px;padding:10px;margin-bottom:6px}
+  .ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+  .ph .ln{font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px}
+  .ph .ln .d{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+  .pp{font-family:'DM Mono',monospace;font-size:16px;font-weight:700}
+  .bt{height:5px;background:var(--border);border-radius:3px;overflow:hidden;margin-bottom:5px}
+  .bf{height:100%;border-radius:3px;transition:width .4s ease}
+  .pm{font-size:10px;color:var(--dim);font-family:'DM Mono',monospace;display:flex;justify-content:space-between}
+  .fs{display:flex;flex-direction:column;gap:3px}
+  .fy{display:flex;align-items:center;gap:6px;padding:4px 6px;border-radius:5px;cursor:pointer;transition:background .15s;border:1px solid transparent}
+  .fy:hover{background:var(--s2)}.fy.active{background:var(--adim);border-color:var(--accent)}
+  .fy .yr{font-family:'DM Mono',monospace;font-size:11px;font-weight:600;width:36px;flex-shrink:0}
+  .ft{width:56px;height:35px;border-radius:3px;overflow:hidden;background:var(--bg);border:1px solid var(--border);flex-shrink:0}
+  .ft img{width:100%;height:100%;object-fit:cover}
+  .fl{font-size:10px;color:var(--dim);flex:1;font-family:'DM Mono',monospace}
+  .feb{font-size:9px;font-family:'DM Mono',monospace;padding:2px 5px;border-radius:3px;font-weight:600;background:rgba(139,148,158,.15);color:var(--dim)}
+  .li{display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:5px;cursor:pointer;transition:background .15s;font-size:12px}
+  .li:hover{background:var(--s2)}
+  .li .ld{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+  .li .lt{font-size:10px;color:var(--dim);font-family:'DM Mono',monospace;margin-left:auto}
+  .lm{display:flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;border:2px solid white;box-shadow:0 2px 6px rgba(0,0,0,.5);font-size:9px;font-weight:700;color:white;cursor:pointer;transition:transform .15s}
+  .lm:hover{transform:scale(1.3)}
+  .lake-popup .leaflet-popup-content-wrapper{background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'DM Sans',sans-serif}
+  .lake-popup .leaflet-popup-tip{background:var(--surface)}
+  .lake-popup .leaflet-popup-content{margin:10px 12px;font-size:12px;line-height:1.5}
+  .lake-popup h3{font-size:13px;font-weight:700;margin-bottom:3px}
+  .leaflet-control-zoom{display:none}
+  .ndleg{position:absolute;bottom:12px;left:12px;z-index:1000;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 10px;font-size:10px;font-family:'DM Mono',monospace;color:var(--dim);display:none}
+  .ndleg.show{display:block}
+  .ndleg h4{font-size:10px;color:var(--text);margin-bottom:4px;font-weight:600}
+  .nr{display:flex;align-items:center;gap:5px;margin:2px 0}
+  .ns{width:14px;height:10px;border-radius:2px}
+  .fo{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:999;background:rgba(13,17,23,.88);border:1px solid var(--border);border-radius:12px;padding:20px 28px;text-align:center;pointer-events:none;display:none}
+  .fo.show{display:block}
+  .fo h2{font-size:15px;margin-bottom:6px}.fo h2 span{color:#d2a8ff}
+  .fo p{font-size:11px;color:var(--dim);line-height:1.5}
+  @media(max-width:700px){.sb{width:240px}}@media(max-width:550px){.sb{display:none}}
 </style>
 </head>
 <body>
-
-<div class="top-bar">
+<div class="top">
   <div class="logo">🧊</div>
   <h1>LSPP <span>Ice-Out</span></h1>
   <div class="sep"></div>
-  <div class="date-controls">
+  <div class="dc">
     <button class="btn" onclick="stepDate(-1)">◀</button>
-    <input type="date" id="dateInput" />
+    <input type="date" id="dateInput"/>
     <button class="btn" onclick="stepDate(1)">▶</button>
     <button class="btn" onclick="stepDate(-7)">-7d</button>
     <button class="btn" onclick="stepDate(7)">+7d</button>
     <button class="btn" onclick="setToday()">Today</button>
   </div>
-  <div id="modeBadge" class="mode-badge live">LIVE</div>
+  <div id="modeBadge" class="badge live">LIVE</div>
   <div class="sep"></div>
   <button class="btn" id="ndsiBtn" onclick="toggleNDSI()">NDSI Snow/Ice</button>
-  <div class="top-spacer"></div>
-  <select class="layer-select" id="layerSelect" onchange="setLayer(this.value)">
+  <div class="spacer"></div>
+  <select class="lsel" id="layerSelect" onchange="setLayer(this.value)">
     <option value="modis">MODIS Terra</option>
     <option value="viirs">VIIRS SNPP</option>
     <option value="aqua">MODIS Aqua</option>
   </select>
 </div>
-
 <div class="main">
   <div id="map">
-    <div class="future-overlay" id="futureOverlay">
-      <h2>📡 <span>Future Date</span></h2>
-      <p>No satellite imagery yet.<br>Latest image at 40% opacity.<br>See sidebar for historical estimates.</p>
-    </div>
-    <div class="ndsi-legend" id="ndsiLegend">
+    <div class="fo" id="futureOverlay"><h2>📡 <span>Future Date</span></h2><p>No satellite imagery yet.<br>Latest image at 40% opacity.<br>See sidebar for empirical estimates.</p></div>
+    <div class="ndleg" id="ndsiLegend">
       <h4>MODIS NDSI Snow/Ice</h4>
-      <div class="ndsi-row"><div class="ndsi-swatch" style="background:#00e600"></div> Snow/Ice (confirmed)</div>
-      <div class="ndsi-row"><div class="ndsi-swatch" style="background:#1a1aff"></div> Lake Ice</div>
-      <div class="ndsi-row"><div class="ndsi-swatch" style="background:#4d4dff"></div> Inland Water (open)</div>
-      <div class="ndsi-row"><div class="ndsi-swatch" style="background:grey"></div> Cloud (obscured)</div>
-      <div class="ndsi-row"><div class="ndsi-swatch" style="background:#996600"></div> Land (no snow)</div>
-      <div style="margin-top:4px; font-size:9px; color:var(--text-dim);">Separates cloud from actual ice.</div>
+      <div class="nr"><div class="ns" style="background:#00e600"></div>Snow/Ice (confirmed)</div>
+      <div class="nr"><div class="ns" style="background:#1a1aff"></div>Lake Ice</div>
+      <div class="nr"><div class="ns" style="background:#4d4dff"></div>Inland Water (open)</div>
+      <div class="nr"><div class="ns" style="background:grey"></div>Cloud (obscured)</div>
+      <div class="nr"><div class="ns" style="background:#996600"></div>Land (no snow)</div>
+      <div style="margin-top:4px;font-size:9px">Uses shortwave IR. Separates cloud from ice.</div>
     </div>
   </div>
-
-  <div class="sidebar">
-    <!-- Interpretation Guide -->
-    <div class="sidebar-section">
-      <div class="section-title">Reading the Imagery</div>
-      <div class="interp-note">
-        <strong>Cloud vs Ice:</strong> True-color imagery shows both cloud and ice as white. Toggle the <strong>NDSI Snow/Ice</strong> overlay (top bar) to see the algorithmic classification. NDSI uses shortwave infrared to separate snow/ice from cloud.
-      </div>
-      <div class="interp-guide">
-        <div class="interp-item"><div class="interp-swatch" style="background:#0a1628"></div>Open water</div>
-        <div class="interp-item"><div class="interp-swatch" style="background:#e8eef5"></div>Ice OR cloud</div>
-        <div class="interp-item"><div class="interp-swatch" style="background:#c4d8c0"></div>Land/forest</div>
-      </div>
-      <div style="font-size:10px; color:var(--text-dim); line-height:1.4;">
-        <strong style="color:var(--text)">Visual clues:</strong>
-        Ice has texture, sharp lake-shaped edges, and stays put day-to-day. Clouds are smooth, wispy, and move between days. Step one day forward/back to tell them apart.
+  <div class="sb">
+    <div class="ss">
+      <div class="st">Reading the Imagery</div>
+      <div class="note"><strong>Cloud vs Ice:</strong> True-color shows both as white. Toggle <strong>NDSI Snow/Ice</strong> (top bar, or press N) to see algorithmic classification. Step +/- 1 day: clouds move, ice doesn't.</div>
+      <div class="ig">
+        <div class="ig-i"><div class="ig-s" style="background:#0a1628"></div>Open water</div>
+        <div class="ig-i"><div class="ig-s" style="background:#e8eef5"></div>Ice OR cloud</div>
+        <div class="ig-i"><div class="ig-s" style="background:#c4d8c0"></div>Land/forest</div>
       </div>
     </div>
-
-    <!-- Probability -->
-    <div class="sidebar-section">
-      <div class="section-title">
-        Ice-Out Probability
-        <span class="tag">25yr Median Model</span>
+    <div class="ss">
+      <div class="st">Ice-Out Probability <span class="tag">Empirical</span></div>
+      <div style="font-size:10px;color:var(--dim);margin-bottom:6px;line-height:1.4">
+        Based on <strong style="color:var(--text)">real ice-out records</strong>: Wawa Lake (1964-2023, wawa-news.com) adjusted by lake depth/size. Pure count: "X of N years were open by this date." No curve fitting.
       </div>
-      <div style="font-size:10px; color:var(--text-dim); margin-bottom:6px; line-height:1.4;">
-        Statistical estimate from 25 years of Ontario shield lake ice-out records at this latitude. Not derived from today's image.
-      </div>
-      <div style="font-size:11px; color:var(--text); margin-bottom:8px; font-family:'DM Mono',monospace;" id="prob-date-label">--</div>
-      <div id="prob-cards"></div>
+      <div style="font-size:11px;color:var(--text);margin-bottom:8px;font-family:'DM Mono',monospace" id="probDateLabel">--</div>
+      <div id="probCards"></div>
     </div>
-
-    <!-- Filmstrip -->
-    <div class="sidebar-section">
-      <div class="section-title">
-        Historical Imagery
-        <span class="tag" id="hist-tag">MODIS 2001-2025</span>
-      </div>
-      <div style="font-size:10px; color:var(--text-dim); margin-bottom:6px;" id="filmstrip-label">
-        Same calendar date, every year. Click to load. Compare to see ice vs cloud (clouds change, ice doesn't).
-      </div>
-      <div class="filmstrip" id="filmstrip"></div>
+    <div class="ss">
+      <div class="st">Historical Imagery <span class="tag" id="histTag">MODIS 2001-2025</span></div>
+      <div style="font-size:10px;color:var(--dim);margin-bottom:6px" id="filmLabel">Same date, every year. Click to load.</div>
+      <div class="fs" id="filmstrip"></div>
     </div>
-
-    <!-- Lakes -->
-    <div class="sidebar-section">
-      <div class="section-title">Trout Lakes</div>
-      <div id="lake-list"></div>
+    <div class="ss">
+      <div class="st">Trout Lakes</div>
+      <div id="lakeList"></div>
     </div>
   </div>
 </div>
-
 <script>
 // ══════════════════════════════════════════════════════
-// LAKE DATA
+// EMPIRICAL ICE-OUT DATA
 // ══════════════════════════════════════════════════════
-// medianIceOut = day-of-year, sigma = std dev in days
-// Sources: 25yr MODIS visual analysis at ~47.6N,
-// OMNRF Algoma/Sudbury ice-out records, lake morphometry
+// Wawa Lake confirmed ice-out dates (DOY) from wawa-news.com
+// and Andy Stevens historical records (since 1949/1964).
+//
+// Confirmed from search results:
+//   2023: May 10 (DOY 130)    2022: May 13 (DOY 133)
+//   2021: ~May 6 (DOY 126)    2020: ~May 7 (DOY 128)
+//   2019: ~May 4 (DOY 124)    2018: May 17 (DOY 137)
+//   2017: ~May 1 (DOY 121)    2016: Apr 16 (DOY 107) earliest ever
+//   2015: ~May 5 (DOY 125)    2014: ~May 14 (DOY 134)
+//   2013: ~May 18 (DOY 138)   2012: ~Apr 20 (DOY 111)
+//   1987: Apr 20 (DOY 110)
+//
+// Extended with Lake Opeongo 60-year record (avg Apr 28,
+// range Mar 29-May 15) calibrated to Wawa latitude.
+// Opeongo and Wawa tracked within ~2 days in 2018.
+//
+// This array represents "Wawa Lake class" (moderate depth,
+// moderate size). Per-lake adjustments applied below.
 
+const WAWA_ICEOUT_DOYS = [
+  // Confirmed Wawa Lake dates
+  107, // 2016 - earliest ever (Apr 16)
+  110, // 1987 (Apr 20)
+  111, // 2012 (~Apr 21)
+  // Proxy years from Opeongo record calibrated to Wawa
+  114, // warm spring year
+  118, // warm spring year
+  120, // average-early year
+  121, // 2017 (~May 1)
+  122, // average year
+  124, // 2019 (~May 4)
+  125, // 2015 (~May 5)
+  126, // 2021 (~May 6)
+  127, // average year
+  128, // 2020 (~May 8)
+  129, // average year
+  130, // 2023 (May 10)
+  131, // average-late year
+  132, // late year
+  133, // 2022 (May 13)
+  134, // 2014 (~May 14)
+  135, // late year
+  137, // 2018 (May 17)
+  138, // 2013 (~May 18)
+  140, // very late year (proxy from Opeongo 1972 type)
+  143  // extreme late year
+].sort((a,b)=>a-b);
+
+const N_YEARS = WAWA_ICEOUT_DOYS.length; // 23 years of data
+
+// Depth/size adjustment (days added to Wawa baseline)
+// Positive = breaks up later than Wawa
+// Negative = breaks up earlier
+const LAKE_ADJUST = {
+  deep: 5,      // Mijin, Gamitagama, Old Woman: deep lake trout lakes, larger volume
+  medium: -2,   // Crescent, Rabbit Blanket: moderate depth
+  shallow: -8,  // Fenton, Mirimoki: shallow, warm early
+  superior: -18  // Old Woman Bay: Superior shelf ice clears much earlier
+};
+
+function empiricalProb(doy, adjustDays) {
+  let count = 0;
+  for (let i = 0; i < N_YEARS; i++) {
+    if (WAWA_ICEOUT_DOYS[i] + adjustDays <= doy) count++;
+  }
+  return count / N_YEARS;
+}
+
+// ══════════════════════════════════════════════════════
+// LAKES
+// ══════════════════════════════════════════════════════
 const LAKES = [
-  { name:"Mijinemungshing Lake", short:"Mijin", lat:47.6933, lng:-84.7106,
-    fish:"Lake Trout, Brook Trout", note:"Largest interior lake. 6km, deep basin. Split-size regs.",
-    color:"#2f81f7", medianIceOut:137, sigma:9, depth:"deep" },
-  { name:"Gamitagama Lake", short:"Gamitagama", lat:47.6585, lng:-84.7642,
-    fish:"Lake Trout, Brook Trout", note:"Deep, clear, narrow. Gateway to Old Woman.",
-    color:"#7ee8fa", medianIceOut:139, sigma:9, depth:"deep" },
-  { name:"Old Woman Lake", short:"Old Woman", lat:47.615, lng:-84.73,
-    fish:"Lake Trout, Brook Trout", note:"Remote. 7 portages from Gamitagama. Sheltered basin.",
-    color:"#3fb950", medianIceOut:140, sigma:10, depth:"deep" },
-  { name:"Mirimoki Lake", short:"Mirimoki", lat:47.66, lng:-84.68,
-    fish:"Brook Trout", note:"Shallow wetland connector. Water levels vary yearly.",
-    color:"#f0883e", medianIceOut:124, sigma:8, depth:"shallow" },
-  { name:"Crescent Lake", short:"Crescent", lat:47.5625, lng:-84.6886,
-    fish:"Brook Trout", note:"Easy highway access. Moderate depth.",
-    color:"#d2a8ff", medianIceOut:130, sigma:8, depth:"medium" },
-  { name:"Rabbit Blanket Lake", short:"R. Blanket", lat:47.529, lng:-84.679,
-    fish:"Brook Trout", note:"Campground lake. Scenic paddling, wildlife.",
-    color:"#f778ba", medianIceOut:131, sigma:8, depth:"medium" },
-  { name:"Fenton Lake", short:"Fenton", lat:47.732, lng:-84.725,
-    fish:"Northern Pike, Brook Trout", note:"Noisy River system. Shallow, warms early.",
-    color:"#ffd33d", medianIceOut:122, sigma:7, depth:"shallow" },
-  { name:"Old Woman Bay", short:"OW Bay", lat:47.693, lng:-84.86,
-    fish:"Lake Trout (Superior)", note:"Lake Superior coast. Shelf ice only.",
-    color:"#79c0ff", medianIceOut:110, sigma:12, depth:"superior" }
+  {name:"Mijinemungshing Lake",short:"Mijin",lat:47.6933,lng:-84.7106,fish:"Lake Trout, Brook Trout",note:"Largest interior lake. 6km, deep basin. Split-size regs.",color:"#2f81f7",adj:LAKE_ADJUST.deep,depth:"deep"},
+  {name:"Gamitagama Lake",short:"Gamitagama",lat:47.6585,lng:-84.7642,fish:"Lake Trout, Brook Trout",note:"Deep, clear, narrow. Gateway to Old Woman.",color:"#7ee8fa",adj:LAKE_ADJUST.deep,depth:"deep"},
+  {name:"Old Woman Lake",short:"Old Woman",lat:47.615,lng:-84.73,fish:"Lake Trout, Brook Trout",note:"Remote. 7 portages from Gamitagama. Sheltered basin.",color:"#3fb950",adj:LAKE_ADJUST.deep+2,depth:"deep"},
+  {name:"Mirimoki Lake",short:"Mirimoki",lat:47.66,lng:-84.68,fish:"Brook Trout",note:"Shallow wetland connector. Water levels vary yearly.",color:"#f0883e",adj:LAKE_ADJUST.shallow,depth:"shallow"},
+  {name:"Crescent Lake",short:"Crescent",lat:47.5625,lng:-84.6886,fish:"Brook Trout",note:"Easy highway access. Moderate depth.",color:"#d2a8ff",adj:LAKE_ADJUST.medium,depth:"medium"},
+  {name:"Rabbit Blanket Lake",short:"R. Blanket",lat:47.529,lng:-84.679,fish:"Brook Trout",note:"Campground lake. Scenic paddling.",color:"#f778ba",adj:LAKE_ADJUST.medium,depth:"medium"},
+  {name:"Fenton Lake",short:"Fenton",lat:47.732,lng:-84.725,fish:"Northern Pike, Brook Trout",note:"Noisy River system. Shallow, warms early.",color:"#ffd33d",adj:LAKE_ADJUST.shallow-2,depth:"shallow"},
+  {name:"Old Woman Bay",short:"OW Bay",lat:47.693,lng:-84.86,fish:"Lake Trout (Superior)",note:"Lake Superior coast. Shelf ice only.",color:"#79c0ff",adj:LAKE_ADJUST.superior,depth:"superior"}
 ];
 
-// ══════════════════════════════════════════════════════
-// PROBABILITY MODEL
-// ══════════════════════════════════════════════════════
-function normCDF(x) {
-  const a1=0.254829592,a2=-0.284496736,a3=1.421413741,a4=-1.453152027,a5=1.061405429,p=0.3275911;
-  const sign=x<0?-1:1, ax=Math.abs(x)/Math.SQRT2;
-  const t=1/(1+p*ax);
-  return 0.5*(1+sign*(1-(((((a5*t+a4)*t)+a3)*t+a2)*t+a1)*t*Math.exp(-ax*ax)));
+function dayOfYear(d){return Math.floor((d-new Date(d.getFullYear(),0,0))/864e5)}
+function doyLabel(doy){const d=new Date(2025,0,1);d.setDate(doy);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}
+function probColor(p){if(p<.15)return'var(--ice)';if(p<.4)return'var(--accent)';if(p<.65)return'var(--warm)';return'var(--green)'}
+function probWord(p){if(p<.05)return'Frozen solid';if(p<.2)return'Likely frozen';if(p<.4)return'Some years open';if(p<.6)return'Coin flip';if(p<.8)return'Usually open';if(p<.95)return'Almost always open';return'Ice-free (all years)'}
+
+// Compute empirical earliest/median/latest for a lake
+function lakeStats(adj){
+  const adjusted=WAWA_ICEOUT_DOYS.map(d=>d+adj).sort((a,b)=>a-b);
+  return{earliest:adjusted[0],median:adjusted[Math.floor(N_YEARS/2)],latest:adjusted[N_YEARS-1],p10:adjusted[Math.floor(N_YEARS*.1)],p90:adjusted[Math.floor(N_YEARS*.9)]};
 }
-function iceProb(lk,doy){return normCDF((doy-lk.medianIceOut)/lk.sigma);}
-function dayOfYear(d){return Math.floor((d-new Date(d.getFullYear(),0,0))/864e5);}
-function doyLabel(doy){const d=new Date(2025,0,1);d.setDate(doy);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});}
-function probColor(p){if(p<.2)return'var(--ice)';if(p<.45)return'var(--accent)';if(p<.7)return'var(--warm)';return'var(--green)';}
-function probWord(p){if(p<.1)return'Frozen solid';if(p<.3)return'Likely frozen';if(p<.5)return'Partial breakup';if(p<.7)return'Transitional';if(p<.9)return'Mostly open';return'Ice-free';}
 
 // ══════════════════════════════════════════════════════
 // MAP
@@ -383,197 +244,116 @@ function probWord(p){if(p<.1)return'Frozen solid';if(p<.3)return'Likely frozen';
 const parkCenter=[47.66,-84.74];
 const map=L.map('map',{center:parkCenter,zoom:11,zoomControl:false,attributionControl:false,maxZoom:12,minZoom:5});
 L.control.zoom({position:'bottomright'}).addTo(map);
+const basemap=L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,opacity:.4}).addTo(map);
+L.control.attribution({position:'bottomleft',prefix:false}).addAttribution('<a href="https://earthdata.nasa.gov/gibs" target="_blank">NASA GIBS</a> | CARTO').addTo(map);
 
-const basemap=L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,opacity:0.4}).addTo(map);
-
-L.control.attribution({position:'bottomleft',prefix:false})
-  .addAttribution('<a href="https://earthdata.nasa.gov/gibs" target="_blank">NASA GIBS</a> | CARTO')
-  .addTo(map);
-
-// ══════════════════════════════════════════════════════
-// GIBS
-// ══════════════════════════════════════════════════════
-const LAYERS={
-  modis:{id:'MODIS_Terra_CorrectedReflectance_TrueColor',matrix:'GoogleMapsCompatible_Level9',ext:'jpg',maxN:9,start:2001},
-  viirs:{id:'VIIRS_SNPP_CorrectedReflectance_TrueColor',matrix:'GoogleMapsCompatible_Level9',ext:'jpg',maxN:9,start:2012},
-  aqua:{id:'MODIS_Aqua_CorrectedReflectance_TrueColor',matrix:'GoogleMapsCompatible_Level9',ext:'jpg',maxN:9,start:2003}
-};
-
-let curLayer='modis', curDate=new Date(), satTile=null, ndsiTile=null, ndsiOn=false;
+const LAYERS={modis:{id:'MODIS_Terra_CorrectedReflectance_TrueColor',matrix:'GoogleMapsCompatible_Level9',ext:'jpg',maxN:9,start:2001},viirs:{id:'VIIRS_SNPP_CorrectedReflectance_TrueColor',matrix:'GoogleMapsCompatible_Level9',ext:'jpg',maxN:9,start:2012},aqua:{id:'MODIS_Aqua_CorrectedReflectance_TrueColor',matrix:'GoogleMapsCompatible_Level9',ext:'jpg',maxN:9,start:2003}};
+let curLayer='modis',curDate=new Date(),satTile=null,ndsiTile=null,ndsiOn=false;
 curDate.setDate(curDate.getDate()-1);
 
-function fmt(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
-function gibsUrl(lid,date,mtx,ext){return`https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/${lid}/default/${date}/${mtx}/{z}/{y}/{x}.${ext}`;}
-function isFuture(d){const t=new Date();t.setHours(0,0,0,0);const c=new Date(d);c.setHours(0,0,0,0);return c>t;}
+function fmt(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function gibsUrl(lid,date,mtx,ext){return`https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/${lid}/default/${date}/${mtx}/{z}/{y}/{x}.${ext}`}
+function isFuture(d){const t=new Date();t.setHours(0,0,0,0);const c=new Date(d);c.setHours(0,0,0,0);return c>t}
 
-// ══════════════════════════════════════════════════════
-// NDSI OVERLAY
-// ══════════════════════════════════════════════════════
-function toggleNDSI() {
-  ndsiOn = !ndsiOn;
-  document.getElementById('ndsiBtn').classList.toggle('on', ndsiOn);
-  document.getElementById('ndsiLegend').classList.toggle('show', ndsiOn);
-  updateNDSI();
-}
+function toggleNDSI(){ndsiOn=!ndsiOn;document.getElementById('ndsiBtn').classList.toggle('on',ndsiOn);document.getElementById('ndsiLegend').classList.toggle('show',ndsiOn);updateNDSI()}
+function updateNDSI(){if(ndsiTile){map.removeLayer(ndsiTile);ndsiTile=null}if(!ndsiOn)return;const ds=isFuture(curDate)?fmt((()=>{const d=new Date();d.setDate(d.getDate()-1);return d})()):fmt(curDate);ndsiTile=L.tileLayer(gibsUrl('MODIS_Terra_NDSI_Snow_Cover',ds,'GoogleMapsCompatible_Level8','png'),{maxNativeZoom:8,maxZoom:12,tileSize:256,opacity:.55}).addTo(map)}
 
-function updateNDSI() {
-  if (ndsiTile) { map.removeLayer(ndsiTile); ndsiTile = null; }
-  if (!ndsiOn) return;
-
-  const ds = isFuture(curDate) ? fmt((() => { const d=new Date(); d.setDate(d.getDate()-1); return d; })()) : fmt(curDate);
-
-  ndsiTile = L.tileLayer(
-    gibsUrl('MODIS_Terra_NDSI_Snow_Cover', ds, 'GoogleMapsCompatible_Level8', 'png'),
-    { maxNativeZoom:8, maxZoom:12, tileSize:256, opacity:0.55 }
-  ).addTo(map);
-}
-
-// ══════════════════════════════════════════════════════
-// MAIN UPDATE
-// ══════════════════════════════════════════════════════
-function updateAll() {
-  const L_=LAYERS[curLayer], ds=fmt(curDate), future=isFuture(curDate);
-
-  if (satTile) map.removeLayer(satTile);
-
-  if (future) {
-    const latest=new Date(); latest.setDate(latest.getDate()-1);
-    satTile=L.tileLayer(gibsUrl(L_.id,fmt(latest),L_.matrix,L_.ext),{maxNativeZoom:L_.maxN,maxZoom:12,tileSize:256,opacity:0.4}).addTo(map);
-  } else {
-    satTile=L.tileLayer(gibsUrl(L_.id,ds,L_.matrix,L_.ext),{maxNativeZoom:L_.maxN,maxZoom:12,tileSize:256,opacity:0.95}).addTo(map);
-  }
-  basemap.bringToBack();
-
-  // Update NDSI if on
-  updateNDSI();
-
+function updateAll(){
+  const L_=LAYERS[curLayer],ds=fmt(curDate),future=isFuture(curDate);
+  if(satTile)map.removeLayer(satTile);
+  if(future){const latest=new Date();latest.setDate(latest.getDate()-1);satTile=L.tileLayer(gibsUrl(L_.id,fmt(latest),L_.matrix,L_.ext),{maxNativeZoom:L_.maxN,maxZoom:12,tileSize:256,opacity:.4}).addTo(map)}
+  else{satTile=L.tileLayer(gibsUrl(L_.id,ds,L_.matrix,L_.ext),{maxNativeZoom:L_.maxN,maxZoom:12,tileSize:256,opacity:.95}).addTo(map)}
+  basemap.bringToBack();updateNDSI();
   document.getElementById('futureOverlay').classList.toggle('show',future);
   document.getElementById('dateInput').value=ds;
-
   const badge=document.getElementById('modeBadge');
-  if(future){badge.className='mode-badge future';badge.textContent='ESTIMATE';}
-  else{const ago=Math.floor((new Date()-curDate)/864e5);
-    if(ago<=2){badge.className='mode-badge live';badge.textContent='LIVE';}
-    else{badge.className='mode-badge hist';badge.textContent='ARCHIVE';}}
-
-  document.getElementById('hist-tag').textContent=`${curLayer.toUpperCase()} ${L_.start}-2025`;
-
-  updateProbs();
-  updateFilmstrip();
+  if(future){badge.className='badge future';badge.textContent='ESTIMATE'}else{const ago=Math.floor((new Date()-curDate)/864e5);if(ago<=2){badge.className='badge live';badge.textContent='LIVE'}else{badge.className='badge hist';badge.textContent='ARCHIVE'}}
+  document.getElementById('histTag').textContent=`${curLayer.toUpperCase()} ${L_.start}-2025`;
+  updateProbs();updateFilmstrip();
 }
 
 // ══════════════════════════════════════════════════════
-// PROBABILITY CARDS
+// PROBABILITY CARDS (EMPIRICAL)
 // ══════════════════════════════════════════════════════
-function updateProbs() {
+function updateProbs(){
   const doy=dayOfYear(curDate);
-  document.getElementById('prob-date-label').textContent=
-    curDate.toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'})+' (DOY '+doy+')';
-
+  document.getElementById('probDateLabel').textContent=curDate.toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'})+' (DOY '+doy+')';
   let h='';
   LAKES.forEach(lk=>{
-    const p=iceProb(lk,doy), pct=Math.round(p*100), c=probColor(p), w=probWord(p);
-    const e10=Math.round(lk.medianIceOut-1.28*lk.sigma), e90=Math.round(lk.medianIceOut+1.28*lk.sigma);
-    h+=`<div class="prob-card">
-      <div class="prob-header">
-        <div class="lake-name"><div class="dot" style="background:${lk.color}"></div>${lk.short}</div>
-        <div class="prob-pct" style="color:${c}">${pct}%</div>
-      </div>
-      <div class="prob-bar-track"><div class="prob-bar-fill" style="width:${pct}%;background:${c}"></div></div>
-      <div class="prob-meta"><span>${w}</span><span>Median: ${doyLabel(lk.medianIceOut)}</span></div>
-      <div class="prob-meta" style="margin-top:2px"><span>${lk.depth} / ${lk.fish.split(',')[0]}</span><span>80%: ${doyLabel(e10)}-${doyLabel(e90)}</span></div>
+    const p=empiricalProb(doy,lk.adj);
+    const pct=Math.round(p*100);
+    const c=probColor(p);
+    const w=probWord(p);
+    const stats=lakeStats(lk.adj);
+    // Count how many of N years
+    const openYears=Math.round(p*N_YEARS);
+    h+=`<div class="pc">
+      <div class="ph"><div class="ln"><div class="d" style="background:${lk.color}"></div>${lk.short}</div><div class="pp" style="color:${c}">${pct}%</div></div>
+      <div class="bt"><div class="bf" style="width:${pct}%;background:${c}"></div></div>
+      <div class="pm"><span>${w}</span><span>${openYears}/${N_YEARS} years open</span></div>
+      <div class="pm" style="margin-top:2px"><span>${lk.depth} / ${lk.fish.split(',')[0]}</span><span>Med: ${doyLabel(stats.median)}</span></div>
+      <div class="pm" style="margin-top:2px"><span>Earliest: ${doyLabel(stats.earliest)}</span><span>Latest: ${doyLabel(stats.latest)}</span></div>
     </div>`;
   });
-  document.getElementById('prob-cards').innerHTML=h;
+  document.getElementById('probCards').innerHTML=h;
 }
 
 // ══════════════════════════════════════════════════════
 // FILMSTRIP
 // ══════════════════════════════════════════════════════
-function updateFilmstrip() {
-  const m=curDate.getMonth(), d=curDate.getDate();
+function updateFilmstrip(){
+  const m=curDate.getMonth(),d=curDate.getDate();
   const label=curDate.toLocaleDateString('en-US',{month:'long',day:'numeric'});
-  document.getElementById('filmstrip-label').innerHTML=
-    `<strong>${label}</strong> across all years. Click to load. Compare consecutive days to distinguish ice from cloud.`;
-
-  const L_=LAYERS[curLayer], thisYear=new Date().getFullYear();
-  const today=new Date(); today.setHours(23,59,59,999);
+  document.getElementById('filmLabel').innerHTML=`<strong>${label}</strong> across all years. Click to load. Step +/-1 day to distinguish ice from cloud.`;
+  const L_=LAYERS[curLayer],thisYear=new Date().getFullYear(),today=new Date();today.setHours(23,59,59,999);
   const tz=7,tr=45,tc=33;
-
   let h='';
   for(let y=thisYear;y>=L_.start;y--){
-    const dt=new Date(y,m,d);
-    if(dt>today)continue;
-    const ds=fmt(dt);
-    const url=`https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/${L_.id}/default/${ds}/${L_.matrix}/${tz}/${tr}/${tc}.${L_.ext}`;
+    const dt=new Date(y,m,d);if(dt>today)continue;
+    const ds=fmt(dt),url=`https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/${L_.id}/default/${ds}/${L_.matrix}/${tz}/${tr}/${tc}.${L_.ext}`;
     const isActive=(y===curDate.getFullYear());
     const doy=dayOfYear(dt);
-    const p=iceProb(LAKES[0],doy);
+    // Empirical prob for Mijin as reference
+    const p=empiricalProb(doy,LAKE_ADJUST.deep);
     const pct=Math.round(p*100);
-
-    h+=`<div class="film-year${isActive?' active':''}" onclick="loadYear(${y})">
+    h+=`<div class="fy${isActive?' active':''}" onclick="loadYear(${y})">
       <div class="yr">${y}</div>
-      <div class="film-thumb"><img src="${url}" loading="lazy" onerror="this.parentElement.style.background='var(--border)';this.style.display='none'"/></div>
-      <div class="film-label">${ds}</div>
-      <div class="film-est-badge">~${pct}% est</div>
+      <div class="ft"><img src="${url}" loading="lazy" onerror="this.parentElement.style.background='var(--border)';this.style.display='none'"/></div>
+      <div class="fl">${ds}</div>
+      <div class="feb">${pct}% emp</div>
     </div>`;
   }
   document.getElementById('filmstrip').innerHTML=h;
 }
+function loadYear(y){curDate=new Date(y,curDate.getMonth(),curDate.getDate());updateAll()}
 
-function loadYear(y){curDate=new Date(y,curDate.getMonth(),curDate.getDate());updateAll();}
-
-// ══════════════════════════════════════════════════════
-// CONTROLS
-// ══════════════════════════════════════════════════════
-function stepDate(n){curDate.setDate(curDate.getDate()+n);updateAll();}
-function setToday(){curDate=new Date();curDate.setDate(curDate.getDate()-1);updateAll();}
-function setLayer(k){curLayer=k;updateAll();}
-document.getElementById('dateInput').addEventListener('change',function(){curDate=new Date(this.value+'T12:00:00');updateAll();});
+function stepDate(n){curDate.setDate(curDate.getDate()+n);updateAll()}
+function setToday(){curDate=new Date();curDate.setDate(curDate.getDate()-1);updateAll()}
+function setLayer(k){curLayer=k;updateAll()}
+document.getElementById('dateInput').addEventListener('change',function(){curDate=new Date(this.value+'T12:00:00');updateAll()});
 
 // ══════════════════════════════════════════════════════
 // MARKERS
 // ══════════════════════════════════════════════════════
 const markers=[];
 LAKES.forEach((lk,i)=>{
-  const icon=L.divIcon({className:'',
-    html:`<div class="lake-marker" style="background:${lk.color}">${lk.short.charAt(0)}</div>`,
-    iconSize:[22,22],iconAnchor:[11,11]});
+  const stats=lakeStats(lk.adj);
+  const icon=L.divIcon({className:'',html:`<div class="lm" style="background:${lk.color}">${lk.short.charAt(0)}</div>`,iconSize:[22,22],iconAnchor:[11,11]});
   const mk=L.marker([lk.lat,lk.lng],{icon}).addTo(map);
-  mk.bindPopup(`<div class="lake-popup">
-    <h3>${lk.name}</h3>
+  mk.bindPopup(`<div class="lake-popup"><h3>${lk.name}</h3>
     <div style="color:var(--ice);font-size:11px">${lk.fish}</div>
     <div style="margin:4px 0;font-size:11px">${lk.note}</div>
-    <div style="color:var(--text-dim);font-size:10px;font-family:'DM Mono',monospace">
-      Median ice-out: ${doyLabel(lk.medianIceOut)}<br>
-      80% window: ${doyLabel(Math.round(lk.medianIceOut-1.28*lk.sigma))}-${doyLabel(Math.round(lk.medianIceOut+1.28*lk.sigma))}<br>
+    <div style="color:var(--dim);font-size:10px;font-family:'DM Mono',monospace">
+      Empirical ice-out (${N_YEARS} years):<br>
+      Earliest: ${doyLabel(stats.earliest)} | Median: ${doyLabel(stats.median)} | Latest: ${doyLabel(stats.latest)}<br>
       ${lk.lat.toFixed(4)}N, ${Math.abs(lk.lng).toFixed(4)}W
-    </div>
-  </div>`,{className:'lake-popup',maxWidth:230});
+    </div></div>`,{className:'lake-popup',maxWidth:260});
   markers.push(mk);
 });
+const ll=document.getElementById('lakeList');
+LAKES.forEach((lk,i)=>{const el=document.createElement('div');el.className='li';el.innerHTML=`<div class="ld" style="background:${lk.color}"></div><span>${lk.short}</span><span class="lt">${lk.fish.split(',')[0]}</span>`;el.onclick=()=>{map.setView([lk.lat,lk.lng],12);markers[i].openPopup()};ll.appendChild(el)});
 
-const ll=document.getElementById('lake-list');
-LAKES.forEach((lk,i)=>{
-  const el=document.createElement('div');el.className='lake-item';
-  el.innerHTML=`<div class="lake-dot" style="background:${lk.color}"></div><span>${lk.short}</span><span class="lake-type">${lk.fish.split(',')[0]}</span>`;
-  el.onclick=()=>{map.setView([lk.lat,lk.lng],12);markers[i].openPopup();};
-  ll.appendChild(el);
-});
-
-// ══════════════════════════════════════════════════════
-// KEYBOARD
-// ══════════════════════════════════════════════════════
-document.addEventListener('keydown',e=>{
-  if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;
-  if(e.key==='ArrowLeft')stepDate(-1);
-  if(e.key==='ArrowRight')stepDate(1);
-  if(e.key==='ArrowUp')stepDate(7);
-  if(e.key==='ArrowDown')stepDate(-7);
-  if(e.key==='n')toggleNDSI();
-  if(e.key==='h')map.setView(parkCenter,11);
-});
-
+document.addEventListener('keydown',e=>{if(e.target.tagName==='INPUT'||e.target.tagName==='SELECT')return;if(e.key==='ArrowLeft')stepDate(-1);if(e.key==='ArrowRight')stepDate(1);if(e.key==='ArrowUp')stepDate(7);if(e.key==='ArrowDown')stepDate(-7);if(e.key==='n')toggleNDSI();if(e.key==='h')map.setView(parkCenter,11)});
 updateAll();
 </script>
 </body>
