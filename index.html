@@ -103,13 +103,14 @@
   <div id="map">
     <div class="fo" id="futureOverlay"><h2>📡 <span>Future Date</span></h2><p>No satellite imagery yet.<br>Latest image at 40% opacity.<br>See sidebar for empirical estimates.</p></div>
     <div class="ndleg" id="ndsiLegend">
-      <h4>MODIS NDSI Snow/Ice</h4>
-      <div class="nr"><div class="ns" style="background:#00e600"></div>Snow/Ice (confirmed)</div>
-      <div class="nr"><div class="ns" style="background:#1a1aff"></div>Lake Ice</div>
-      <div class="nr"><div class="ns" style="background:#4d4dff"></div>Inland Water (open)</div>
-      <div class="nr"><div class="ns" style="background:grey"></div>Cloud (obscured)</div>
-      <div class="nr"><div class="ns" style="background:#996600"></div>Land (no snow)</div>
-      <div style="margin-top:4px;font-size:9px">Uses shortwave IR. Separates cloud from ice.</div>
+      <h4>MODIS NDSI Snow Cover</h4>
+      <div class="nr"><div class="ns" style="background:#fff"></div>High snow/ice (NDSI 80-100)</div>
+      <div class="nr"><div class="ns" style="background:#5cf0ff"></div>Moderate snow/ice (NDSI 40-80)</div>
+      <div class="nr"><div class="ns" style="background:#0dffff"></div>Low snow/ice (NDSI 1-40)</div>
+      <div class="nr"><div class="ns" style="background:#000"></div>Snow-free land</div>
+      <div class="nr"><div class="ns" style="background:rgba(200,200,200,.7)"></div>Cloud (no data)</div>
+      <div class="nr"><div class="ns" style="background:transparent;border:1px dashed var(--dim)"></div>Transparent = open water</div>
+      <div style="margin-top:4px;font-size:9px">Shortwave IR separates cloud from ice.<br>Compare: white in true-color may be cloud<br>but transparent here = confirmed open water.</div>
     </div>
   </div>
   <div class="sb">
