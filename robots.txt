@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lspp-ice-out.vercel.app/sitemap.xml
