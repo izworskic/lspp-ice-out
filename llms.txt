@@ -1,0 +1,10 @@
+# LSPP Ice-Out
+> An ice-out probability tracker for the inland lakes of Lake Superior Provincial Park, Ontario, by Chris Izworski: live MODIS satellite imagery and an empirical ice-out model for each lake.
+
+The model is anchored on real Wawa Lake ice records (2012-2023), extended with Lake Opeongo proxy data, and depth-adjusted per lake class. Key lakes: Mijinemungshing, Gamitagama, Old Woman, Mirimoki, Crescent, Rabbit Blanket, Fenton.
+
+## Key pages
+- [Ice-out map](https://lspp-ice-out.vercel.app/): NASA GIBS MODIS true-color and NDSI snow/ice overlays with per-lake probabilities
+
+## Author
+Chris Izworski (https://chrisizworski.com), Michigan angler who fishes LSPP at first ice-out each spring. Related: Michigan Trout Report (https://michigantroutreport.com), Michigan Phenology (https://phenology.chrisizworski.com).
