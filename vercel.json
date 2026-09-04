@@ -1,0 +1,4 @@
+{
+  "buildCommand": "node scripts/inject-ga4.mjs",
+  "outputDirectory": "public"
+}
