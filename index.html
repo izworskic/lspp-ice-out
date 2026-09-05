@@ -259,7 +259,7 @@ function lakeStats(adj){
 const parkCenter=[47.66,-84.74];
 const map=L.map('map',{center:parkCenter,zoom:11,zoomControl:false,attributionControl:false,maxZoom:12,minZoom:5});
 L.control.zoom({position:'bottomright'}).addTo(map);
-const basemap=L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,opacity:.4}).addTo(map);
+const basemap=L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=cb1_2y8f_1_1ee5e3a872c91d0ebf5d7b88',{maxZoom:19,opacity:.4}).addTo(map);
 L.control.attribution({position:'bottomleft',prefix:false}).addAttribution('<a href="https://earthdata.nasa.gov/gibs" target="_blank">NASA GIBS</a> | CARTO').addTo(map);
 
 const LAYERS={modis:{id:'MODIS_Terra_CorrectedReflectance_TrueColor',matrix:'GoogleMapsCompatible_Level9',ext:'jpg',maxN:9,start:2001},viirs:{id:'VIIRS_SNPP_CorrectedReflectance_TrueColor',matrix:'GoogleMapsCompatible_Level9',ext:'jpg',maxN:9,start:2012},aqua:{id:'MODIS_Aqua_CorrectedReflectance_TrueColor',matrix:'GoogleMapsCompatible_Level9',ext:'jpg',maxN:9,start:2003}};
