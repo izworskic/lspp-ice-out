@@ -66,8 +66,24 @@ for h in rows:
     if pred is None or len(obs)<10:continue
     residuals=[o-pred for o in obs]
     (test if int(hashlib.sha1(h['lakecode'].encode()).hexdigest()[:8],16)%5==0 else train).extend(residuals)
-lo=percentile(train,.10);hi=percentile(train,.90)
-# Also evaluate symmetric interval chosen by train absolute 80th percentile for comparison.
-half=percentile([abs(x) for x in train],.80)
-out={'method':'regional median residual interval; 10/90 residual quantiles selected on deterministic 80% lake training split, tested on held-out 20% lakes','train_cases':len(train),'test_cases':len(test),'selected_asymmetric_offsets_days':{'p10':round(lo,2),'p90':round(hi,2)},'selected_symmetric_halfwidth_days':round(half,2),'train_asymmetric':score(train,lo,hi),'test_asymmetric':score(test,lo,hi),'train_symmetric':score(train,-half,half),'test_symmetric':score(test,-half,half)}
+lo10=percentile(train,.10);hi90=percentile(train,.90)
+lo25=percentile(train,.25);hi75=percentile(train,.75)
+half80=percentile([abs(x) for x in train],.80)
+half50=percentile([abs(x) for x in train],.50)
+out={
+ 'method':'regional median residual intervals selected on deterministic 80% lake training split and tested on held-out 20% lakes',
+ 'train_cases':len(train),'test_cases':len(test),
+ 'interval80':{
+   'asymmetric_offsets_days':{'p10':round(lo10,2),'p90':round(hi90,2)},
+   'symmetric_halfwidth_days':round(half80,2),
+   'train_asymmetric':score(train,lo10,hi90),'test_asymmetric':score(test,lo10,hi90),
+   'train_symmetric':score(train,-half80,half80),'test_symmetric':score(test,-half80,half80)
+ },
+ 'interval50':{
+   'asymmetric_offsets_days':{'p25':round(lo25,2),'p75':round(hi75,2)},
+   'symmetric_halfwidth_days':round(half50,2),
+   'train_asymmetric':score(train,lo25,hi75),'test_asymmetric':score(test,lo25,hi75),
+   'train_symmetric':score(train,-half50,half50),'test_symmetric':score(test,-half50,half50)
+ }
+}
 OUT.parent.mkdir(parents=True,exist_ok=True);OUT.write_text(json.dumps(out,indent=2),encoding='utf-8');print(json.dumps(out,indent=2))
