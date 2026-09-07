@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# Applies only after the empirical probability benchmark has passed; fails closed if source markers drift.
 from pathlib import Path
 p=Path('north-america/app.js')
 s=p.read_text(encoding='utf-8')
