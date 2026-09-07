@@ -164,6 +164,23 @@
   function histLakeObject(h){
     return {lat:Number(h.lat),lng:Number(h.lon),elev:Number(h.elevation_m)||0,depth:depthClass(Number(h.mean_depth_m)),area:areaClass(Number(h.surface_area_km2)),registry:'history'};
   }
+  function historyAreaAgreement(lake,h,maxRatio=2.5){
+    const a=Number(lake.areaKm2),b=Number(h.surface_area_km2);
+    if(!(a>0)||!(b>0))return false;
+    return Math.max(a,b)/Math.min(a,b)<=maxRatio;
+  }
+  function chooseDirectHistory(lake,ranked){
+    // Prefer false negatives over false positives: attaching another lake's history is worse
+    // than falling back to the validated regional model.
+    const byName=ranked.filter(x=>x.same&&x.d<=35);
+    let hit=byName.find(x=>x.d<=15);
+    if(!hit)hit=byName.find(x=>x.d<=35&&historyAreaAgreement(lake,x.h,2.5));
+    if(hit)return {...hit,matchMethod:hit.d<=15?'name+distance':'name+distance+area'};
+    hit=ranked.find(x=>x.d<=.35);
+    if(hit)return {...hit,matchMethod:'near-exact-coordinate'};
+    hit=ranked.find(x=>x.d<=1.0&&historyAreaAgreement(lake,x.h,2.0));
+    return hit?{...hit,matchMethod:'coordinate+area'}:null;
+  }
   async function attachHistory(lake){
     if(lake.history||lake.historyAttempted)return;
     lake.historyAttempted=true;
@@ -171,10 +188,10 @@
       const data=await getIceHistory(),rows=(data.lakes||[]).filter(h=>Number.isFinite(Number(h.lat))&&Number.isFinite(Number(h.lon)));
       const lk=nameKey(lake.name),country=lake.country==='US'?'USA':'CANADA';
       const ranked=rows.filter(h=>h.country===country).map(h=>({h,d:distanceKm(lake,{lat:Number(h.lat),lng:Number(h.lon)}),same:nameKey(h.name)===lk})).sort((a,b)=>a.d-b.d);
-      const direct=ranked.find(x=>(x.same&&x.d<=35)||x.d<=1.5);
+      const direct=chooseDirectHistory(lake,ranked);
       if(direct){
         const h=direct.h;
-        lake.history={type:'direct',source:'NSIDC G01377',lakecode:h.lakecode,name:h.name,distanceKm:direct.d,records:Number(h.records)||0,firstYear:h.first_year,lastYear:h.last_year,medianDoy:Number(h.median_doy),p10Doy:Number(h.p10_doy),p20Doy:Number(h.p20_doy),p25Doy:Number(h.p25_doy),p75Doy:Number(h.p75_doy),p80Doy:Number(h.p80_doy),p90Doy:Number(h.p90_doy),doys:Array.isArray(h.iceout_doys)?h.iceout_doys.map(Number).filter(Number.isFinite):[],trendDaysDecade:h.trend_days_decade};
+        lake.history={type:'direct',source:'NSIDC G01377',lakecode:h.lakecode,name:h.name,distanceKm:direct.d,matchMethod:direct.matchMethod,records:Number(h.records)||0,firstYear:h.first_year,lastYear:h.last_year,medianDoy:Number(h.median_doy),p10Doy:Number(h.p10_doy),p20Doy:Number(h.p20_doy),p25Doy:Number(h.p25_doy),p75Doy:Number(h.p75_doy),p80Doy:Number(h.p80_doy),p90Doy:Number(h.p90_doy),doys:Array.isArray(h.iceout_doys)?h.iceout_doys.map(Number).filter(Number.isFinite):[],trendDaysDecade:h.trend_days_decade};
       }else{
         const nearby=ranked.filter(x=>x.d<=500&&Number(x.h.records)>=15).slice(0,16);
         if(nearby.length>=3){
