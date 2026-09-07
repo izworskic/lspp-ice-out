@@ -1,0 +1,40 @@
+name: Benchmark seasonal ice-out physics
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - seasonal-physics
+    paths:
+      - scripts/benchmark_seasonal_physics.py
+      - .github/workflows/benchmark-seasonal-physics.yml
+
+permissions:
+  contents: write
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical dependencies
+        run: pip install numpy==2.1.3 scikit-learn==1.5.2
+      - name: Run NASA POWER seasonal-physics benchmark
+        run: python scripts/benchmark_seasonal_physics.py
+      - name: Commit benchmark products
+        run: |
+          git config user.name "ice-out-physics-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add north-america/data/seasonal-physics/benchmark.json north-america/data/seasonal-physics/features.json
+          if git diff --cached --quiet; then
+            echo "No seasonal physics benchmark changes"
+          else
+            git commit -m "Update seasonal physics benchmark"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
