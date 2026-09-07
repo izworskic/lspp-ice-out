@@ -76,7 +76,8 @@
     if(isRegional(lake)) spread = lake.lat>60 ? 22 : 18;
     else if(isOfficial(lake) && lake.enriched) spread = Math.max(spread,13);
     const targetDoy = doy(targetDate);
-    const scale = Math.max(4.8, spread/2.1);
+    // Held-out regional calibration benchmark selected a 6.5-day logistic scale.
+    const scale = lake.history?.type==='regional' ? 6.5 : Math.max(4.8, spread/2.1);
     let probability;
     if(lake.history?.type==='direct' && Array.isArray(lake.history.doys) && lake.history.doys.length>=5){
       // Rolling-origin validation favors a lightly smoothed empirical CDF over a generic S-curve.
