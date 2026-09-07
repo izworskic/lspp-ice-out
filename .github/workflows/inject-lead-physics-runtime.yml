@@ -7,6 +7,7 @@ on:
       - seasonal-physics
     paths:
       - scripts/inject_lead_physics_runtime.py
+      - scripts/patch_physics_runtime_confidence.py
       - api/seasonal-physics.js
       - scripts/inject-ga4.mjs
       - north-america/data/seasonal-physics/lead-models.json
@@ -33,7 +34,9 @@ jobs:
         with:
           node-version: '22'
       - name: Inject validated lead-aware runtime
-        run: python scripts/inject_lead_physics_runtime.py
+        run: |
+          python scripts/inject_lead_physics_runtime.py
+          python scripts/patch_physics_runtime_confidence.py
       - name: Check browser and API JavaScript syntax
         run: |
           node --check north-america/app.js
