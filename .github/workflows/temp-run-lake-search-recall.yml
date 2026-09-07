@@ -1,0 +1,48 @@
+name: Temporary lake search recall runner
+
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/temp-run-lake-search-recall.yml]
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/lake-search-recall
+          fetch-depth: 2
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: python scripts/patch-lake-search-recall.py
+      - run: node --check north-america/app.js
+      - name: Validate search recall code
+        run: |
+          grep -q "resultRecordCount:'75'" north-america/app.js
+          grep -q "num:'75'" north-america/app.js
+          grep -q "function rankLakeResults" north-america/app.js
+          if grep -q "filter(l=>/lake|reservoir|pond|flowage/i.test(l.featureClass))" north-america/app.js; then exit 1; fi
+      - name: Smoke real official registries
+        run: |
+          node <<'NODE'
+          const us='https://carto.nationalmap.gov/arcgis/rest/services/geonames/MapServer/7/query?where='+encodeURIComponent("gaz_name LIKE '%Higgins%'")+'&outFields=gaz_id,gaz_name,gaz_featureclass,state_alpha,county_name&returnGeometry=true&outSR=4326&f=geojson&resultRecordCount=75';
+          const ca='https://geogratis.gc.ca/services/geoname/en/geonames.json?q=Opeongo&category=O&concise=LAKE&num=75&expand=items.concise,items.province&select=items.concise.term,items.province.description';
+          for(const [name,url] of [['USGS',us],['NRCan',ca]]){
+            const r=await fetch(url,{headers:{Accept:'application/json,application/geo+json'}}); if(!r.ok)throw new Error(`${name} ${r.status}`);
+            const j=await r.json(); const rows=Array.isArray(j)?j:(j.features||j.items||j.results||[]);
+            console.log(name,rows.length,rows.slice(0,5).map(x=>x?.properties?.gaz_name||x?.name||x?.geoname));
+            if(!rows.length)throw new Error(`${name} returned no candidates`);
+          }
+          NODE
+      - name: Commit runtime patch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add north-america/app.js
+          git commit -m 'Improve official lake search recall and ranking'
+          git push origin HEAD:fix/lake-search-recall
