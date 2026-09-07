@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "source": "NOAA/USNIC IMS G02156 1-km GeoTIFF",
   "class_semantics": {
     "1": "open water/sea class",
@@ -21,44 +21,84 @@
       "iceout_date": "2020-04-02",
       "samples": [
         {
+          "water_pixels": 0,
+          "ice_pixels": 14,
+          "land_pixels": 67,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 14,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -7,
           "date": "2020-03-26",
-          "error": "No IMS 1-km GeoTIFF for 2020-03-26",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020086_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 14,
+          "land_pixels": 67,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 14,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -3,
           "date": "2020-03-30",
-          "error": "No IMS 1-km GeoTIFF for 2020-03-30",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020090_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 14,
+          "land_pixels": 67,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 14,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 0,
           "date": "2020-04-02",
-          "error": "No IMS 1-km GeoTIFF for 2020-04-02",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020093_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 14,
+          "land_pixels": 67,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 14,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 3,
           "date": "2020-04-05",
-          "error": "No IMS 1-km GeoTIFF for 2020-04-05",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020096_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 14,
+          "ice_pixels": 0,
+          "land_pixels": 67,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 14,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 7,
           "date": "2020-04-09",
-          "error": "No IMS 1-km GeoTIFF for 2020-04-09",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020100_1km_GIS_v1.3.tif.gz"
         }
       ],
-      "median_pre_iceout_fraction": null,
-      "median_post_iceout_fraction": null,
-      "drop_pre_to_post": null
+      "median_pre_iceout_fraction": 1.0,
+      "median_post_iceout_fraction": 0.5,
+      "drop_pre_to_post": 0.5
     },
     {
       "lakecode": "MINN12",
@@ -71,44 +111,84 @@
       "iceout_date": "2019-04-20",
       "samples": [
         {
+          "water_pixels": 14,
+          "ice_pixels": 0,
+          "land_pixels": 0,
+          "snow_pixels": 67,
+          "usable_water_ice_pixels": 14,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -7,
           "date": "2019-04-13",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-13",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019103_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 14,
+          "ice_pixels": 0,
+          "land_pixels": 67,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 14,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -3,
           "date": "2019-04-17",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-17",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019107_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 14,
+          "ice_pixels": 0,
+          "land_pixels": 67,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 14,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 0,
           "date": "2019-04-20",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-20",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019110_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 14,
+          "ice_pixels": 0,
+          "land_pixels": 67,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 14,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 3,
           "date": "2019-04-23",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-23",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019113_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 14,
+          "ice_pixels": 0,
+          "land_pixels": 67,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 14,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 7,
           "date": "2019-04-27",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-27",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019117_1km_GIS_v1.3.tif.gz"
         }
       ],
-      "median_pre_iceout_fraction": null,
-      "median_post_iceout_fraction": null,
-      "drop_pre_to_post": null
+      "median_pre_iceout_fraction": 0.0,
+      "median_post_iceout_fraction": 0.0,
+      "drop_pre_to_post": 0.0
     },
     {
       "lakecode": "JJM24",
@@ -121,44 +201,84 @@
       "iceout_date": "2020-03-26",
       "samples": [
         {
+          "water_pixels": 0,
+          "ice_pixels": 36,
+          "land_pixels": 45,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 36,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -7,
           "date": "2020-03-19",
-          "error": "No IMS 1-km GeoTIFF for 2020-03-19",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020079_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 36,
+          "land_pixels": 45,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 36,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -3,
           "date": "2020-03-23",
-          "error": "No IMS 1-km GeoTIFF for 2020-03-23",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020083_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 36,
+          "land_pixels": 45,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 36,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 0,
           "date": "2020-03-26",
-          "error": "No IMS 1-km GeoTIFF for 2020-03-26",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020086_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 36,
+          "land_pixels": 45,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 36,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 3,
           "date": "2020-03-29",
-          "error": "No IMS 1-km GeoTIFF for 2020-03-29",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020089_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 36,
+          "land_pixels": 45,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 36,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 7,
           "date": "2020-04-02",
-          "error": "No IMS 1-km GeoTIFF for 2020-04-02",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020093_1km_GIS_v1.3.tif.gz"
         }
       ],
-      "median_pre_iceout_fraction": null,
-      "median_post_iceout_fraction": null,
-      "drop_pre_to_post": null
+      "median_pre_iceout_fraction": 1.0,
+      "median_post_iceout_fraction": 1.0,
+      "drop_pre_to_post": 0.0
     },
     {
       "lakecode": "JJM24",
@@ -171,44 +291,84 @@
       "iceout_date": "2019-04-04",
       "samples": [
         {
+          "water_pixels": 0,
+          "ice_pixels": 36,
+          "land_pixels": 45,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 36,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -7,
           "date": "2019-03-28",
-          "error": "No IMS 1-km GeoTIFF for 2019-03-28",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019087_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 36,
+          "land_pixels": 45,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 36,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -3,
           "date": "2019-04-01",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-01",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019091_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 36,
+          "ice_pixels": 0,
+          "land_pixels": 45,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 36,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 0,
           "date": "2019-04-04",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-04",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019094_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 36,
+          "ice_pixels": 0,
+          "land_pixels": 45,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 36,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 3,
           "date": "2019-04-07",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-07",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019097_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 36,
+          "ice_pixels": 0,
+          "land_pixels": 0,
+          "snow_pixels": 45,
+          "usable_water_ice_pixels": 36,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 7,
           "date": "2019-04-11",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-11",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019101_1km_GIS_v1.3.tif.gz"
         }
       ],
-      "median_pre_iceout_fraction": null,
-      "median_post_iceout_fraction": null,
-      "drop_pre_to_post": null
+      "median_pre_iceout_fraction": 1.0,
+      "median_post_iceout_fraction": 0.0,
+      "drop_pre_to_post": 1.0
     },
     {
       "lakecode": "MINN27",
@@ -221,44 +381,84 @@
       "iceout_date": "2020-04-10",
       "samples": [
         {
+          "water_pixels": 0,
+          "ice_pixels": 28,
+          "land_pixels": 53,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 28,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -7,
           "date": "2020-04-03",
-          "error": "No IMS 1-km GeoTIFF for 2020-04-03",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020094_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 28,
+          "ice_pixels": 0,
+          "land_pixels": 53,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 28,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -3,
           "date": "2020-04-07",
-          "error": "No IMS 1-km GeoTIFF for 2020-04-07",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020098_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 28,
+          "ice_pixels": 0,
+          "land_pixels": 53,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 28,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 0,
           "date": "2020-04-10",
-          "error": "No IMS 1-km GeoTIFF for 2020-04-10",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020101_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 28,
+          "ice_pixels": 0,
+          "land_pixels": 53,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 28,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 3,
           "date": "2020-04-13",
-          "error": "No IMS 1-km GeoTIFF for 2020-04-13",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020104_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 28,
+          "ice_pixels": 0,
+          "land_pixels": 53,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 28,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 7,
           "date": "2020-04-17",
-          "error": "No IMS 1-km GeoTIFF for 2020-04-17",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020108_1km_GIS_v1.3.tif.gz"
         }
       ],
-      "median_pre_iceout_fraction": null,
-      "median_post_iceout_fraction": null,
-      "drop_pre_to_post": null
+      "median_pre_iceout_fraction": 0.5,
+      "median_post_iceout_fraction": 0.0,
+      "drop_pre_to_post": 0.5
     },
     {
       "lakecode": "MINN27",
@@ -271,44 +471,84 @@
       "iceout_date": "2019-04-24",
       "samples": [
         {
+          "water_pixels": 0,
+          "ice_pixels": 28,
+          "land_pixels": 53,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 28,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -7,
           "date": "2019-04-17",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-17",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019107_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 28,
+          "land_pixels": 53,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 28,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -3,
           "date": "2019-04-21",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-21",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019111_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 28,
+          "ice_pixels": 0,
+          "land_pixels": 53,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 28,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 0,
           "date": "2019-04-24",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-24",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019114_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 28,
+          "ice_pixels": 0,
+          "land_pixels": 53,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 28,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 3,
           "date": "2019-04-27",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-27",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019117_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 28,
+          "ice_pixels": 0,
+          "land_pixels": 53,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 28,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 7,
           "date": "2019-05-01",
-          "error": "No IMS 1-km GeoTIFF for 2019-05-01",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019121_1km_GIS_v1.3.tif.gz"
         }
       ],
-      "median_pre_iceout_fraction": null,
-      "median_post_iceout_fraction": null,
-      "drop_pre_to_post": null
+      "median_pre_iceout_fraction": 1.0,
+      "median_post_iceout_fraction": 0.0,
+      "drop_pre_to_post": 1.0
     },
     {
       "lakecode": "KMSM1",
@@ -321,44 +561,84 @@
       "iceout_date": "2019-05-09",
       "samples": [
         {
+          "water_pixels": 0,
+          "ice_pixels": 49,
+          "land_pixels": 32,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 49,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -7,
           "date": "2019-05-02",
-          "error": "No IMS 1-km GeoTIFF for 2019-05-02",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019122_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 2,
+          "ice_pixels": 47,
+          "land_pixels": 32,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 49,
+          "ice_fraction": 0.9592,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -3,
           "date": "2019-05-06",
-          "error": "No IMS 1-km GeoTIFF for 2019-05-06",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019126_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 49,
+          "ice_pixels": 0,
+          "land_pixels": 32,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 49,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 0,
           "date": "2019-05-09",
-          "error": "No IMS 1-km GeoTIFF for 2019-05-09",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019129_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 49,
+          "ice_pixels": 0,
+          "land_pixels": 32,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 49,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 3,
           "date": "2019-05-12",
-          "error": "No IMS 1-km GeoTIFF for 2019-05-12",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019132_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 49,
+          "ice_pixels": 0,
+          "land_pixels": 32,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 49,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 7,
           "date": "2019-05-16",
-          "error": "No IMS 1-km GeoTIFF for 2019-05-16",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019136_1km_GIS_v1.3.tif.gz"
         }
       ],
-      "median_pre_iceout_fraction": null,
-      "median_post_iceout_fraction": null,
-      "drop_pre_to_post": null
+      "median_pre_iceout_fraction": 0.9796,
+      "median_post_iceout_fraction": 0.0,
+      "drop_pre_to_post": 0.9796
     },
     {
       "lakecode": "KMSM1",
@@ -371,44 +651,84 @@
       "iceout_date": "2018-05-08",
       "samples": [
         {
+          "water_pixels": 0,
+          "ice_pixels": 49,
+          "land_pixels": 32,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 49,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -7,
           "date": "2018-05-01",
-          "error": "No IMS 1-km GeoTIFF for 2018-05-01",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018121_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 23,
+          "ice_pixels": 26,
+          "land_pixels": 32,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 49,
+          "ice_fraction": 0.5306,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -3,
           "date": "2018-05-05",
-          "error": "No IMS 1-km GeoTIFF for 2018-05-05",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018125_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 49,
+          "ice_pixels": 0,
+          "land_pixels": 32,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 49,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 0,
           "date": "2018-05-08",
-          "error": "No IMS 1-km GeoTIFF for 2018-05-08",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018128_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 49,
+          "ice_pixels": 0,
+          "land_pixels": 32,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 49,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 3,
           "date": "2018-05-11",
-          "error": "No IMS 1-km GeoTIFF for 2018-05-11",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018131_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 49,
+          "ice_pixels": 0,
+          "land_pixels": 32,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 49,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 7,
           "date": "2018-05-15",
-          "error": "No IMS 1-km GeoTIFF for 2018-05-15",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018135_1km_GIS_v1.3.tif.gz"
         }
       ],
-      "median_pre_iceout_fraction": null,
-      "median_post_iceout_fraction": null,
-      "drop_pre_to_post": null
+      "median_pre_iceout_fraction": 0.7653,
+      "median_post_iceout_fraction": 0.0,
+      "drop_pre_to_post": 0.7653
     },
     {
       "lakecode": "LR1",
@@ -421,39 +741,79 @@
       "iceout_date": "2019-04-09",
       "samples": [
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 56,
+          "snow_pixels": 25,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -7,
           "date": "2019-04-02",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-02",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019092_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 81,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -3,
           "date": "2019-04-06",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-06",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019096_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 81,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 0,
           "date": "2019-04-09",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-09",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019099_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 81,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 3,
           "date": "2019-04-12",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-12",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019102_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 81,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 7,
           "date": "2019-04-16",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-16",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019106_1km_GIS_v1.3.tif.gz"
         }
       ],
       "median_pre_iceout_fraction": null,
@@ -471,39 +831,79 @@
       "iceout_date": "2018-04-04",
       "samples": [
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 81,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -7,
           "date": "2018-03-28",
-          "error": "No IMS 1-km GeoTIFF for 2018-03-28",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018087_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 81,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -3,
           "date": "2018-04-01",
-          "error": "No IMS 1-km GeoTIFF for 2018-04-01",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018091_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 81,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 0,
           "date": "2018-04-04",
-          "error": "No IMS 1-km GeoTIFF for 2018-04-04",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018094_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 0,
+          "snow_pixels": 81,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 3,
           "date": "2018-04-07",
-          "error": "No IMS 1-km GeoTIFF for 2018-04-07",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018097_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 81,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 7,
           "date": "2018-04-11",
-          "error": "No IMS 1-km GeoTIFF for 2018-04-11",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018101_1km_GIS_v1.3.tif.gz"
         }
       ],
       "median_pre_iceout_fraction": null,
@@ -521,44 +921,84 @@
       "iceout_date": "2019-05-05",
       "samples": [
         {
+          "water_pixels": 0,
+          "ice_pixels": 79,
+          "land_pixels": 2,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 79,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -7,
           "date": "2019-04-28",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-28",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019118_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 79,
+          "land_pixels": 2,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 79,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -3,
           "date": "2019-05-02",
-          "error": "No IMS 1-km GeoTIFF for 2019-05-02",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019122_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 79,
+          "ice_pixels": 0,
+          "land_pixels": 2,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 79,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 0,
           "date": "2019-05-05",
-          "error": "No IMS 1-km GeoTIFF for 2019-05-05",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019125_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 79,
+          "ice_pixels": 0,
+          "land_pixels": 2,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 79,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 3,
           "date": "2019-05-08",
-          "error": "No IMS 1-km GeoTIFF for 2019-05-08",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019128_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 79,
+          "ice_pixels": 0,
+          "land_pixels": 2,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 79,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 7,
           "date": "2019-05-12",
-          "error": "No IMS 1-km GeoTIFF for 2019-05-12",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019132_1km_GIS_v1.3.tif.gz"
         }
       ],
-      "median_pre_iceout_fraction": null,
-      "median_post_iceout_fraction": null,
-      "drop_pre_to_post": null
+      "median_pre_iceout_fraction": 1.0,
+      "median_post_iceout_fraction": 0.0,
+      "drop_pre_to_post": 1.0
     },
     {
       "lakecode": "PJD15",
@@ -571,44 +1011,84 @@
       "iceout_date": "2018-05-07",
       "samples": [
         {
+          "water_pixels": 0,
+          "ice_pixels": 79,
+          "land_pixels": 0,
+          "snow_pixels": 2,
+          "usable_water_ice_pixels": 79,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -7,
           "date": "2018-04-30",
-          "error": "No IMS 1-km GeoTIFF for 2018-04-30",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018120_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 79,
+          "land_pixels": 2,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 79,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -3,
           "date": "2018-05-04",
-          "error": "No IMS 1-km GeoTIFF for 2018-05-04",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018124_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 79,
+          "ice_pixels": 0,
+          "land_pixels": 2,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 79,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 0,
           "date": "2018-05-07",
-          "error": "No IMS 1-km GeoTIFF for 2018-05-07",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018127_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 79,
+          "ice_pixels": 0,
+          "land_pixels": 2,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 79,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 3,
           "date": "2018-05-10",
-          "error": "No IMS 1-km GeoTIFF for 2018-05-10",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018130_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 79,
+          "ice_pixels": 0,
+          "land_pixels": 2,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 79,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 7,
           "date": "2018-05-14",
-          "error": "No IMS 1-km GeoTIFF for 2018-05-14",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018134_1km_GIS_v1.3.tif.gz"
         }
       ],
-      "median_pre_iceout_fraction": null,
-      "median_post_iceout_fraction": null,
-      "drop_pre_to_post": null
+      "median_pre_iceout_fraction": 1.0,
+      "median_post_iceout_fraction": 0.0,
+      "drop_pre_to_post": 1.0
     },
     {
       "lakecode": "DMR1",
@@ -621,44 +1101,84 @@
       "iceout_date": "2019-03-31",
       "samples": [
         {
+          "water_pixels": 0,
+          "ice_pixels": 40,
+          "land_pixels": 41,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 40,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -7,
           "date": "2019-03-24",
-          "error": "No IMS 1-km GeoTIFF for 2019-03-24",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019083_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 40,
+          "land_pixels": 41,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 40,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -3,
           "date": "2019-03-28",
-          "error": "No IMS 1-km GeoTIFF for 2019-03-28",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019087_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 40,
+          "land_pixels": 41,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 40,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 0,
           "date": "2019-03-31",
-          "error": "No IMS 1-km GeoTIFF for 2019-03-31",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019090_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 40,
+          "land_pixels": 41,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 40,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 3,
           "date": "2019-04-03",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-03",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019093_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 40,
+          "ice_pixels": 0,
+          "land_pixels": 41,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 40,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 7,
           "date": "2019-04-07",
-          "error": "No IMS 1-km GeoTIFF for 2019-04-07",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019097_1km_GIS_v1.3.tif.gz"
         }
       ],
-      "median_pre_iceout_fraction": null,
-      "median_post_iceout_fraction": null,
-      "drop_pre_to_post": null
+      "median_pre_iceout_fraction": 1.0,
+      "median_post_iceout_fraction": 0.5,
+      "drop_pre_to_post": 0.5
     },
     {
       "lakecode": "DMR1",
@@ -671,44 +1191,84 @@
       "iceout_date": "2018-03-31",
       "samples": [
         {
+          "water_pixels": 0,
+          "ice_pixels": 40,
+          "land_pixels": 41,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 40,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -7,
           "date": "2018-03-24",
-          "error": "No IMS 1-km GeoTIFF for 2018-03-24",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018083_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 40,
+          "land_pixels": 41,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 40,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -3,
           "date": "2018-03-28",
-          "error": "No IMS 1-km GeoTIFF for 2018-03-28",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018087_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 40,
+          "land_pixels": 41,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 40,
+          "ice_fraction": 1.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 0,
           "date": "2018-03-31",
-          "error": "No IMS 1-km GeoTIFF for 2018-03-31",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018090_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 40,
+          "ice_pixels": 0,
+          "land_pixels": 41,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 40,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 3,
           "date": "2018-04-03",
-          "error": "No IMS 1-km GeoTIFF for 2018-04-03",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018093_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 40,
+          "ice_pixels": 0,
+          "land_pixels": 41,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 40,
+          "ice_fraction": 0.0,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 7,
           "date": "2018-04-07",
-          "error": "No IMS 1-km GeoTIFF for 2018-04-07",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018097_1km_GIS_v1.3.tif.gz"
         }
       ],
-      "median_pre_iceout_fraction": null,
-      "median_post_iceout_fraction": null,
-      "drop_pre_to_post": null
+      "median_pre_iceout_fraction": 1.0,
+      "median_post_iceout_fraction": 0.0,
+      "drop_pre_to_post": 1.0
     },
     {
       "lakecode": "RH1",
@@ -721,39 +1281,79 @@
       "iceout_date": "2019-05-11",
       "samples": [
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 81,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -7,
           "date": "2019-05-04",
-          "error": "No IMS 1-km GeoTIFF for 2019-05-04",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019124_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 81,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -3,
           "date": "2019-05-08",
-          "error": "No IMS 1-km GeoTIFF for 2019-05-08",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019128_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 81,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 0,
           "date": "2019-05-11",
-          "error": "No IMS 1-km GeoTIFF for 2019-05-11",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019131_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 81,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 3,
           "date": "2019-05-14",
-          "error": "No IMS 1-km GeoTIFF for 2019-05-14",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019134_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 81,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 7,
           "date": "2019-05-18",
-          "error": "No IMS 1-km GeoTIFF for 2019-05-18",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019138_1km_GIS_v1.3.tif.gz"
         }
       ],
       "median_pre_iceout_fraction": null,
@@ -771,39 +1371,79 @@
       "iceout_date": "2018-05-09",
       "samples": [
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 81,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -7,
           "date": "2018-05-02",
-          "error": "No IMS 1-km GeoTIFF for 2018-05-02",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018122_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 81,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": -3,
           "date": "2018-05-06",
-          "error": "No IMS 1-km GeoTIFF for 2018-05-06",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018126_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 81,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 0,
           "date": "2018-05-09",
-          "error": "No IMS 1-km GeoTIFF for 2018-05-09",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018129_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 81,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 3,
           "date": "2018-05-12",
-          "error": "No IMS 1-km GeoTIFF for 2018-05-12",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018132_1km_GIS_v1.3.tif.gz"
         },
         {
+          "water_pixels": 0,
+          "ice_pixels": 0,
+          "land_pixels": 81,
+          "snow_pixels": 0,
+          "usable_water_ice_pixels": 0,
+          "ice_fraction": null,
+          "shape": [
+            9,
+            9
+          ],
           "offset_days": 7,
           "date": "2018-05-16",
-          "error": "No IMS 1-km GeoTIFF for 2018-05-16",
-          "ice_fraction": null,
-          "usable_water_ice_pixels": 0
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018136_1km_GIS_v1.3.tif.gz"
         }
       ],
       "median_pre_iceout_fraction": null,
@@ -813,11 +1453,11 @@
   ],
   "summary": {
     "cases": 16,
-    "usable_cases": 0,
-    "positive_drop_fraction": null,
-    "median_pre_fraction": null,
-    "median_post_fraction": null,
-    "median_drop": null
+    "usable_cases": 12,
+    "positive_drop_fraction": 0.8333,
+    "median_pre_fraction": 1.0,
+    "median_post_fraction": 0.0,
+    "median_drop": 0.8724
   },
   "gate": "Proceed to full IMS classifier backtest only if >=8 usable cases and >=70% show declining IMS ice fraction across reported ice-out."
 }
