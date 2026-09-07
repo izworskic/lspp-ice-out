@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - historical-calibration
+      - seasonal-physics
     paths:
       - scripts/build_nsidc_calibration.py
       - .github/workflows/build-nsidc-calibration.yml
