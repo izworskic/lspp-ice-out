@@ -1,0 +1,823 @@
+{
+  "version": 2,
+  "source": "NOAA/USNIC IMS G02156 1-km GeoTIFF",
+  "class_semantics": {
+    "1": "open water/sea class",
+    "3": "ice",
+    "2": "land",
+    "4": "snow-covered land"
+  },
+  "method": "9x9-pixel neighborhood around NSIDC lake coordinate; fraction uses only IMS water+ice pixels; sampled -7,-3,0,+3,+7 days around reported ice-out; archive filename/version discovered from year index",
+  "candidate_rule": "NSIDC lakes with area >= 20 km2 and observations since 2014",
+  "cases": [
+    {
+      "lakecode": "MINN12",
+      "lake": "MINNETONKA",
+      "country": "UNITED STATES",
+      "lat": 44.87,
+      "lon": -93.57,
+      "area_km2": 58.0,
+      "year": 2020,
+      "iceout_date": "2020-04-02",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2020-03-26",
+          "error": "No IMS 1-km GeoTIFF for 2020-03-26",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2020-03-30",
+          "error": "No IMS 1-km GeoTIFF for 2020-03-30",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2020-04-02",
+          "error": "No IMS 1-km GeoTIFF for 2020-04-02",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2020-04-05",
+          "error": "No IMS 1-km GeoTIFF for 2020-04-05",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2020-04-09",
+          "error": "No IMS 1-km GeoTIFF for 2020-04-09",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "MINN12",
+      "lake": "MINNETONKA",
+      "country": "UNITED STATES",
+      "lat": 44.87,
+      "lon": -93.57,
+      "area_km2": 58.0,
+      "year": 2019,
+      "iceout_date": "2019-04-20",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2019-04-13",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-13",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2019-04-17",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-17",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2019-04-20",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-20",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2019-04-23",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-23",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2019-04-27",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-27",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "JJM24",
+      "lake": "BIG GREEN LAKE",
+      "country": "UNITED STATES",
+      "lat": 43.8,
+      "lon": -89.0,
+      "area_km2": 29.64999962,
+      "year": 2020,
+      "iceout_date": "2020-03-26",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2020-03-19",
+          "error": "No IMS 1-km GeoTIFF for 2020-03-19",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2020-03-23",
+          "error": "No IMS 1-km GeoTIFF for 2020-03-23",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2020-03-26",
+          "error": "No IMS 1-km GeoTIFF for 2020-03-26",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2020-03-29",
+          "error": "No IMS 1-km GeoTIFF for 2020-03-29",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2020-04-02",
+          "error": "No IMS 1-km GeoTIFF for 2020-04-02",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "JJM24",
+      "lake": "BIG GREEN LAKE",
+      "country": "UNITED STATES",
+      "lat": 43.8,
+      "lon": -89.0,
+      "area_km2": 29.64999962,
+      "year": 2019,
+      "iceout_date": "2019-04-04",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2019-03-28",
+          "error": "No IMS 1-km GeoTIFF for 2019-03-28",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2019-04-01",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-01",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2019-04-04",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-04",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2019-04-07",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-07",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2019-04-11",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-11",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "MINN27",
+      "lake": "OSAKIS",
+      "country": "UNITED STATES",
+      "lat": 45.87,
+      "lon": -95.13,
+      "area_km2": 27.0,
+      "year": 2020,
+      "iceout_date": "2020-04-10",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2020-04-03",
+          "error": "No IMS 1-km GeoTIFF for 2020-04-03",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2020-04-07",
+          "error": "No IMS 1-km GeoTIFF for 2020-04-07",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2020-04-10",
+          "error": "No IMS 1-km GeoTIFF for 2020-04-10",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2020-04-13",
+          "error": "No IMS 1-km GeoTIFF for 2020-04-13",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2020-04-17",
+          "error": "No IMS 1-km GeoTIFF for 2020-04-17",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "MINN27",
+      "lake": "OSAKIS",
+      "country": "UNITED STATES",
+      "lat": 45.87,
+      "lon": -95.13,
+      "area_km2": 27.0,
+      "year": 2019,
+      "iceout_date": "2019-04-24",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2019-04-17",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-17",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2019-04-21",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-21",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2019-04-24",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-24",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2019-04-27",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-27",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2019-05-01",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-01",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "KMSM1",
+      "lake": "MOOSEHEAD LAKE",
+      "country": "UNITED STATES",
+      "lat": 45.65,
+      "lon": -69.67,
+      "area_km2": 303.0,
+      "year": 2019,
+      "iceout_date": "2019-05-09",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2019-05-02",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-02",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2019-05-06",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-06",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2019-05-09",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-09",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2019-05-12",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-12",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2019-05-16",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-16",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "KMSM1",
+      "lake": "MOOSEHEAD LAKE",
+      "country": "UNITED STATES",
+      "lat": 45.65,
+      "lon": -69.67,
+      "area_km2": 303.0,
+      "year": 2018,
+      "iceout_date": "2018-05-08",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2018-05-01",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-01",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2018-05-05",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-05",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2018-05-08",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-08",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2018-05-11",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-11",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2018-05-15",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-15",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "LR1",
+      "lake": "ONEIDA",
+      "country": "UNITED STATES",
+      "lat": 43.24,
+      "lon": -76.14,
+      "area_km2": 206.6999969,
+      "year": 2019,
+      "iceout_date": "2019-04-09",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2019-04-02",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-02",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2019-04-06",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-06",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2019-04-09",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-09",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2019-04-12",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-12",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2019-04-16",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-16",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "LR1",
+      "lake": "ONEIDA",
+      "country": "UNITED STATES",
+      "lat": 43.24,
+      "lon": -76.14,
+      "area_km2": 206.6999969,
+      "year": 2018,
+      "iceout_date": "2018-04-04",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2018-03-28",
+          "error": "No IMS 1-km GeoTIFF for 2018-03-28",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2018-04-01",
+          "error": "No IMS 1-km GeoTIFF for 2018-04-01",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2018-04-04",
+          "error": "No IMS 1-km GeoTIFF for 2018-04-04",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2018-04-07",
+          "error": "No IMS 1-km GeoTIFF for 2018-04-07",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2018-04-11",
+          "error": "No IMS 1-km GeoTIFF for 2018-04-11",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "PJD15",
+      "lake": "LAKE OF BAYS HAYSTACK",
+      "country": "CANADA",
+      "lat": 45.283,
+      "lon": -79.018,
+      "area_km2": 70.58100128,
+      "year": 2019,
+      "iceout_date": "2019-05-05",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2019-04-28",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-28",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2019-05-02",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-02",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2019-05-05",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-05",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2019-05-08",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-08",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2019-05-12",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-12",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "PJD15",
+      "lake": "LAKE OF BAYS HAYSTACK",
+      "country": "CANADA",
+      "lat": 45.283,
+      "lon": -79.018,
+      "area_km2": 70.58100128,
+      "year": 2018,
+      "iceout_date": "2018-05-07",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2018-04-30",
+          "error": "No IMS 1-km GeoTIFF for 2018-04-30",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2018-05-04",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-04",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2018-05-07",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-07",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2018-05-10",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-10",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2018-05-14",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-14",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "DMR1",
+      "lake": "LAKE MENDOTA",
+      "country": "UNITED STATES",
+      "lat": 43.1,
+      "lon": -89.4,
+      "area_km2": 39.3769989,
+      "year": 2019,
+      "iceout_date": "2019-03-31",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2019-03-24",
+          "error": "No IMS 1-km GeoTIFF for 2019-03-24",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2019-03-28",
+          "error": "No IMS 1-km GeoTIFF for 2019-03-28",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2019-03-31",
+          "error": "No IMS 1-km GeoTIFF for 2019-03-31",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2019-04-03",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-03",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2019-04-07",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-07",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "DMR1",
+      "lake": "LAKE MENDOTA",
+      "country": "UNITED STATES",
+      "lat": 43.1,
+      "lon": -89.4,
+      "area_km2": 39.3769989,
+      "year": 2018,
+      "iceout_date": "2018-03-31",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2018-03-24",
+          "error": "No IMS 1-km GeoTIFF for 2018-03-24",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2018-03-28",
+          "error": "No IMS 1-km GeoTIFF for 2018-03-28",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2018-03-31",
+          "error": "No IMS 1-km GeoTIFF for 2018-03-31",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2018-04-03",
+          "error": "No IMS 1-km GeoTIFF for 2018-04-03",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2018-04-07",
+          "error": "No IMS 1-km GeoTIFF for 2018-04-07",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "RH1",
+      "lake": "RANGELEY LAKE",
+      "country": "UNITED STATES",
+      "lat": 44.95,
+      "lon": -70.65,
+      "area_km2": 24.29999924,
+      "year": 2019,
+      "iceout_date": "2019-05-11",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2019-05-04",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-04",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2019-05-08",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-08",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2019-05-11",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-11",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2019-05-14",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-14",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2019-05-18",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-18",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "RH1",
+      "lake": "RANGELEY LAKE",
+      "country": "UNITED STATES",
+      "lat": 44.95,
+      "lon": -70.65,
+      "area_km2": 24.29999924,
+      "year": 2018,
+      "iceout_date": "2018-05-09",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2018-05-02",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-02",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2018-05-06",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-06",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2018-05-09",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-09",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2018-05-12",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-12",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2018-05-16",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-16",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    }
+  ],
+  "summary": {
+    "cases": 16,
+    "usable_cases": 0,
+    "positive_drop_fraction": null,
+    "median_pre_fraction": null,
+    "median_post_fraction": null,
+    "median_drop": null
+  },
+  "gate": "Proceed to full IMS classifier backtest only if >=8 usable cases and >=70% show declining IMS ice fraction across reported ice-out."
+}

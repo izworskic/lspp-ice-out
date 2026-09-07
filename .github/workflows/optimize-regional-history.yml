@@ -1,0 +1,39 @@
+name: Optimize regional ice-out history
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - seasonal-physics
+    paths:
+      - scripts/optimize_regional_history.py
+      - .github/workflows/optimize-regional-history.yml
+
+permissions:
+  contents: write
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Tune regional residual weighting
+        run: python scripts/optimize_regional_history.py
+      - name: Commit validation
+        run: |
+          git config user.name "ice-out-validation-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add north-america/data/ice-history/regional-weight-validation.json
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Update regional history weighting validation"
+            git pull --rebase origin ${{ github.ref_name }}
+            git push origin HEAD:${{ github.ref_name }}
+          fi

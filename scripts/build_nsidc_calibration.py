@@ -63,25 +63,33 @@ for r in download_csv(FREEZE):
     if d is None or y is None or lat is None or lon is None:continue
     y=int(y)
     if y<1800 or y>datetime.now().year:continue
-    code=(r.get('lakecode') or '').strip();
+    code=(r.get('lakecode') or '').strip()
     if not code:continue
     records[code].append((y,d))
     meta[code]={'name':(r.get('lakename') or code).strip(),'country':country,'lat':lat,'lon':lon}
 
 out=[]
 for code,pts in records.items():
-    pts=sorted(set(pts)); modern=[p for p in pts if p[0]>=1950]
+    # Multiple observations in the same year are collapsed to the median so a contributor
+    # cannot overweight the empirical probability distribution merely by duplicate rows.
+    by_year=defaultdict(list)
+    for y,d in pts:by_year[y].append(d)
+    pts=sorted((y,statistics.median(ds)) for y,ds in by_year.items())
+    modern=[p for p in pts if p[0]>=1950]
     use=modern if len(modern)>=10 else pts
     if len(use)<5:continue
-    days=[d for _,d in use]; pr=phys.get(code,{})
+    days=sorted(int(round(d)) for _,d in use); pr=phys.get(code,{})
     lat=num(pr.get('lat_decimal')) or meta[code]['lat'];lon=num(pr.get('lon_decimal')) or meta[code]['lon']
     row={
         'lakecode':code,'name':meta[code]['name'],'country':meta[code]['country'],
         'state':(pr.get('state') or '').strip(),'lat':lat,'lon':lon,
         'records':len(use),'records_all':len(pts),'first_year':use[0][0],'last_year':use[-1][0],
-        'median_doy':round(statistics.median(days),1),'p10_doy':round(percentile(days,.1),1),'p90_doy':round(percentile(days,.9),1),
+        'median_doy':round(statistics.median(days),1),
+        'p10_doy':round(percentile(days,.1),1),'p20_doy':round(percentile(days,.2),1),'p25_doy':round(percentile(days,.25),1),
+        'p75_doy':round(percentile(days,.75),1),'p80_doy':round(percentile(days,.8),1),'p90_doy':round(percentile(days,.9),1),
         'earliest_doy':min(days),'latest_doy':max(days),'trend_days_decade':None,
-        'elevation_m':num(pr.get('elevation')),'mean_depth_m':num(pr.get('mean_depth')),'surface_area_km2':num(pr.get('surface_area'))
+        'elevation_m':num(pr.get('elevation')),'mean_depth_m':num(pr.get('mean_depth')),'surface_area_km2':num(pr.get('surface_area')),
+        'iceout_doys':days
     }
     trend=slope_days_decade(use)
     if trend is not None:row['trend_days_decade']=round(trend,2)
@@ -89,11 +97,13 @@ for code,pts in records.items():
 
 out.sort(key=lambda x:(x['country'],x['name'],x['lakecode']))
 manifest={
-    'version':1,'generated_at':datetime.now(timezone.utc).isoformat(),'source':'NSIDC G01377',
-    'doi':'10.7265/N5W66HP8','source_url':BASE,'definition_note':'Observation definitions vary by contributor; use as historical calibration, not a uniform operational ice-out definition.',
+    'version':2,'generated_at':datetime.now(timezone.utc).isoformat(),'source':'NSIDC G01377',
+    'doi':'10.7265/N5W66HP8','source_url':BASE,
+    'definition_note':'Observation definitions vary by contributor; use as historical calibration, not a uniform operational ice-out definition.',
+    'probability_note':'Direct-history lakes retain deduplicated observed ice-out DOYs so the runtime can use an empirically calibrated CDF rather than a generic probability curve.',
     'modern_period_start':1950,'lake_count':len(out),'record_count':sum(x['records'] for x in out),
     'lakes':out
 }
 OUT.parent.mkdir(parents=True,exist_ok=True)
 OUT.write_text(json.dumps(manifest,separators=(',',':')),encoding='utf-8')
-print(json.dumps({'lake_count':manifest['lake_count'],'record_count':manifest['record_count'],'sample':out[:5]},indent=2))
+print(json.dumps({'lake_count':manifest['lake_count'],'record_count':manifest['record_count'],'version':manifest['version'],'sample':out[:2]},indent=2))

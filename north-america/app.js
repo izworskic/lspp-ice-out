@@ -11,8 +11,8 @@
   let iceHistory = null;
   const state = {
     lake: benchmarkLakes.find(x=>x.id==='lake-vermilion-mn') || benchmarkLakes[0],
-    weather:null, weatherError:null, targetTouched:false, ndsi:false, sensor:'modis',
-    searchSeq:0, nearbySeq:0, enrichSeq:0
+    weather:null, weatherError:null, physics:null, physicsError:null, targetTouched:false, ndsi:false, sensor:'modis',
+    searchSeq:0, nearbySeq:0, enrichSeq:0, physicsSeq:0
   };
 
   const depthAdj = {shallow:-4, medium:0, deep:4, verydeep:8};
@@ -21,6 +21,10 @@
   const CA_NAMES = 'https://geogratis.gc.ca/services/geoname/en/geonames.json';
   const HYDRO_BASE = 'data/hydrolakes';
   const HISTORY_URL = 'data/ice-history/nsidc-calibration.json';
+  const PHYSICS_MODELS_URL = 'data/seasonal-physics/lead-models.json';
+  const REGIONAL_PHYSICS_MODELS_URL = 'data/seasonal-physics/regional-plus-physics.json';
+  const PHYSICS_PROBABILITY_URL = 'data/seasonal-physics/probability-calibration.json';
+  const PHYSICS_INTERVALS_URL = 'data/seasonal-physics/postphysics-intervals.json';
 
   function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
   function fmtDate(d){return d.toISOString().slice(0,10);}
@@ -67,27 +71,120 @@
     return clamp((weather.tdd7-18)/7, -4, 5);
   }
 
+  function evalPhysicsModel(model,features){
+    if(!model||!Array.isArray(features)||features.length!==4)return null;
+    const mean=model.mean||[],scale=model.scale||[],coef=model.coef_scaled||[];
+    if(mean.length!==4||scale.length!==4||coef.length!==4)return null;
+    let out=Number(model.intercept)||0;
+    for(let i=0;i<4;i++){
+      const z=(features[i]-Number(mean[i]))/Number(scale[i]);
+      // Do not extrapolate the regression far outside its historical training domain.
+      if(!Number.isFinite(z)||Math.abs(z)>4.5)return null;
+      out+=Number(coef[i])*z;
+    }
+    return Number.isFinite(out)?out:null;
+  }
+
+  function leadBracket(lead,minLead=7){
+    if(lead<minLead||lead>45)return null;
+    const leads=[45,30,21,14,7].filter(x=>x>=minLead);
+    let upper=leads[0],lower=leads[leads.length-1];
+    for(let i=0;i<leads.length;i++){
+      if(lead===leads[i]){upper=lower=leads[i];break;}
+      if(i<leads.length-1&&lead<leads[i]&&lead>leads[i+1]){upper=leads[i];lower=leads[i+1];break;}
+    }
+    const t=upper===lower?0:(upper-lead)/(upper-lower);
+    return {upper,lower,t};
+  }
+  function interp(a,b,t){return Number(a)+(Number(b)-Number(a))*t;}
+  function seasonalPhysicsCorrection(lake){
+    const ph=state.physics;if(!ph||ph.lakeId!==lake.id)return null;
+    const family=lake.history?.type;if(family!=='direct'&&family!=='regional')return null;
+    // Direct probability calibration passed down to 14d. Regional probability passed to 7d.
+    const minLead=family==='direct'?14:7,lead=baselineMedianDoy(lake)-doy(today),br=leadBracket(lead,minLead);
+    if(!br)return null;
+    const results=family==='direct'?ph.directModels?.results:ph.regionalModels?.results;
+    const a=results?.[String(br.upper)],b=results?.[String(br.lower)];if(!a?.passes||!b?.passes)return null;
+    const ca=evalPhysicsModel(a.model,ph.features),cb=evalPhysicsModel(b.model,ph.features);if(!Number.isFinite(ca)||!Number.isFinite(cb))return null;
+    const correction=interp(ca,cb,br.t);return Number.isFinite(correction)?{correction,lead,family,bracket:br}:null;
+  }
+  function seasonalProbabilityParameter(lake,physics){
+    const ph=state.physics;if(!physics||!ph?.probability)return null;const fam=physics.family,br=physics.bracket;
+    const a=ph.probability?.[fam]?.[String(br.upper)],b=ph.probability?.[fam]?.[String(br.lower)];if(!a?.passes||!b?.passes)return null;
+    if(fam==='direct')return {smoothing:interp(a.selected_smoothing_days,b.selected_smoothing_days,br.t)};
+    return {scale:interp(a.selected_scale_days,b.selected_scale_days,br.t)};
+  }
+  function seasonalIntervalOffsets(lake,physics){
+    const ph=state.physics;if(!physics||!ph?.intervals)return null;const fam=physics.family,br=physics.bracket;
+    const a=ph.intervals?.[fam]?.[String(br.upper)],b=ph.intervals?.[fam]?.[String(br.lower)];if(!a||!b)return null;
+    const aa=a.asymmetric_offsets_days,bb=b.asymmetric_offsets_days;if(!aa||!bb)return null;
+    return {p10:interp(aa.p10,bb.p10,br.t),p90:interp(aa.p90,bb.p90,br.t),p25:interp(aa.p25,bb.p25,br.t),p75:interp(aa.p75,bb.p75,br.t)};
+  }
+
+  async function refreshSeasonalPhysics(lake){
+    const seq=++state.physicsSeq;state.physics=null;state.physicsError=null;
+    const family=lake.history?.type,lead=baselineMedianDoy(lake)-doy(today),minLead=family==='direct'?14:family==='regional'?7:999;
+    if(!activeSeason(today)||(family!=='direct'&&family!=='regional')||lead<minLead||lead>45){if(state.lake.id===lake.id)renderModel();return;}
+    try{
+      const lat=(Math.round(lake.lat/0.5)*0.5).toFixed(3),lon=(Math.round(lake.lng/0.625)*0.625).toFixed(3);
+      const [dr,rr,pr,ir,fr]=await Promise.all([
+        fetch(PHYSICS_MODELS_URL,{cache:'force-cache'}),fetch(REGIONAL_PHYSICS_MODELS_URL,{cache:'force-cache'}),
+        fetch(PHYSICS_PROBABILITY_URL,{cache:'force-cache'}),fetch(PHYSICS_INTERVALS_URL,{cache:'force-cache'}),
+        fetch(`/api/seasonal-physics?lat=${encodeURIComponent(lat)}&lon=${encodeURIComponent(lon)}`)
+      ]);
+      for(const [name,r] of [['direct models',dr],['regional models',rr],['probability',pr],['intervals',ir]])if(!r.ok)throw new Error(`${name} ${r.status}`);
+      if(!fr.ok){const detail=await fr.json().catch(()=>({}));throw new Error(detail.detail||`physics features ${fr.status}`);}
+      const [directModels,regionalModels,probability,intervals,feat]=await Promise.all([dr.json(),rr.json(),pr.json(),ir.json(),fr.json()]);
+      if(seq!==state.physicsSeq||state.lake.id!==lake.id)return;if(!feat.active||!Array.isArray(feat.features))throw new Error('seasonal features inactive');
+      state.physics={lakeId:lake.id,features:feat.features,directModels,regionalModels,probability,intervals,asOf:feat.as_of,priorYears:feat.prior_years,source:feat.source,lead};
+      renderWeather();renderModel();
+    }catch(e){if(seq!==state.physicsSeq||state.lake.id!==lake.id)return;state.physicsError=e.message||'Seasonal physics unavailable';renderWeather();renderModel();}
+  }
+
   function lakeModel(lake, targetDate){
     const base = baselineMedianDoy(lake);
-    const applyWeather = activeSeason(today) && targetDate.getFullYear()===today.getFullYear() && state.weather && state.weather.lakeId===lake.id;
-    const shift = applyWeather ? weatherShiftDays(state.weather) : 0;
-    const median = Math.round(base - shift);
+    const currentSpring = activeSeason(today) && targetDate.getFullYear()===today.getFullYear();
+    const physics = currentSpring ? seasonalPhysicsCorrection(lake) : null;
+    const seasonalPhysicsApplied = Number.isFinite(physics?.correction);
+    const forecastFallbackApplied = currentSpring && !seasonalPhysicsApplied && state.weather && state.weather.lakeId===lake.id;
+    const forecastShift = forecastFallbackApplied ? weatherShiftDays(state.weather) : 0;
+    // correctionDays is positive when breakup is shifted later. The short-range fallback is positive earlier.
+    const correctionDays = seasonalPhysicsApplied ? physics.correction : -forecastShift;
+    const median = Math.round(base + correctionDays);
     let spread = lake.area==='huge' || lake.depth==='verydeep' ? 15 : lake.depth==='deep' ? 12 : 10;
     if(isRegional(lake)) spread = lake.lat>60 ? 22 : 18;
     else if(isOfficial(lake) && lake.enriched) spread = Math.max(spread,13);
     const targetDoy = doy(targetDate);
-    const scale = Math.max(4.8, spread/2.1);
-    const probability = 1/(1+Math.exp(-(targetDoy-median)/scale));
-    const p10 = Math.round(median - spread);
-    const p90 = Math.round(median + spread);
-    const winLo = Math.round(median - spread*.45);
-    const winHi = Math.round(median + spread*.45);
+    const probParam=seasonalPhysicsApplied?seasonalProbabilityParameter(lake,physics):null;
+    const scale = probParam?.scale ?? (lake.history?.type==='regional' ? 6.5 : Math.max(4.8, spread/2.1));
+    let probability;
+    if(lake.history?.type==='direct' && Array.isArray(lake.history.doys) && lake.history.doys.length>=5){
+      const smooth=probParam?.smoothing ?? 3;
+      probability=lake.history.doys.reduce((sum,d)=>sum+1/(1+Math.exp(-(targetDoy-correctionDays-d)/smooth)),0)/lake.history.doys.length;
+    }else{probability=1/(1+Math.exp(-(targetDoy-median)/scale));}
+    let p10 = Math.round(median - spread), p90 = Math.round(median + spread);
+    let winLo = Math.round(median - spread*.45), winHi = Math.round(median + spread*.45);
+    if(lake.history?.type==='direct'){
+      const h=lake.history;
+      if(Number.isFinite(h.p10Doy))p10=Math.round(h.p10Doy+correctionDays);
+      if(Number.isFinite(h.p90Doy))p90=Math.round(h.p90Doy+correctionDays);
+      if(Number.isFinite(h.p25Doy))winLo=Math.round(h.p25Doy+correctionDays);
+      else if(Number.isFinite(h.p20Doy))winLo=Math.round(h.p20Doy+correctionDays);
+      if(Number.isFinite(h.p75Doy))winHi=Math.round(h.p75Doy+correctionDays);
+      else if(Number.isFinite(h.p80Doy))winHi=Math.round(h.p80Doy+correctionDays);
+    }
+    // Without seasonal physics, retain the validated regional climatological intervals.
+    if(lake.history?.type==='regional'&&!seasonalPhysicsApplied){p10=median-14;p90=median+14;winLo=median-7;winHi=median+7;}
+    if(seasonalPhysicsApplied){
+      const ints=seasonalIntervalOffsets(lake,physics);
+      if(ints){p10=Math.round(median+ints.p10);p90=Math.round(median+ints.p90);winLo=Math.round(median+ints.p25);winHi=Math.round(median+ints.p75);}
+    }
     let confidence = lake.history?.type==='direct' && lake.history.records>=20 ? 'Moderate–high'
       : lake.history?.type==='regional' ? 'Moderate'
       : isRegional(lake) ? 'Low' : isOfficial(lake) ? 'Moderate' : 'Moderate';
     if(!isRegional(lake) && (lake.lat>60 || lake.area==='huge')) confidence='Low–moderate';
-    if(state.weatherError && activeSeason(today)) confidence='Low';
-    return {base,shift,median,p10,p90,winLo,winHi,probability,confidence,applyWeather};
+    if(state.weatherError && activeSeason(today) && !seasonalPhysicsApplied) confidence='Low';
+    return {base,correctionDays,physicsCorrection:physics?.correction??null,forecastShift,median,p10,p90,winLo,winHi,probability,confidence,applyWeather:seasonalPhysicsApplied||forecastFallbackApplied,seasonalPhysicsApplied,forecastFallbackApplied,physicsLead:physics?.lead??(baselineMedianDoy(lake)-doy(today)),physicsFamily:physics?.family??null};
   }
 
   function statusFor(p){
@@ -103,19 +200,21 @@
     if(lake.history?.type==='direct'){
       const h=lake.history;
       const hist=`${h.records} observed ice-out dates (${h.firstYear}–${h.lastYear}), median ${shortDate(fromDoy(target.getFullYear(),h.medianDoy))}`;
-      if(m.applyWeather)return `${lake.name} is directly calibrated to NSIDC history: ${hist}. The current 7-day thaw forecast then makes a bounded seasonal adjustment.`;
-      return `${lake.name} is directly calibrated to NSIDC history: ${hist}. Live weather is shown separately outside the active spring adjustment window.`;
+      if(m.seasonalPhysicsApplied){const dir=m.correctionDays>=0?'later':'earlier';return `${lake.name} is directly calibrated to NSIDC history: ${hist}. Validated season-to-date freezing/thaw physics at a ${Math.round(m.physicsLead)}-day lead shifts the current-season median ${Math.abs(m.correctionDays).toFixed(1)} days ${dir}.`;}
+      if(m.forecastFallbackApplied)return `${lake.name} is directly calibrated to NSIDC history: ${hist}. Seasonal-physics features are unavailable, so the current 7-day thaw forecast is being used only as a bounded fallback adjustment.`;
+      return `${lake.name} is directly calibrated to NSIDC history: ${hist}. Live weather is shown separately outside the validated seasonal-physics lead window.`;
     }
     if(lake.history?.type==='regional'){
       const h=lake.history,sign=h.correctionDays>0?'later':'earlier';
       const txt=`${h.stationCount} nearby long-record lakes shift the morphology baseline ${Math.abs(h.correctionDays).toFixed(1)} days ${sign}`;
-      if(m.applyWeather)return `Regional NSIDC calibration is active: ${txt}. The current 7-day thaw forecast is then applied as a separate bounded adjustment.`;
+      if(m.seasonalPhysicsApplied){const dir=m.correctionDays>=0?'later':'earlier';return `Regional NSIDC calibration is active: ${txt}. A separately validated regional seasonal-physics model at ${Math.round(m.physicsLead)} days lead shifts this year's median ${Math.abs(m.correctionDays).toFixed(1)} days ${dir}.`;}
+      if(m.forecastFallbackApplied)return `Regional NSIDC calibration is active: ${txt}. Seasonal physics is unavailable, so the current 7-day thaw forecast is used only as a bounded fallback.`;
       return `Regional NSIDC calibration is active: ${txt}. No single nearby lake is being treated as this lake's own history.`;
     }
     if(isRegional(lake)){
       const registry = lake.source || 'official geographic-name registry';
       if(!activeSeason(today)) return `For ${targetText}, ${lake.name} is resolved from ${registry}. Until its HydroLAKES morphology and historical ice-out calibration are attached, the date range is deliberately broad and latitude-driven. Live weather is shown but not applied outside spring breakup season.`;
-      if(m.applyWeather) return `This is a regional low-confidence estimate for an officially named lake. The current 7-day thaw signal shifts the broad climatology by ${Math.abs(m.shift).toFixed(1)} days; lake morphology and historical calibration are still pending.`;
+      if(m.applyWeather) return `This is a regional low-confidence estimate for an officially named lake. The current 7-day thaw signal shifts the broad climatology by ${Math.abs(m.forecastShift).toFixed(1)} days; lake morphology and historical calibration are still pending.`;
       return `This officially named lake is available immediately, but its morphology/history enrichment is still pending. The result stays broad and low-confidence rather than inventing lake-specific precision.`;
     }
     if(isOfficial(lake) && lake.enriched){
@@ -126,8 +225,8 @@
     }
     if(!activeSeason(today)) return `For ${targetText}, this beta uses ${lake.name}'s latitude, elevation, basin depth class and size to establish a transparent regional climatology. Live weather is shown below but is not applied outside the spring breakup season.`;
     if(m.applyWeather){
-      const dir = m.shift>1 ? 'pulling the window earlier' : m.shift<-1 ? 'pushing the window later' : 'close to climatological pace';
-      return `The current 7-day thaw signal is ${dir}. The live forecast contributes ${Math.abs(m.shift).toFixed(1)} days of adjustment, capped so short-range weather cannot overwhelm the lake baseline.`;
+      const dir = m.forecastShift>1 ? 'pulling the window earlier' : m.forecastShift<-1 ? 'pushing the window later' : 'close to climatological pace';
+      return `The current 7-day thaw signal is ${dir}. The live forecast contributes ${Math.abs(m.forecastShift).toFixed(1)} days of adjustment, capped so short-range weather cannot overwhelm the lake baseline.`;
     }
     return `The lake baseline is active, but fresh operational weather could not be applied. Probability remains climatology-driven until the forecast feed refreshes.`;
   }
@@ -149,6 +248,23 @@
   function histLakeObject(h){
     return {lat:Number(h.lat),lng:Number(h.lon),elev:Number(h.elevation_m)||0,depth:depthClass(Number(h.mean_depth_m)),area:areaClass(Number(h.surface_area_km2)),registry:'history'};
   }
+  function historyAreaAgreement(lake,h,maxRatio=2.5){
+    const a=Number(lake.areaKm2),b=Number(h.surface_area_km2);
+    if(!(a>0)||!(b>0))return false;
+    return Math.max(a,b)/Math.min(a,b)<=maxRatio;
+  }
+  function chooseDirectHistory(lake,ranked){
+    // Prefer false negatives over false positives: attaching another lake's history is worse
+    // than falling back to the validated regional model.
+    const byName=ranked.filter(x=>x.same&&x.d<=35);
+    let hit=byName.find(x=>x.d<=15);
+    if(!hit)hit=byName.find(x=>x.d<=35&&historyAreaAgreement(lake,x.h,2.5));
+    if(hit)return {...hit,matchMethod:hit.d<=15?'name+distance':'name+distance+area'};
+    hit=ranked.find(x=>x.d<=.35);
+    if(hit)return {...hit,matchMethod:'near-exact-coordinate'};
+    hit=ranked.find(x=>x.d<=1.0&&historyAreaAgreement(lake,x.h,2.0));
+    return hit?{...hit,matchMethod:'coordinate+area'}:null;
+  }
   async function attachHistory(lake){
     if(lake.history||lake.historyAttempted)return;
     lake.historyAttempted=true;
@@ -156,18 +272,21 @@
       const data=await getIceHistory(),rows=(data.lakes||[]).filter(h=>Number.isFinite(Number(h.lat))&&Number.isFinite(Number(h.lon)));
       const lk=nameKey(lake.name),country=lake.country==='US'?'USA':'CANADA';
       const ranked=rows.filter(h=>h.country===country).map(h=>({h,d:distanceKm(lake,{lat:Number(h.lat),lng:Number(h.lon)}),same:nameKey(h.name)===lk})).sort((a,b)=>a.d-b.d);
-      const direct=ranked.find(x=>(x.same&&x.d<=35)||x.d<=1.5);
+      const direct=chooseDirectHistory(lake,ranked);
       if(direct){
         const h=direct.h;
-        lake.history={type:'direct',source:'NSIDC G01377',lakecode:h.lakecode,name:h.name,distanceKm:direct.d,records:Number(h.records)||0,firstYear:h.first_year,lastYear:h.last_year,medianDoy:Number(h.median_doy),p10Doy:Number(h.p10_doy),p90Doy:Number(h.p90_doy),trendDaysDecade:h.trend_days_decade};
+        lake.history={type:'direct',source:'NSIDC G01377',lakecode:h.lakecode,name:h.name,distanceKm:direct.d,matchMethod:direct.matchMethod,records:Number(h.records)||0,firstYear:h.first_year,lastYear:h.last_year,medianDoy:Number(h.median_doy),p10Doy:Number(h.p10_doy),p20Doy:Number(h.p20_doy),p25Doy:Number(h.p25_doy),p75Doy:Number(h.p75_doy),p80Doy:Number(h.p80_doy),p90Doy:Number(h.p90_doy),doys:Array.isArray(h.iceout_doys)?h.iceout_doys.map(Number).filter(Number.isFinite):[],trendDaysDecade:h.trend_days_decade};
       }else{
-        const nearby=ranked.filter(x=>x.d<=500&&Number(x.h.records)>=15).slice(0,16);
+        // Held-out optimization: use fewer/closer analogs and favor similar elevation/depth.
+        const nearby=ranked.filter(x=>x.d<=500&&Number(x.h.records)>=15).slice(0,8);
         if(nearby.length>=3){
           let num=0,den=0;
           for(const x of nearby){
             const expected=morphologyBaselineDoy(histLakeObject(x.h));
             const residual=Number(x.h.median_doy)-expected;
-            const w=Math.sqrt(Number(x.h.records))*Math.exp(-x.d/220);
+            const elevSim=(Number(lake.elev)>0&&Number(x.h.elevation_m)>0)?Math.exp(-Math.abs(Number(lake.elev)-Number(x.h.elevation_m))/250):1;
+            const depthSim=(Number(lake.depthM)>0&&Number(x.h.mean_depth_m)>0)?Math.exp(-Math.abs(Math.log(Number(lake.depthM)/Number(x.h.mean_depth_m)))/2):1;
+            const w=Math.sqrt(Number(x.h.records))*Math.exp(-x.d/140)*elevSim*depthSim;
             num+=residual*w;den+=w;
           }
           if(den>0){
@@ -179,6 +298,7 @@
       if(state.lake.id===lake.id&&lake.history){
         if(!state.targetTouched)$('targetDate').value=fmtDate(defaultTarget(lake));
         renderModel();
+        if(lake.history.type==='direct'||lake.history.type==='regional')refreshSeasonalPhysics(lake);
       }
     }catch(e){console.warn('NSIDC historical calibration unavailable',e);}
   }
@@ -343,7 +463,7 @@
     const thaw=w.tdd7;
     const thawClass=thaw>30?'good':thaw>12?'warm':'cold';
     const thawText=thaw>30?'strong':thaw>12?'moderate':'weak';
-    const used=activeSeason(today)?'model input':'off-season only';
+    const used=activeSeason(today)?(state.physics?.lakeId===state.lake.id?'forward context · seasonal physics active':'fallback model input'):'off-season only';
     box.innerHTML=`
       <div class="driver"><span class="dot ${thawClass}"></span><div><strong>${thaw.toFixed(1)} °C-days</strong><small>7-day accumulated thaw energy</small></div><em>${thawText}</em></div>
       <div class="driver"><span class="dot"></span><div><strong>${w.meanC.toFixed(1)} °C</strong><small>forecast mean temperature</small></div><em>${used}</em></div>
@@ -412,7 +532,7 @@
     $('range').textContent=`${shortDate(fromDoy(target.getFullYear(),m.p10))}–${shortDate(fromDoy(target.getFullYear(),m.p90))}`;
     $('confidence').textContent=m.confidence; $('reason').textContent=reasonFor(lake,m,target);
     $('modeNote').textContent = activeSeason(today) && target.getFullYear()===today.getFullYear()
-      ? (m.applyWeather?'Live spring mode: short-range thaw forecast is adjusting the baseline.':'Spring mode: waiting for usable live forecast; climatology is carrying the result.')
+      ? (m.seasonalPhysicsApplied?'Live spring mode: validated season-to-date freezing/thaw physics is adjusting the historical baseline.':m.forecastFallbackApplied?'Live spring mode: seasonal physics is unavailable, so the short-range thaw forecast is a bounded fallback.':'Spring mode: waiting for a validated seasonal signal; climatology is carrying the result.')
       : `Off-season outlook: live weather is visible but not applied to the ${target.getFullYear()} spring estimate.`;
     renderNearby(target);
   }
@@ -439,11 +559,13 @@
   function bindNearby(){document.querySelectorAll('.nearitem').forEach(el=>el.addEventListener('click',()=>{const l=allKnownLakes().find(x=>x.id===el.dataset.id);if(l)selectLake(l,true);}));}
 
   function selectLake(lake,fly=false){
-    if(!lake)return; rememberLake(lake); ensureMarker(lake); state.lake=lake;
+    if(!lake)return; rememberLake(lake); ensureMarker(lake); state.lake=lake; state.physics=null; state.physicsError=null; state.physicsSeq++;
     markers.forEach((m,id)=>{const obj=allKnownLakes().find(x=>x.id===id);m.setIcon(markerIcon(id===lake.id,obj?isRegional(obj):false));});
     if(!state.targetTouched)$('targetDate').value=fmtDate(defaultTarget(lake));
     if(fly)map.flyTo([lake.lat,lake.lng], isOfficial(lake)?8:(lake.area==='huge'?6:7),{duration:.65});
-    $('search').value=''; $('results').classList.remove('show'); renderModel(); refreshWeather(); enrichLake(lake).finally(()=>attachHistory(lake));
+    $('search').value=''; $('results').classList.remove('show'); renderModel(); refreshWeather();
+    if(lake.history?.type==='direct'||lake.history?.type==='regional')refreshSeasonalPhysics(lake);
+    enrichLake(lake).finally(()=>attachHistory(lake));
   }
 
   let searchTimer=null;

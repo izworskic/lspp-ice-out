@@ -1,0 +1,51 @@
+name: Benchmark regional plus seasonal physics
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - seasonal-physics
+    paths:
+      - scripts/benchmark_regional_plus_physics.py
+      - .github/workflows/benchmark-regional-plus-physics.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: regional-plus-physics-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install numerical dependencies
+        run: pip install numpy==2.1.3 scikit-learn==1.5.2
+      - name: Run combined held-out benchmark
+        run: python scripts/benchmark_regional_plus_physics.py
+      - name: Commit benchmark result safely
+        run: |
+          git config user.name "ice-out-combined-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add north-america/data/seasonal-physics/regional-plus-physics.json
+          if git diff --cached --quiet; then
+            echo "No combined benchmark changes"
+            exit 0
+          fi
+          cp north-america/data/seasonal-physics/regional-plus-physics.json /tmp/regional-plus-physics.json
+          git reset --hard
+          git fetch origin "${GITHUB_REF_NAME}"
+          git checkout -B "${GITHUB_REF_NAME}" "origin/${GITHUB_REF_NAME}"
+          cp /tmp/regional-plus-physics.json north-america/data/seasonal-physics/regional-plus-physics.json
+          git add north-america/data/seasonal-physics/regional-plus-physics.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Update combined regional seasonal physics benchmark"
+          git push origin "HEAD:${GITHUB_REF_NAME}"

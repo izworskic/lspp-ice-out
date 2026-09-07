@@ -1,0 +1,75 @@
+{
+  "method": "regional median residual intervals selected on deterministic 80% lake training split and tested on held-out 20% lakes",
+  "train_cases": 8833,
+  "test_cases": 2814,
+  "interval80": {
+    "asymmetric_offsets_days": {
+      "p10": -15.0,
+      "p90": 13.0
+    },
+    "symmetric_halfwidth_days": 14.0,
+    "train_asymmetric": {
+      "n": 8833,
+      "coverage": 0.8069,
+      "mean_width_days": 28.0,
+      "mean_residual": -0.711,
+      "median_abs_residual": 7
+    },
+    "test_asymmetric": {
+      "n": 2814,
+      "coverage": 0.8202,
+      "mean_width_days": 28.0,
+      "mean_residual": -1.394,
+      "median_abs_residual": 7.0
+    },
+    "train_symmetric": {
+      "n": 8833,
+      "coverage": 0.8113,
+      "mean_width_days": 28.0,
+      "mean_residual": -0.711,
+      "median_abs_residual": 7
+    },
+    "test_symmetric": {
+      "n": 2814,
+      "coverage": 0.8241,
+      "mean_width_days": 28.0,
+      "mean_residual": -1.394,
+      "median_abs_residual": 7.0
+    }
+  },
+  "interval50": {
+    "asymmetric_offsets_days": {
+      "p25": -7,
+      "p75": 7
+    },
+    "symmetric_halfwidth_days": 7,
+    "train_asymmetric": {
+      "n": 8833,
+      "coverage": 0.52,
+      "mean_width_days": 14,
+      "mean_residual": -0.711,
+      "median_abs_residual": 7
+    },
+    "test_asymmetric": {
+      "n": 2814,
+      "coverage": 0.5334,
+      "mean_width_days": 14,
+      "mean_residual": -1.394,
+      "median_abs_residual": 7.0
+    },
+    "train_symmetric": {
+      "n": 8833,
+      "coverage": 0.52,
+      "mean_width_days": 14,
+      "mean_residual": -0.711,
+      "median_abs_residual": 7
+    },
+    "test_symmetric": {
+      "n": 2814,
+      "coverage": 0.5334,
+      "mean_width_days": 14,
+      "mean_residual": -1.394,
+      "median_abs_residual": 7.0
+    }
+  }
+}

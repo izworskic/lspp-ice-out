@@ -1,0 +1,346 @@
+{
+  "version": 2,
+  "question": "Do season-to-date temperature anomalies improve ice-out prediction 30 days before prior median?",
+  "ice_source": "NSIDC G01377",
+  "weather_source": "NASA POWER daily T2M",
+  "weather_time_standard": "UTC",
+  "data_discipline": "Each case uses only earlier years for its lake prior/climate anomaly; grouped CV holds out entire lakes from regression training.",
+  "selected_lakes": 100,
+  "weather_lakes_succeeded": 100,
+  "weather_failures": [],
+  "cases": 2067,
+  "case_lakes": 100,
+  "baseline_prior_median": {
+    "n": 2067,
+    "mae": 8.798,
+    "median_abs_error": 7.0,
+    "p80_abs_error": 14.0,
+    "p90_abs_error": 20.0,
+    "bias_days": 3.612
+  },
+  "seasonal_physics_grouped_cv": {
+    "n": 2067,
+    "mae": 6.141,
+    "median_abs_error": 4.844,
+    "p80_abs_error": 9.74,
+    "p90_abs_error": 13.313,
+    "bias_days": -0.001
+  },
+  "improved_fraction": 0.6536,
+  "relative_mae_improvement": 0.302,
+  "release_gate": {
+    "minimum_relative_mae_improvement": 0.08,
+    "maximum_physics_mae_days": 7.5,
+    "passes": true
+  },
+  "model": {
+    "feature_order": [
+      "fdd_anom_per_100Cday",
+      "tdd_anom_per_50Cday",
+      "last14_temp_anom_C",
+      "warm14_anom_per_50Cday"
+    ],
+    "mean": [
+      -0.495124,
+      0.184565,
+      0.382487,
+      0.146811
+    ],
+    "scale": [
+      2.345954,
+      0.483935,
+      3.613289,
+      0.396061
+    ],
+    "coef_scaled": [
+      3.761667,
+      -4.712655,
+      -2.348363,
+      1.735485
+    ],
+    "intercept": -3.611514,
+    "alpha": 12.0
+  },
+  "folds": [
+    {
+      "fold": 1,
+      "train_n": 1809,
+      "test_n": 258,
+      "test_lakes": 11
+    },
+    {
+      "fold": 2,
+      "train_n": 1808,
+      "test_n": 259,
+      "test_lakes": 13
+    },
+    {
+      "fold": 3,
+      "train_n": 1808,
+      "test_n": 259,
+      "test_lakes": 13
+    },
+    {
+      "fold": 4,
+      "train_n": 1808,
+      "test_n": 259,
+      "test_lakes": 13
+    },
+    {
+      "fold": 5,
+      "train_n": 1810,
+      "test_n": 257,
+      "test_lakes": 12
+    },
+    {
+      "fold": 6,
+      "train_n": 1808,
+      "test_n": 259,
+      "test_lakes": 12
+    },
+    {
+      "fold": 7,
+      "train_n": 1809,
+      "test_n": 258,
+      "test_lakes": 13
+    },
+    {
+      "fold": 8,
+      "train_n": 1809,
+      "test_n": 258,
+      "test_lakes": 13
+    }
+  ],
+  "worst_errors": [
+    {
+      "lake": "BIG GREEN LAKE",
+      "year": 1998,
+      "observed": 20.0,
+      "prior_median": 96.5,
+      "physics_pred": 79.72,
+      "base_error": 76.5,
+      "physics_error": 59.72
+    },
+    {
+      "lake": "LAKE GENEVA",
+      "year": 1999,
+      "observed": 36.0,
+      "prior_median": 90.0,
+      "physics_pred": 81.54,
+      "base_error": 54.0,
+      "physics_error": 45.54
+    },
+    {
+      "lake": "GULL LAKE",
+      "year": 1990,
+      "observed": 42.0,
+      "prior_median": 87.0,
+      "physics_pred": 80.93,
+      "base_error": 45.0,
+      "physics_error": 38.93
+    },
+    {
+      "lake": "GEORGE",
+      "year": 2017,
+      "observed": 57.0,
+      "prior_median": 102,
+      "physics_pred": 92.02,
+      "base_error": 45.0,
+      "physics_error": 35.02
+    },
+    {
+      "lake": "ONEIDA",
+      "year": 2012,
+      "observed": 53.0,
+      "prior_median": 95,
+      "physics_pred": 87.98,
+      "base_error": 42.0,
+      "physics_error": 34.98
+    },
+    {
+      "lake": "OTSEGO",
+      "year": 1991,
+      "observed": 59.0,
+      "prior_median": 102,
+      "physics_pred": 93.52,
+      "base_error": 43.0,
+      "physics_error": 34.52
+    },
+    {
+      "lake": "SCHROON",
+      "year": 2017,
+      "observed": 73.0,
+      "prior_median": 110.5,
+      "physics_pred": 103.92,
+      "base_error": 37.5,
+      "physics_error": 30.92
+    },
+    {
+      "lake": "GULL LAKE",
+      "year": 2017,
+      "observed": 39.0,
+      "prior_median": 85.0,
+      "physics_pred": 69.73,
+      "base_error": 46.0,
+      "physics_error": 30.73
+    },
+    {
+      "lake": "BIG GREEN LAKE",
+      "year": 2017,
+      "observed": 55.0,
+      "prior_median": 95.0,
+      "physics_pred": 84.57,
+      "base_error": 40.0,
+      "physics_error": 29.57
+    },
+    {
+      "lake": "FAIR LAKE",
+      "year": 1990,
+      "observed": 43.0,
+      "prior_median": 79.5,
+      "physics_pred": 70.58,
+      "base_error": 36.5,
+      "physics_error": 27.58
+    },
+    {
+      "lake": "BIG STONE",
+      "year": 2013,
+      "observed": 128.0,
+      "prior_median": 100.0,
+      "physics_pred": 100.72,
+      "base_error": -28.0,
+      "physics_error": -27.28
+    },
+    {
+      "lake": "GULL LAKE",
+      "year": 2012,
+      "observed": 52.0,
+      "prior_median": 85,
+      "physics_pred": 77.55,
+      "base_error": 33.0,
+      "physics_error": 25.55
+    },
+    {
+      "lake": "GULL LAKE",
+      "year": 2018,
+      "observed": 56.0,
+      "prior_median": 85,
+      "physics_pred": 81.22,
+      "base_error": 29.0,
+      "physics_error": 25.22
+    },
+    {
+      "lake": "MOHANSIC",
+      "year": 2005,
+      "observed": 92.0,
+      "prior_median": 73.0,
+      "physics_pred": 67.72,
+      "base_error": -19.0,
+      "physics_error": -24.28
+    },
+    {
+      "lake": "LAKE SUPERIOR AT BAYFIELD",
+      "year": 2015,
+      "observed": 82.0,
+      "prior_median": 97,
+      "physics_pred": 106.07,
+      "base_error": 15.0,
+      "physics_error": 24.07
+    },
+    {
+      "lake": "MOHANSIC",
+      "year": 1993,
+      "observed": 94.0,
+      "prior_median": 73.0,
+      "physics_pred": 69.93,
+      "base_error": -21.0,
+      "physics_error": -24.07
+    },
+    {
+      "lake": "HOUGHTONS (HOOSICWHISICK) POND",
+      "year": 2018,
+      "observed": 53.0,
+      "prior_median": 80.5,
+      "physics_pred": 76.85,
+      "base_error": 27.5,
+      "physics_error": 23.85
+    },
+    {
+      "lake": "MINNEWASKA",
+      "year": 2013,
+      "observed": 131.0,
+      "prior_median": 104,
+      "physics_pred": 107.28,
+      "base_error": -27.0,
+      "physics_error": -23.72
+    },
+    {
+      "lake": "MILLE LACS",
+      "year": 1995,
+      "observed": 125.0,
+      "prior_median": 115.0,
+      "physics_pred": 101.49,
+      "base_error": -10.0,
+      "physics_error": -23.51
+    },
+    {
+      "lake": "DAMARISCOTTA LAKE",
+      "year": 1998,
+      "observed": 73.0,
+      "prior_median": 104,
+      "physics_pred": 96.45,
+      "base_error": 31.0,
+      "physics_error": 23.45
+    },
+    {
+      "lake": "ASHBY LAKE",
+      "year": 1992,
+      "observed": 95.0,
+      "prior_median": 113,
+      "physics_pred": 118.15,
+      "base_error": 18.0,
+      "physics_error": 23.15
+    },
+    {
+      "lake": "FAIR LAKE",
+      "year": 2018,
+      "observed": 57.0,
+      "prior_median": 79,
+      "physics_pred": 79.85,
+      "base_error": 22.0,
+      "physics_error": 22.85
+    },
+    {
+      "lake": "CHARLIE LAKE",
+      "year": 1992,
+      "observed": 92.0,
+      "prior_median": 128.5,
+      "physics_pred": 114.76,
+      "base_error": 36.5,
+      "physics_error": 22.76
+    },
+    {
+      "lake": "GULL LAKE",
+      "year": 2000,
+      "observed": 58.0,
+      "prior_median": 86,
+      "physics_pred": 80.54,
+      "base_error": 28.0,
+      "physics_error": 22.54
+    },
+    {
+      "lake": "HOUGHTONS (HOOSICWHISICK) POND",
+      "year": 1990,
+      "observed": 54.0,
+      "prior_median": 83.0,
+      "physics_pred": 76.33,
+      "base_error": 29.0,
+      "physics_error": 22.33
+    }
+  ],
+  "notes": [
+    "NASA POWER meteorology is coarse-scale; anomalies are used to reduce terrain/elevation bias.",
+    "This test does not yet include snowpack, satellite state, wind or radiation.",
+    "A passing result qualifies temperature physics as an additional model layer; it does not by itself validate final probabilities."
+  ]
+}

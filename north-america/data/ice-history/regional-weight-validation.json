@@ -1,0 +1,269 @@
+{
+  "method": "deterministic 80/20 lake holdout; tune regional residual similarity weighting on train only",
+  "train_lakes": 226,
+  "test_lakes": 71,
+  "baseline_config": {
+    "radius": 500,
+    "nmax": 16,
+    "record_pow": 0.5,
+    "dist_scale": 220,
+    "elev_scale": 0,
+    "depth_scale": 0,
+    "area_scale": 0,
+    "cap": 15
+  },
+  "baseline_train": {
+    "n": 220,
+    "mae": 5.175,
+    "median_abs_error": 4.0,
+    "p80_abs_error": 9,
+    "p90_abs_error": 12.0,
+    "bias_days": 0.907
+  },
+  "baseline_test": {
+    "n": 68,
+    "mae": 4.838,
+    "median_abs_error": 3.5,
+    "p80_abs_error": 7.0,
+    "p90_abs_error": 11,
+    "bias_days": 1.574
+  },
+  "selected_config": {
+    "radius": 500,
+    "nmax": 8,
+    "record_pow": 0.5,
+    "dist_scale": 140,
+    "elev_scale": 250,
+    "depth_scale": 2.0,
+    "area_scale": 0,
+    "cap": 15
+  },
+  "selected_train": {
+    "n": 220,
+    "mae": 4.861,
+    "median_abs_error": 3.0,
+    "p80_abs_error": 8,
+    "p90_abs_error": 12,
+    "bias_days": 0.784
+  },
+  "selected_test": {
+    "n": 68,
+    "mae": 4.309,
+    "median_abs_error": 3.0,
+    "p80_abs_error": 5,
+    "p90_abs_error": 11.0,
+    "bias_days": 1.353
+  },
+  "top_train_candidates": [
+    {
+      "mae": 4.861,
+      "n": 220,
+      "config": {
+        "radius": 500,
+        "nmax": 8,
+        "record_pow": 0.5,
+        "dist_scale": 140,
+        "elev_scale": 250,
+        "depth_scale": 2.0,
+        "area_scale": 0,
+        "cap": 15
+      }
+    },
+    {
+      "mae": 4.875,
+      "n": 220,
+      "config": {
+        "radius": 500,
+        "nmax": 8,
+        "record_pow": 0.5,
+        "dist_scale": 140,
+        "elev_scale": 250,
+        "depth_scale": 1.2,
+        "area_scale": 0,
+        "cap": 15
+      }
+    },
+    {
+      "mae": 4.875,
+      "n": 220,
+      "config": {
+        "radius": 500,
+        "nmax": 8,
+        "record_pow": 0.5,
+        "dist_scale": 140,
+        "elev_scale": 500,
+        "depth_scale": 1.2,
+        "area_scale": 0,
+        "cap": 15
+      }
+    },
+    {
+      "mae": 4.88,
+      "n": 220,
+      "config": {
+        "radius": 500,
+        "nmax": 8,
+        "record_pow": 0.5,
+        "dist_scale": 140,
+        "elev_scale": 0,
+        "depth_scale": 1.2,
+        "area_scale": 0,
+        "cap": 15
+      }
+    },
+    {
+      "mae": 4.88,
+      "n": 220,
+      "config": {
+        "radius": 500,
+        "nmax": 8,
+        "record_pow": 0.5,
+        "dist_scale": 140,
+        "elev_scale": 900,
+        "depth_scale": 1.2,
+        "area_scale": 0,
+        "cap": 15
+      }
+    },
+    {
+      "mae": 4.88,
+      "n": 220,
+      "config": {
+        "radius": 500,
+        "nmax": 8,
+        "record_pow": 0.5,
+        "dist_scale": 180,
+        "elev_scale": 250,
+        "depth_scale": 2.0,
+        "area_scale": 0,
+        "cap": 15
+      }
+    },
+    {
+      "mae": 4.884,
+      "n": 220,
+      "config": {
+        "radius": 500,
+        "nmax": 8,
+        "record_pow": 0.5,
+        "dist_scale": 140,
+        "elev_scale": 250,
+        "depth_scale": 0,
+        "area_scale": 0,
+        "cap": 15
+      }
+    },
+    {
+      "mae": 4.889,
+      "n": 220,
+      "config": {
+        "radius": 500,
+        "nmax": 8,
+        "record_pow": 0.5,
+        "dist_scale": 140,
+        "elev_scale": 500,
+        "depth_scale": 2.0,
+        "area_scale": 0,
+        "cap": 15
+      }
+    },
+    {
+      "mae": 4.889,
+      "n": 220,
+      "config": {
+        "radius": 500,
+        "nmax": 8,
+        "record_pow": 0.5,
+        "dist_scale": 180,
+        "elev_scale": 250,
+        "depth_scale": 1.2,
+        "area_scale": 0,
+        "cap": 15
+      }
+    },
+    {
+      "mae": 4.889,
+      "n": 220,
+      "config": {
+        "radius": 500,
+        "nmax": 8,
+        "record_pow": 0.5,
+        "dist_scale": 220,
+        "elev_scale": 250,
+        "depth_scale": 1.2,
+        "area_scale": 0,
+        "cap": 15
+      }
+    },
+    {
+      "mae": 4.889,
+      "n": 220,
+      "config": {
+        "radius": 500,
+        "nmax": 8,
+        "record_pow": 0.5,
+        "dist_scale": 220,
+        "elev_scale": 250,
+        "depth_scale": 2.0,
+        "area_scale": 0,
+        "cap": 15
+      }
+    },
+    {
+      "mae": 4.893,
+      "n": 220,
+      "config": {
+        "radius": 500,
+        "nmax": 8,
+        "record_pow": 0.5,
+        "dist_scale": 140,
+        "elev_scale": 0,
+        "depth_scale": 2.0,
+        "area_scale": 0,
+        "cap": 15
+      }
+    },
+    {
+      "mae": 4.893,
+      "n": 220,
+      "config": {
+        "radius": 500,
+        "nmax": 8,
+        "record_pow": 0.5,
+        "dist_scale": 140,
+        "elev_scale": 250,
+        "depth_scale": 0.7,
+        "area_scale": 0,
+        "cap": 15
+      }
+    },
+    {
+      "mae": 4.893,
+      "n": 220,
+      "config": {
+        "radius": 500,
+        "nmax": 8,
+        "record_pow": 0.5,
+        "dist_scale": 180,
+        "elev_scale": 250,
+        "depth_scale": 0,
+        "area_scale": 0,
+        "cap": 15
+      }
+    },
+    {
+      "mae": 4.893,
+      "n": 220,
+      "config": {
+        "radius": 500,
+        "nmax": 8,
+        "record_pow": 0.5,
+        "dist_scale": 220,
+        "elev_scale": 250,
+        "depth_scale": 0,
+        "area_scale": 0,
+        "cap": 15
+      }
+    }
+  ]
+}
