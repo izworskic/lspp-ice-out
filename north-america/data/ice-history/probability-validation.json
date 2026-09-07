@@ -1,0 +1,51 @@
+{
+  "method": "rolling-origin probability calibration; every test year uses only earlier observations from the same lake",
+  "source": "NSIDC G01377",
+  "eligible_lakes": 300,
+  "test_lake_years": 12598,
+  "target_offsets_days": [
+    -20,
+    -15,
+    -10,
+    -5,
+    0,
+    5,
+    10,
+    15,
+    20
+  ],
+  "metrics": {
+    "generic_logistic": {
+      "n": 113382,
+      "brier": 0.12423,
+      "log_loss": 0.39477,
+      "ece10": 0.0472
+    },
+    "history_width_logistic": {
+      "n": 113382,
+      "brier": 0.12454,
+      "log_loss": 0.39778,
+      "ece10": 0.04721
+    },
+    "empirical_laplace": {
+      "n": 113382,
+      "brier": 0.12292,
+      "log_loss": 0.38963,
+      "ece10": 0.0278
+    },
+    "empirical_smooth3": {
+      "n": 113382,
+      "brier": 0.1226,
+      "log_loss": 0.3875,
+      "ece10": 0.0366
+    },
+    "empirical_smooth5": {
+      "n": 113382,
+      "brier": 0.12435,
+      "log_loss": 0.39621,
+      "ece10": 0.05061
+    }
+  },
+  "best_brier": "empirical_smooth3",
+  "best_ece": "empirical_laplace"
+}
