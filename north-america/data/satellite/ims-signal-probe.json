@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "source": "NOAA/USNIC IMS G02156 1-km GeoTIFF",
   "class_semantics": {
     "1": "open water/sea class",
@@ -7,7 +7,7 @@
     "2": "land",
     "4": "snow-covered land"
   },
-  "method": "9x9-pixel neighborhood around NSIDC lake coordinate; fraction uses only IMS water+ice pixels; sampled -7,-3,0,+3,+7 days around reported ice-out",
+  "method": "9x9-pixel neighborhood around NSIDC lake coordinate; fraction uses only IMS water+ice pixels; sampled -7,-3,0,+3,+7 days around reported ice-out; archive filename/version discovered from year index",
   "candidate_rule": "NSIDC lakes with area >= 20 km2 and observations since 2014",
   "cases": [
     {
@@ -23,40 +23,35 @@
         {
           "offset_days": -7,
           "date": "2020-03-26",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020086_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2020-03-26",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": -3,
           "date": "2020-03-30",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020090_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2020-03-30",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 0,
           "date": "2020-04-02",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020093_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2020-04-02",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 3,
           "date": "2020-04-05",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020096_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2020-04-05",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 7,
           "date": "2020-04-09",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020100_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2020-04-09",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         }
@@ -78,40 +73,35 @@
         {
           "offset_days": -7,
           "date": "2019-04-13",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019103_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-13",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": -3,
           "date": "2019-04-17",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019107_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-17",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 0,
           "date": "2019-04-20",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019110_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-20",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 3,
           "date": "2019-04-23",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019113_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-23",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 7,
           "date": "2019-04-27",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019117_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-27",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         }
@@ -133,40 +123,35 @@
         {
           "offset_days": -7,
           "date": "2020-03-19",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020079_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2020-03-19",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": -3,
           "date": "2020-03-23",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020083_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2020-03-23",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 0,
           "date": "2020-03-26",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020086_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2020-03-26",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 3,
           "date": "2020-03-29",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020089_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2020-03-29",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 7,
           "date": "2020-04-02",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020093_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2020-04-02",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         }
@@ -188,40 +173,35 @@
         {
           "offset_days": -7,
           "date": "2019-03-28",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019087_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-03-28",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": -3,
           "date": "2019-04-01",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019091_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-01",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 0,
           "date": "2019-04-04",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019094_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-04",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 3,
           "date": "2019-04-07",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019097_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-07",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 7,
           "date": "2019-04-11",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019101_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-11",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         }
@@ -243,40 +223,35 @@
         {
           "offset_days": -7,
           "date": "2020-04-03",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020094_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2020-04-03",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": -3,
           "date": "2020-04-07",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020098_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2020-04-07",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 0,
           "date": "2020-04-10",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020101_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2020-04-10",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 3,
           "date": "2020-04-13",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020104_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2020-04-13",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 7,
           "date": "2020-04-17",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020108_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2020-04-17",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         }
@@ -298,40 +273,35 @@
         {
           "offset_days": -7,
           "date": "2019-04-17",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019107_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-17",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": -3,
           "date": "2019-04-21",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019111_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-21",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 0,
           "date": "2019-04-24",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019114_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-24",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 3,
           "date": "2019-04-27",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019117_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-27",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 7,
           "date": "2019-05-01",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019121_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-01",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         }
@@ -353,40 +323,35 @@
         {
           "offset_days": -7,
           "date": "2019-05-02",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019122_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-02",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": -3,
           "date": "2019-05-06",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019126_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-06",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 0,
           "date": "2019-05-09",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019129_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-09",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 3,
           "date": "2019-05-12",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019132_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-12",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 7,
           "date": "2019-05-16",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019136_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-16",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         }
@@ -408,40 +373,35 @@
         {
           "offset_days": -7,
           "date": "2018-05-01",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018121_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-01",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": -3,
           "date": "2018-05-05",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018125_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-05",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 0,
           "date": "2018-05-08",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018128_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-08",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 3,
           "date": "2018-05-11",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018131_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-11",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 7,
           "date": "2018-05-15",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018135_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-15",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         }
@@ -463,40 +423,35 @@
         {
           "offset_days": -7,
           "date": "2019-04-02",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019092_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-02",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": -3,
           "date": "2019-04-06",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019096_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-06",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 0,
           "date": "2019-04-09",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019099_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-09",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 3,
           "date": "2019-04-12",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019102_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-12",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 7,
           "date": "2019-04-16",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019106_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-16",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         }
@@ -518,40 +473,35 @@
         {
           "offset_days": -7,
           "date": "2018-03-28",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018087_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-03-28",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": -3,
           "date": "2018-04-01",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018091_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-04-01",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 0,
           "date": "2018-04-04",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018094_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-04-04",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 3,
           "date": "2018-04-07",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018097_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-04-07",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 7,
           "date": "2018-04-11",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018101_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-04-11",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         }
@@ -573,40 +523,35 @@
         {
           "offset_days": -7,
           "date": "2019-04-28",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019118_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-28",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": -3,
           "date": "2019-05-02",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019122_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-02",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 0,
           "date": "2019-05-05",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019125_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-05",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 3,
           "date": "2019-05-08",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019128_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-08",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 7,
           "date": "2019-05-12",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019132_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-12",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         }
@@ -628,40 +573,35 @@
         {
           "offset_days": -7,
           "date": "2018-04-30",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018120_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-04-30",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": -3,
           "date": "2018-05-04",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018124_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-04",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 0,
           "date": "2018-05-07",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018127_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-07",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 3,
           "date": "2018-05-10",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018130_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-10",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 7,
           "date": "2018-05-14",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018134_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-14",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         }
@@ -683,40 +623,35 @@
         {
           "offset_days": -7,
           "date": "2019-03-24",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019083_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-03-24",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": -3,
           "date": "2019-03-28",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019087_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-03-28",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 0,
           "date": "2019-03-31",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019090_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-03-31",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 3,
           "date": "2019-04-03",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019093_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-03",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 7,
           "date": "2019-04-07",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019097_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-04-07",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         }
@@ -738,40 +673,35 @@
         {
           "offset_days": -7,
           "date": "2018-03-24",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018083_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-03-24",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": -3,
           "date": "2018-03-28",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018087_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-03-28",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 0,
           "date": "2018-03-31",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018090_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-03-31",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 3,
           "date": "2018-04-03",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018093_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-04-03",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 7,
           "date": "2018-04-07",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018097_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-04-07",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         }
@@ -793,40 +723,35 @@
         {
           "offset_days": -7,
           "date": "2019-05-04",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019124_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-04",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": -3,
           "date": "2019-05-08",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019128_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-08",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 0,
           "date": "2019-05-11",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019131_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-11",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 3,
           "date": "2019-05-14",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019134_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-14",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 7,
           "date": "2019-05-18",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019138_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2019-05-18",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         }
@@ -848,40 +773,35 @@
         {
           "offset_days": -7,
           "date": "2018-05-02",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018122_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-02",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": -3,
           "date": "2018-05-06",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018126_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-06",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 0,
           "date": "2018-05-09",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018129_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-09",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 3,
           "date": "2018-05-12",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018132_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-12",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         },
         {
           "offset_days": 7,
           "date": "2018-05-16",
-          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018136_00UTC_1km_v1.3.tif",
-          "error": "HTTP response code: 404",
+          "error": "No IMS 1-km GeoTIFF for 2018-05-16",
           "ice_fraction": null,
           "usable_water_ice_pixels": 0
         }
