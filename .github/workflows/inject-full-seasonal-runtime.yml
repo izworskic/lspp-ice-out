@@ -7,6 +7,8 @@ on:
       - seasonal-physics
     paths:
       - scripts/inject_full_seasonal_runtime.py
+      - scripts/patch_seasonal_runtime_edgecases.py
+      - api/seasonal-physics.js
       - north-america/data/seasonal-physics/lead-models.json
       - north-america/data/seasonal-physics/regional-plus-physics.json
       - north-america/data/seasonal-physics/probability-calibration.json
@@ -23,6 +25,7 @@ concurrency:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
@@ -37,6 +40,7 @@ jobs:
         run: |
           python scripts/inject_full_seasonal_runtime.py
           python scripts/patch_physics_runtime_confidence.py
+          python scripts/patch_seasonal_runtime_edgecases.py
       - name: Check JavaScript syntax
         run: |
           node --check north-america/app.js
@@ -47,9 +51,22 @@ jobs:
           const fs=require('fs');
           const app=fs.readFileSync('north-america/app.js','utf8');
           for(const x of ['REGIONAL_PHYSICS_MODELS_URL','PHYSICS_PROBABILITY_URL','PHYSICS_INTERVALS_URL','seasonalIntervalOffsets','selected_smoothing_days','selected_scale_days'])if(!app.includes(x)){console.error('missing',x);process.exit(1)}
+          if(app.includes('Math.abs(m.shift)')||app.includes('m.shift>1')){console.error('stale shift field');process.exit(1)}
+          if(!app.includes("if(lake.history?.type==='direct'||lake.history?.type==='regional')refreshSeasonalPhysics(lake);")){console.error('reselection reload missing');process.exit(1)}
           const p=JSON.parse(fs.readFileSync('north-america/data/seasonal-physics/probability-calibration.json'));
           if(!p.direct['14'].passes||p.direct['7'].passes||!p.regional['7'].passes)process.exit(1);
-          console.log('Calibration runtime rules verified');
+          console.log('Calibration and edge-case runtime rules verified');
+          NODE
+      - name: Smoke-test real NASA POWER seasonal features
+        run: |
+          node - <<'NODE'
+          const handler=require('./api/seasonal-physics.js');
+          let code=0,body=null;
+          const res={setHeader(){},status(v){code=v;return this;},json(v){body=v;return v;}};
+          Promise.resolve(handler({method:'GET',query:{lat:'44.87',lon:'-93.57',date:'2026-04-01'}},res)).then(()=>{
+            if(code!==200||!body?.active||!Array.isArray(body.features)||body.features.length!==4||body.prior_years<8){console.error(code,body);process.exit(1)}
+            console.log('NASA POWER seasonal feature smoke passed',body.features,body.prior_years);
+          }).catch(e=>{console.error(e);process.exit(1);});
           NODE
       - name: Build static output
         run: |
