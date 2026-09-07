@@ -1,0 +1,67 @@
+name: Package validated seasonal release
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - deploy/seasonal-release-artifact
+    paths:
+      - .github/workflows/package-seasonal-release.yml
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify pinned release commit lineage
+        run: |
+          git merge-base --is-ancestor ea6e795b0ee72d9d2be28cf31e8fb63214c90519 HEAD
+      - name: Check runtime syntax
+        run: |
+          node --check north-america/app.js
+          node --check api/seasonal-physics.js
+      - name: Build Vercel static output
+        run: node scripts/inject-ga4.mjs
+      - name: Verify release bundle
+        run: |
+          test -f public/index.html
+          test -f public/north-america/index.html
+          test -f public/north-america/app.js
+          test -f api/seasonal-physics.js
+          test ! -e public/api
+          grep -q 'REGIONAL_PHYSICS_MODELS_URL' public/north-america/app.js
+          grep -q 'PHYSICS_PROBABILITY_URL' public/north-america/app.js
+          grep -q 'PHYSICS_INTERVALS_URL' public/north-america/app.js
+          du -sh public
+          find public -type f | wc -l
+      - name: Create deploy source package
+        run: |
+          mkdir -p deploy-source
+          cp index.html llms.txt robots.txt sitemap.xml vercel.json deploy-source/
+          cp -R north-america api scripts deploy-source/
+          cp -f og-card.png deploy-source/og-card.png
+          tar -czf seasonal-release-source.tgz -C deploy-source .
+          tar -czf seasonal-release-public.tgz -C public .
+          sha256sum seasonal-release-source.tgz seasonal-release-public.tgz > seasonal-release-sha256.txt
+      - name: Upload deploy source
+        uses: actions/upload-artifact@v4
+        with:
+          name: seasonal-release-source
+          path: |
+            seasonal-release-source.tgz
+            seasonal-release-sha256.txt
+          retention-days: 7
+      - name: Upload built public output
+        uses: actions/upload-artifact@v4
+        with:
+          name: seasonal-release-public
+          path: |
+            seasonal-release-public.tgz
+            seasonal-release-sha256.txt
+          retention-days: 7
