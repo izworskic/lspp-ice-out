@@ -77,11 +77,25 @@
     else if(isOfficial(lake) && lake.enriched) spread = Math.max(spread,13);
     const targetDoy = doy(targetDate);
     const scale = Math.max(4.8, spread/2.1);
-    const probability = 1/(1+Math.exp(-(targetDoy-median)/scale));
-    const p10 = Math.round(median - spread);
-    const p90 = Math.round(median + spread);
-    const winLo = Math.round(median - spread*.45);
-    const winHi = Math.round(median + spread*.45);
+    let probability;
+    if(lake.history?.type==='direct' && Array.isArray(lake.history.doys) && lake.history.doys.length>=5){
+      // Rolling-origin validation favors a lightly smoothed empirical CDF over a generic S-curve.
+      // A positive seasonal shift means breakup is running early, so compare target+shift to history.
+      probability=lake.history.doys.reduce((sum,d)=>sum+1/(1+Math.exp(-(targetDoy+shift-d)/3)),0)/lake.history.doys.length;
+    }else{
+      probability=1/(1+Math.exp(-(targetDoy-median)/scale));
+    }
+    let p10 = Math.round(median - spread), p90 = Math.round(median + spread);
+    let winLo = Math.round(median - spread*.45), winHi = Math.round(median + spread*.45);
+    if(lake.history?.type==='direct'){
+      const h=lake.history;
+      if(Number.isFinite(h.p10Doy))p10=Math.round(h.p10Doy-shift);
+      if(Number.isFinite(h.p90Doy))p90=Math.round(h.p90Doy-shift);
+      if(Number.isFinite(h.p25Doy))winLo=Math.round(h.p25Doy-shift);
+      else if(Number.isFinite(h.p20Doy))winLo=Math.round(h.p20Doy-shift);
+      if(Number.isFinite(h.p75Doy))winHi=Math.round(h.p75Doy-shift);
+      else if(Number.isFinite(h.p80Doy))winHi=Math.round(h.p80Doy-shift);
+    }
     let confidence = lake.history?.type==='direct' && lake.history.records>=20 ? 'Moderate–high'
       : lake.history?.type==='regional' ? 'Moderate'
       : isRegional(lake) ? 'Low' : isOfficial(lake) ? 'Moderate' : 'Moderate';
@@ -159,7 +173,7 @@
       const direct=ranked.find(x=>(x.same&&x.d<=35)||x.d<=1.5);
       if(direct){
         const h=direct.h;
-        lake.history={type:'direct',source:'NSIDC G01377',lakecode:h.lakecode,name:h.name,distanceKm:direct.d,records:Number(h.records)||0,firstYear:h.first_year,lastYear:h.last_year,medianDoy:Number(h.median_doy),p10Doy:Number(h.p10_doy),p90Doy:Number(h.p90_doy),trendDaysDecade:h.trend_days_decade};
+        lake.history={type:'direct',source:'NSIDC G01377',lakecode:h.lakecode,name:h.name,distanceKm:direct.d,records:Number(h.records)||0,firstYear:h.first_year,lastYear:h.last_year,medianDoy:Number(h.median_doy),p10Doy:Number(h.p10_doy),p20Doy:Number(h.p20_doy),p25Doy:Number(h.p25_doy),p75Doy:Number(h.p75_doy),p80Doy:Number(h.p80_doy),p90Doy:Number(h.p90_doy),doys:Array.isArray(h.iceout_doys)?h.iceout_doys.map(Number).filter(Number.isFinite):[],trendDaysDecade:h.trend_days_decade};
       }else{
         const nearby=ranked.filter(x=>x.d<=500&&Number(x.h.records)>=15).slice(0,16);
         if(nearby.length>=3){
