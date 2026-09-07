@@ -1,0 +1,42 @@
+name: Inject optimized regional history
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - seasonal-physics
+    paths:
+      - scripts/inject_optimized_regional_history.py
+      - north-america/data/ice-history/regional-weight-validation.json
+      - .github/workflows/inject-optimized-regional-history.yml
+
+permissions:
+  contents: write
+
+jobs:
+  inject:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Inject validated regional weighting
+        run: python scripts/inject_optimized_regional_history.py
+      - name: Check browser JavaScript syntax
+        run: node --check north-america/app.js
+      - name: Commit runtime
+        run: |
+          git config user.name "ice-out-model-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add north-america/app.js
+          if git diff --cached --quiet; then echo "No runtime changes"; else
+            git commit -m "Improve regional ice-out analog weighting"
+            git pull --rebase origin ${{ github.ref_name }}
+            git push origin HEAD:${{ github.ref_name }}
+          fi
