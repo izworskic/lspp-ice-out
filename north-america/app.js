@@ -4,6 +4,8 @@
   const now = new Date();
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const activeSeason = (d=today) => d.getMonth() >= 1 && d.getMonth() <= 6;
+  const openWaterSeason = (d=today) => d.getMonth() === 7 || d.getMonth() === 8; // Aug-Sep: spring ice-out is complete, before the next freeze-up cycle.
+  const sameDay = (a,b) => a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
   const nextSpringYear = now.getMonth() >= 7 ? now.getFullYear()+1 : now.getFullYear();
   const dynamicLakes = new Map();
   const hydrolakesCache = new Map();
@@ -232,6 +234,12 @@
   }
 
   function defaultTarget(lake){return fromDoy(nextSpringYear,baselineMedianDoy(lake));}
+  function currentOpenWaterState(lake,target=today){
+    // Current-state override is intentionally conservative: only Aug-Sep, only for today,
+    // and only once the lake's modeled spring median is at least three weeks behind us.
+    return openWaterSeason(today) && sameDay(target,today) && doy(today) >= baselineMedianDoy(lake)+21;
+  }
+  function initialTarget(lake){return currentOpenWaterState(lake,today)?today:defaultTarget(lake);}
 
 
 
@@ -296,7 +304,7 @@
         }
       }
       if(state.lake.id===lake.id&&lake.history){
-        if(!state.targetTouched)$('targetDate').value=fmtDate(defaultTarget(lake));
+        if(!state.targetTouched)$('targetDate').value=fmtDate(initialTarget(lake));
         renderModel();
         if(lake.history.type==='direct'||lake.history.type==='regional')refreshSeasonalPhysics(lake);
       }
@@ -348,7 +356,7 @@
       const match=await findHydroMatch(lake); if(!match)return;
       Object.assign(lake,match,{enriched:true}); lake.area=areaClass(lake.areaKm2); lake.depth=depthClass(lake.depthM);
       if(state.lake.id===lake.id&&token===state.enrichSeq){
-        if(!state.targetTouched)$('targetDate').value=fmtDate(defaultTarget(lake));
+        if(!state.targetTouched)$('targetDate').value=fmtDate(initialTarget(lake));
         ensureMarker(lake).setIcon(markerIcon(true,false)); renderModel();
       }
     }catch(e){console.warn('HydroLAKES enrichment unavailable',e);}
@@ -518,7 +526,12 @@
 
   function renderModel(){
     const lake=state.lake; const target=new Date($('targetDate').value+'T12:00:00'); if(Number.isNaN(target.getTime()))return;
-    const m=lakeModel(lake,target); const p=Math.round(m.probability*100); const st=statusFor(m.probability);
+    const currentOpen=currentOpenWaterState(lake,target);
+    const m=lakeModel(lake,target);
+    const springTarget=defaultTarget(lake);
+    const springModel=currentOpen?lakeModel(lake,springTarget):null;
+    const p=currentOpen?100:Math.round(m.probability*100);
+    const st=currentOpen?['Open water season','#48d597']:statusFor(m.probability);
     const historyTag=lake.history?.type==='direct'?` · ${lake.history.records} historical ice-out dates`:lake.history?.type==='regional'?` · ${lake.history.stationCount}-lake regional history calibration`:'';
     const meta=(isOfficial(lake)&&lake.enriched
       ? `${lake.region} · ${lake.country==='US'?'United States':'Canada'} · HydroLAKES ${lake.areaKm2.toFixed(lake.areaKm2<10?1:0)} km² · ${lake.depthM>0?`${lake.depthM.toFixed(1)} m avg depth`:'depth unavailable'}`
@@ -527,13 +540,34 @@
         : `${lake.region} · ${lake.country==='US'?'United States':'Canada'} · ${lake.depth} basin · ${lake.area} lake`)+historyTag;
     $('lakeName').textContent=lake.name; $('lakeMeta').textContent=meta;
     $('prob').textContent=`${p}%`; $('probBar').style.width=`${p}%`; $('statusChip').textContent=st[0]; $('statusChip').style.color=st[1];
-    $('window').textContent=`Most likely window: ${shortDate(fromDoy(target.getFullYear(),m.winLo))}–${shortDate(fromDoy(target.getFullYear(),m.winHi))}`;
-    $('median').textContent=shortDate(fromDoy(target.getFullYear(),m.median));
-    $('range').textContent=`${shortDate(fromDoy(target.getFullYear(),m.p10))}–${shortDate(fromDoy(target.getFullYear(),m.p90))}`;
-    $('confidence').textContent=m.confidence; $('reason').textContent=reasonFor(lake,m,target);
-    $('modeNote').textContent = activeSeason(today) && target.getFullYear()===today.getFullYear()
-      ? (m.seasonalPhysicsApplied?'Live spring mode: validated season-to-date freezing/thaw physics is adjusting the historical baseline.':m.forecastFallbackApplied?'Live spring mode: seasonal physics is unavailable, so the short-range thaw forecast is a bounded fallback.':'Spring mode: waiting for a validated seasonal signal; climatology is carrying the result.')
-      : `Off-season outlook: live weather is visible but not applied to the ${target.getFullYear()} spring estimate.`;
+    $('probLabel').textContent=currentOpen?`${today.getFullYear()} ice-out complete`:'chance of ice-out by target date';
+    const metricLabels=document.querySelectorAll('.grid3 .metric span');
+    if(metricLabels.length>=3){
+      metricLabels[0].textContent=currentOpen?'Next spring median':'Median';
+      metricLabels[1].textContent=currentOpen?'Next spring 80% range':'80% range';
+      metricLabels[2].textContent=currentOpen?'Outlook confidence':'Confidence';
+    }
+    if(currentOpen){
+      const springYear=springTarget.getFullYear();
+      const springMedian=shortDate(fromDoy(springYear,springModel.median));
+      const springLo=shortDate(fromDoy(springYear,springModel.p10));
+      const springHi=shortDate(fromDoy(springYear,springModel.p90));
+      $('window').textContent='No new seasonal ice-out cycle yet · next cycle begins after freeze-up';
+      $('median').textContent=`${springMedian} ${springYear}`;
+      $('range').textContent=`${springLo}–${springHi} ${springYear}`;
+      $('confidence').textContent=springModel.confidence;
+      const todayText=today.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+      $('reason').textContent=`As of ${todayText}, this spring's ice-out is already complete, so today's ice-out state is 100%. The next seasonal ice-out cycle does not begin until the lake freezes again. The Spring ${springYear} outlook remains available below.`;
+      $('modeNote').textContent=`Today view: ${today.getFullYear()} ice-out is complete. No new seasonal ice-out cycle is active before freeze-up. Change the target date into Spring ${springYear} to see the next ice-out probability.`;
+    }else{
+      $('window').textContent=`Most likely window: ${shortDate(fromDoy(target.getFullYear(),m.winLo))}–${shortDate(fromDoy(target.getFullYear(),m.winHi))}`;
+      $('median').textContent=shortDate(fromDoy(target.getFullYear(),m.median));
+      $('range').textContent=`${shortDate(fromDoy(target.getFullYear(),m.p10))}–${shortDate(fromDoy(target.getFullYear(),m.p90))}`;
+      $('confidence').textContent=m.confidence; $('reason').textContent=reasonFor(lake,m,target);
+      $('modeNote').textContent = activeSeason(today) && target.getFullYear()===today.getFullYear()
+        ? (m.seasonalPhysicsApplied?'Live spring mode: validated season-to-date freezing/thaw physics is adjusting the historical baseline.':m.forecastFallbackApplied?'Live spring mode: seasonal physics is unavailable, so the short-range thaw forecast is a bounded fallback.':'Spring mode: waiting for a validated seasonal signal; climatology is carrying the result.')
+        : `Off-season outlook: live weather is visible but not applied to the ${target.getFullYear()} spring estimate.`;
+    }
     renderNearby(target);
   }
 
@@ -561,7 +595,7 @@
   function selectLake(lake,fly=false){
     if(!lake)return; rememberLake(lake); ensureMarker(lake); state.lake=lake; state.physics=null; state.physicsError=null; state.physicsSeq++;
     markers.forEach((m,id)=>{const obj=allKnownLakes().find(x=>x.id===id);m.setIcon(markerIcon(id===lake.id,obj?isRegional(obj):false));});
-    if(!state.targetTouched)$('targetDate').value=fmtDate(defaultTarget(lake));
+    if(!state.targetTouched)$('targetDate').value=fmtDate(initialTarget(lake));
     if(fly)map.flyTo([lake.lat,lake.lng], isOfficial(lake)?8:(lake.area==='huge'?6:7),{duration:.65});
     $('search').value=''; $('results').classList.remove('show'); renderModel(); refreshWeather();
     if(lake.history?.type==='direct'||lake.history?.type==='regional')refreshSeasonalPhysics(lake);
@@ -607,10 +641,10 @@
   $('ndsiBtn').addEventListener('click',()=>{state.ndsi=!state.ndsi;$('ndsiBtn').classList.toggle('active',state.ndsi);updateImagery();});
   $('fitBtn').addEventListener('click',()=>map.flyTo([state.lake.lat,state.lake.lng],isOfficial(state.lake)?8:(state.lake.area==='huge'?6:7),{duration:.6}));
 
-  $('seasonPill').textContent=activeSeason(today)?'LIVE SPRING MODEL':'OFF-SEASON · SPRING OUTLOOK';
+  $('seasonPill').textContent=activeSeason(today)?'LIVE SPRING MODEL':openWaterSeason(today)?'OPEN-WATER SEASON':'OFF-SEASON · SPRING OUTLOOK';
   $('seasonPill').classList.toggle('offseason',!activeSeason(today));
   const imageryDefault = activeSeason(today) ? new Date(today.getTime()-86400000) : new Date(now.getFullYear(),3,25);
   $('imageryDate').value=fmtDate(imageryDefault);
-  $('targetDate').value=fmtDate(defaultTarget(state.lake));
+  $('targetDate').value=fmtDate(initialTarget(state.lake));
   updateImagery(); selectLake(state.lake,false); map.setView([state.lake.lat,state.lake.lng],6);
 })();
