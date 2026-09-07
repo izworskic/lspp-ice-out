@@ -1,0 +1,275 @@
+{
+  "version": 1,
+  "question": "Does seasonal temperature physics improve a strictly historical regional-analog baseline?",
+  "ice_source": "NSIDC G01377",
+  "weather_source": "NASA POWER daily T2M UTC",
+  "validation": "Regional baseline excludes target lake and uses neighbor observations only from years before each case; weather anomalies use prior years; GroupKFold holds out whole target lakes.",
+  "selected_lakes": 100,
+  "weather_lakes": 100,
+  "weather_failures": [],
+  "lead_days": [
+    45,
+    30,
+    21,
+    14,
+    7
+  ],
+  "results": {
+    "45": {
+      "cases": 2077,
+      "lakes": 99,
+      "regional_only": {
+        "n": 2077,
+        "mae": 9.702,
+        "median_abs_error": 7.184,
+        "p80_abs_error": 15.59,
+        "p90_abs_error": 22.399,
+        "bias_days": 4.345
+      },
+      "regional_plus_physics": {
+        "n": 2077,
+        "mae": 7.936,
+        "median_abs_error": 6.012,
+        "p80_abs_error": 13.123,
+        "p90_abs_error": 17.38,
+        "bias_days": 0.003
+      },
+      "relative_mae_improvement": 0.182,
+      "improved_fraction": 0.5965,
+      "passes": true,
+      "model": {
+        "feature_order": [
+          "fdd_anom_per_100Cday",
+          "tdd_anom_per_50Cday",
+          "last14_temp_anom_C",
+          "warm14_anom_per_50Cday"
+        ],
+        "mean": [
+          -0.423387,
+          0.077227,
+          0.347233,
+          0.068373
+        ],
+        "scale": [
+          2.208503,
+          0.216365,
+          3.871061,
+          0.161155
+        ],
+        "coef_scaled": [
+          4.17986,
+          -2.370213,
+          -1.20013,
+          -0.073372
+        ],
+        "intercept": -4.344923,
+        "alpha": 12.0
+      }
+    },
+    "30": {
+      "cases": 2077,
+      "lakes": 99,
+      "regional_only": {
+        "n": 2077,
+        "mae": 9.702,
+        "median_abs_error": 7.184,
+        "p80_abs_error": 15.59,
+        "p90_abs_error": 22.399,
+        "bias_days": 4.345
+      },
+      "regional_plus_physics": {
+        "n": 2077,
+        "mae": 7.224,
+        "median_abs_error": 5.67,
+        "p80_abs_error": 11.467,
+        "p90_abs_error": 15.416,
+        "bias_days": 0.002
+      },
+      "relative_mae_improvement": 0.2554,
+      "improved_fraction": 0.6288,
+      "passes": true,
+      "model": {
+        "feature_order": [
+          "fdd_anom_per_100Cday",
+          "tdd_anom_per_50Cday",
+          "last14_temp_anom_C",
+          "warm14_anom_per_50Cday"
+        ],
+        "mean": [
+          -0.496733,
+          0.190174,
+          0.427477,
+          0.156133
+        ],
+        "scale": [
+          2.349434,
+          0.493159,
+          3.60577,
+          0.39924
+        ],
+        "coef_scaled": [
+          3.628045,
+          -4.69221,
+          -1.983901,
+          1.222148
+        ],
+        "intercept": -4.344923,
+        "alpha": 12.0
+      }
+    },
+    "21": {
+      "cases": 2077,
+      "lakes": 99,
+      "regional_only": {
+        "n": 2077,
+        "mae": 9.702,
+        "median_abs_error": 7.184,
+        "p80_abs_error": 15.59,
+        "p90_abs_error": 22.399,
+        "bias_days": 4.345
+      },
+      "regional_plus_physics": {
+        "n": 2077,
+        "mae": 6.545,
+        "median_abs_error": 4.976,
+        "p80_abs_error": 10.524,
+        "p90_abs_error": 13.895,
+        "bias_days": -0.001
+      },
+      "relative_mae_improvement": 0.3254,
+      "improved_fraction": 0.6586,
+      "passes": true,
+      "model": {
+        "feature_order": [
+          "fdd_anom_per_100Cday",
+          "tdd_anom_per_50Cday",
+          "last14_temp_anom_C",
+          "warm14_anom_per_50Cday"
+        ],
+        "mean": [
+          -0.494735,
+          0.199676,
+          0.177359,
+          0.126046
+        ],
+        "scale": [
+          2.407237,
+          0.684882,
+          3.236615,
+          0.493038
+        ],
+        "coef_scaled": [
+          2.832219,
+          -6.699396,
+          -2.199511,
+          2.25496
+        ],
+        "intercept": -4.344923,
+        "alpha": 12.0
+      }
+    },
+    "14": {
+      "cases": 2077,
+      "lakes": 99,
+      "regional_only": {
+        "n": 2077,
+        "mae": 9.702,
+        "median_abs_error": 7.184,
+        "p80_abs_error": 15.59,
+        "p90_abs_error": 22.399,
+        "bias_days": 4.345
+      },
+      "regional_plus_physics": {
+        "n": 2077,
+        "mae": 6.126,
+        "median_abs_error": 4.731,
+        "p80_abs_error": 9.312,
+        "p90_abs_error": 13.151,
+        "bias_days": 0.001
+      },
+      "relative_mae_improvement": 0.3686,
+      "improved_fraction": 0.6798,
+      "passes": true,
+      "model": {
+        "feature_order": [
+          "fdd_anom_per_100Cday",
+          "tdd_anom_per_50Cday",
+          "last14_temp_anom_C",
+          "warm14_anom_per_50Cday"
+        ],
+        "mean": [
+          -0.488842,
+          0.211346,
+          0.147906,
+          0.116048
+        ],
+        "scale": [
+          2.426144,
+          0.837529,
+          2.884707,
+          0.541163
+        ],
+        "coef_scaled": [
+          2.369641,
+          -7.81773,
+          -2.886704,
+          3.591372
+        ],
+        "intercept": -4.344923,
+        "alpha": 12.0
+      }
+    },
+    "7": {
+      "cases": 2077,
+      "lakes": 99,
+      "regional_only": {
+        "n": 2077,
+        "mae": 9.702,
+        "median_abs_error": 7.184,
+        "p80_abs_error": 15.59,
+        "p90_abs_error": 22.399,
+        "bias_days": 4.345
+      },
+      "regional_plus_physics": {
+        "n": 2077,
+        "mae": 6.093,
+        "median_abs_error": 4.588,
+        "p80_abs_error": 9.228,
+        "p90_abs_error": 12.406,
+        "bias_days": 0.004
+      },
+      "relative_mae_improvement": 0.372,
+      "improved_fraction": 0.6745,
+      "passes": true,
+      "model": {
+        "feature_order": [
+          "fdd_anom_per_100Cday",
+          "tdd_anom_per_50Cday",
+          "last14_temp_anom_C",
+          "warm14_anom_per_50Cday"
+        ],
+        "mean": [
+          -0.485269,
+          0.237442,
+          0.218778,
+          0.111776
+        ],
+        "scale": [
+          2.434565,
+          0.991988,
+          2.771975,
+          0.599929
+        ],
+        "coef_scaled": [
+          2.302045,
+          -8.410058,
+          -2.318847,
+          3.865538
+        ],
+        "intercept": -4.344923,
+        "alpha": 12.0
+      }
+    }
+  },
+  "deployment_rule": "Regional lakes may use seasonal physics only at lead times with passes=true. Use the regional-plus-physics coefficients from this report, not the direct-history coefficients."
+}
