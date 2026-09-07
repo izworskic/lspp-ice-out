@@ -1,0 +1,903 @@
+{
+  "version": 1,
+  "source": "NOAA/USNIC IMS G02156 1-km GeoTIFF",
+  "class_semantics": {
+    "1": "open water/sea class",
+    "3": "ice",
+    "2": "land",
+    "4": "snow-covered land"
+  },
+  "method": "9x9-pixel neighborhood around NSIDC lake coordinate; fraction uses only IMS water+ice pixels; sampled -7,-3,0,+3,+7 days around reported ice-out",
+  "candidate_rule": "NSIDC lakes with area >= 20 km2 and observations since 2014",
+  "cases": [
+    {
+      "lakecode": "MINN12",
+      "lake": "MINNETONKA",
+      "country": "UNITED STATES",
+      "lat": 44.87,
+      "lon": -93.57,
+      "area_km2": 58.0,
+      "year": 2020,
+      "iceout_date": "2020-04-02",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2020-03-26",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020086_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2020-03-30",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020090_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2020-04-02",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020093_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2020-04-05",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020096_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2020-04-09",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020100_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "MINN12",
+      "lake": "MINNETONKA",
+      "country": "UNITED STATES",
+      "lat": 44.87,
+      "lon": -93.57,
+      "area_km2": 58.0,
+      "year": 2019,
+      "iceout_date": "2019-04-20",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2019-04-13",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019103_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2019-04-17",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019107_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2019-04-20",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019110_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2019-04-23",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019113_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2019-04-27",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019117_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "JJM24",
+      "lake": "BIG GREEN LAKE",
+      "country": "UNITED STATES",
+      "lat": 43.8,
+      "lon": -89.0,
+      "area_km2": 29.64999962,
+      "year": 2020,
+      "iceout_date": "2020-03-26",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2020-03-19",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020079_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2020-03-23",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020083_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2020-03-26",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020086_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2020-03-29",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020089_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2020-04-02",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020093_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "JJM24",
+      "lake": "BIG GREEN LAKE",
+      "country": "UNITED STATES",
+      "lat": 43.8,
+      "lon": -89.0,
+      "area_km2": 29.64999962,
+      "year": 2019,
+      "iceout_date": "2019-04-04",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2019-03-28",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019087_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2019-04-01",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019091_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2019-04-04",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019094_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2019-04-07",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019097_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2019-04-11",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019101_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "MINN27",
+      "lake": "OSAKIS",
+      "country": "UNITED STATES",
+      "lat": 45.87,
+      "lon": -95.13,
+      "area_km2": 27.0,
+      "year": 2020,
+      "iceout_date": "2020-04-10",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2020-04-03",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020094_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2020-04-07",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020098_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2020-04-10",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020101_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2020-04-13",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020104_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2020-04-17",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2020/ims2020108_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "MINN27",
+      "lake": "OSAKIS",
+      "country": "UNITED STATES",
+      "lat": 45.87,
+      "lon": -95.13,
+      "area_km2": 27.0,
+      "year": 2019,
+      "iceout_date": "2019-04-24",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2019-04-17",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019107_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2019-04-21",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019111_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2019-04-24",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019114_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2019-04-27",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019117_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2019-05-01",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019121_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "KMSM1",
+      "lake": "MOOSEHEAD LAKE",
+      "country": "UNITED STATES",
+      "lat": 45.65,
+      "lon": -69.67,
+      "area_km2": 303.0,
+      "year": 2019,
+      "iceout_date": "2019-05-09",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2019-05-02",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019122_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2019-05-06",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019126_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2019-05-09",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019129_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2019-05-12",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019132_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2019-05-16",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019136_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "KMSM1",
+      "lake": "MOOSEHEAD LAKE",
+      "country": "UNITED STATES",
+      "lat": 45.65,
+      "lon": -69.67,
+      "area_km2": 303.0,
+      "year": 2018,
+      "iceout_date": "2018-05-08",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2018-05-01",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018121_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2018-05-05",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018125_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2018-05-08",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018128_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2018-05-11",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018131_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2018-05-15",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018135_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "LR1",
+      "lake": "ONEIDA",
+      "country": "UNITED STATES",
+      "lat": 43.24,
+      "lon": -76.14,
+      "area_km2": 206.6999969,
+      "year": 2019,
+      "iceout_date": "2019-04-09",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2019-04-02",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019092_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2019-04-06",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019096_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2019-04-09",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019099_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2019-04-12",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019102_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2019-04-16",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019106_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "LR1",
+      "lake": "ONEIDA",
+      "country": "UNITED STATES",
+      "lat": 43.24,
+      "lon": -76.14,
+      "area_km2": 206.6999969,
+      "year": 2018,
+      "iceout_date": "2018-04-04",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2018-03-28",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018087_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2018-04-01",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018091_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2018-04-04",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018094_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2018-04-07",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018097_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2018-04-11",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018101_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "PJD15",
+      "lake": "LAKE OF BAYS HAYSTACK",
+      "country": "CANADA",
+      "lat": 45.283,
+      "lon": -79.018,
+      "area_km2": 70.58100128,
+      "year": 2019,
+      "iceout_date": "2019-05-05",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2019-04-28",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019118_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2019-05-02",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019122_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2019-05-05",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019125_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2019-05-08",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019128_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2019-05-12",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019132_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "PJD15",
+      "lake": "LAKE OF BAYS HAYSTACK",
+      "country": "CANADA",
+      "lat": 45.283,
+      "lon": -79.018,
+      "area_km2": 70.58100128,
+      "year": 2018,
+      "iceout_date": "2018-05-07",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2018-04-30",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018120_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2018-05-04",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018124_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2018-05-07",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018127_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2018-05-10",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018130_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2018-05-14",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018134_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "DMR1",
+      "lake": "LAKE MENDOTA",
+      "country": "UNITED STATES",
+      "lat": 43.1,
+      "lon": -89.4,
+      "area_km2": 39.3769989,
+      "year": 2019,
+      "iceout_date": "2019-03-31",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2019-03-24",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019083_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2019-03-28",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019087_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2019-03-31",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019090_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2019-04-03",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019093_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2019-04-07",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019097_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "DMR1",
+      "lake": "LAKE MENDOTA",
+      "country": "UNITED STATES",
+      "lat": 43.1,
+      "lon": -89.4,
+      "area_km2": 39.3769989,
+      "year": 2018,
+      "iceout_date": "2018-03-31",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2018-03-24",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018083_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2018-03-28",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018087_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2018-03-31",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018090_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2018-04-03",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018093_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2018-04-07",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018097_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "RH1",
+      "lake": "RANGELEY LAKE",
+      "country": "UNITED STATES",
+      "lat": 44.95,
+      "lon": -70.65,
+      "area_km2": 24.29999924,
+      "year": 2019,
+      "iceout_date": "2019-05-11",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2019-05-04",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019124_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2019-05-08",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019128_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2019-05-11",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019131_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2019-05-14",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019134_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2019-05-18",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2019/ims2019138_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    },
+    {
+      "lakecode": "RH1",
+      "lake": "RANGELEY LAKE",
+      "country": "UNITED STATES",
+      "lat": 44.95,
+      "lon": -70.65,
+      "area_km2": 24.29999924,
+      "year": 2018,
+      "iceout_date": "2018-05-09",
+      "samples": [
+        {
+          "offset_days": -7,
+          "date": "2018-05-02",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018122_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": -3,
+          "date": "2018-05-06",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018126_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 0,
+          "date": "2018-05-09",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018129_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 3,
+          "date": "2018-05-12",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018132_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        },
+        {
+          "offset_days": 7,
+          "date": "2018-05-16",
+          "url": "https://noaadata.apps.nsidc.org/NOAA/G02156/GIS/1km/2018/ims2018136_00UTC_1km_v1.3.tif",
+          "error": "HTTP response code: 404",
+          "ice_fraction": null,
+          "usable_water_ice_pixels": 0
+        }
+      ],
+      "median_pre_iceout_fraction": null,
+      "median_post_iceout_fraction": null,
+      "drop_pre_to_post": null
+    }
+  ],
+  "summary": {
+    "cases": 16,
+    "usable_cases": 0,
+    "positive_drop_fraction": null,
+    "median_pre_fraction": null,
+    "median_post_fraction": null,
+    "median_drop": null
+  },
+  "gate": "Proceed to full IMS classifier backtest only if >=8 usable cases and >=70% show declining IMS ice fraction across reported ice-out."
+}
