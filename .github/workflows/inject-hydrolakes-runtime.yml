@@ -1,0 +1,43 @@
+name: Wire HydroLAKES browser runtime
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - official-lake-search
+    paths:
+      - scripts/inject_hydrolakes_runtime.py
+      - .github/workflows/inject-hydrolakes-runtime.yml
+
+permissions:
+  contents: write
+
+jobs:
+  inject-runtime:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Inject morphometry runtime
+        run: python scripts/inject_hydrolakes_runtime.py
+      - name: Check JavaScript syntax
+        run: node --check north-america/app.js
+      - name: Commit runtime
+        run: |
+          git config user.name "ice-out-data-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add north-america/app.js
+          if git diff --cached --quiet; then
+            echo "Runtime already wired"
+          else
+            git commit -m "Wire HydroLAKES morphometry into lake runtime"
+            git push origin HEAD:${{ github.ref_name }}
+          fi

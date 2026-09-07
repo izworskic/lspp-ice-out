@@ -1,0 +1,2 @@
+.result-head{padding:8px 12px 5px;font-size:9px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--ice);background:rgba(139,233,255,.035);border-bottom:1px solid rgba(38,56,73,.55)}
+.loading-row{cursor:default}.loading-row:hover{background:transparent}.lake-marker.regional{background:var(--amber);border-color:#fff4d8}.lake-marker.regional.active{background:var(--amber);border-color:#071019}

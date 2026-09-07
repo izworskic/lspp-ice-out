@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "generated_at": "2026-09-07T15:34:57.078216+00:00",
+  "source": "https://data.hydrosheds.org/file/hydrolakes/HydroLAKES_points_v10_shp.zip",
+  "license": "CC-BY-4.0",
+  "citation": "Messager et al. (2016), HydroLAKES v1.0, HydroSHEDS",
+  "derived_subset": "Canada plus U.S. lakes north of 40N",
+  "min_area_km2": 0.5,
+  "shard_size_degrees": 2,
+  "fields": [
+    "hylak_id",
+    "lat",
+    "lon",
+    "area_km2",
+    "depth_m",
+    "elevation_m",
+    "shore_dev",
+    "volume_mcm",
+    "lake_type"
+  ],
+  "record_count": 210437,
+  "shard_count": 793,
+  "country_counts": {
+    "canada": 189638,
+    "united states of america": 20799
+  }
+}
