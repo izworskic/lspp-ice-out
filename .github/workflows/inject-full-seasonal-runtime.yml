@@ -1,0 +1,73 @@
+name: Inject full calibrated seasonal runtime
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - seasonal-physics
+    paths:
+      - scripts/inject_full_seasonal_runtime.py
+      - north-america/data/seasonal-physics/lead-models.json
+      - north-america/data/seasonal-physics/regional-plus-physics.json
+      - north-america/data/seasonal-physics/probability-calibration.json
+      - north-america/data/seasonal-physics/postphysics-intervals.json
+      - .github/workflows/inject-full-seasonal-runtime.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: full-seasonal-runtime-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Inject full calibrated runtime
+        run: |
+          python scripts/inject_full_seasonal_runtime.py
+          python scripts/patch_physics_runtime_confidence.py
+      - name: Check JavaScript syntax
+        run: |
+          node --check north-america/app.js
+          node --check api/seasonal-physics.js
+      - name: Assert calibration assets and runtime rules
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const app=fs.readFileSync('north-america/app.js','utf8');
+          for(const x of ['REGIONAL_PHYSICS_MODELS_URL','PHYSICS_PROBABILITY_URL','PHYSICS_INTERVALS_URL','seasonalIntervalOffsets','selected_smoothing_days','selected_scale_days'])if(!app.includes(x)){console.error('missing',x);process.exit(1)}
+          const p=JSON.parse(fs.readFileSync('north-america/data/seasonal-physics/probability-calibration.json'));
+          if(!p.direct['14'].passes||p.direct['7'].passes||!p.regional['7'].passes)process.exit(1);
+          console.log('Calibration runtime rules verified');
+          NODE
+      - name: Build static output
+        run: |
+          node scripts/inject-ga4.mjs
+          test -f public/north-america/app.js
+          test ! -e public/api
+      - name: Commit runtime safely
+        run: |
+          git config user.name "ice-out-model-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add north-america/app.js
+          if git diff --cached --quiet; then echo "Runtime already applied"; exit 0; fi
+          cp north-america/app.js /tmp/app.js
+          git reset --hard
+          git fetch origin "${GITHUB_REF_NAME}"
+          git checkout -B "${GITHUB_REF_NAME}" "origin/${GITHUB_REF_NAME}"
+          cp /tmp/app.js north-america/app.js
+          git add north-america/app.js
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Apply fully calibrated seasonal ice-out runtime"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
