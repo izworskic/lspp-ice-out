@@ -193,13 +193,16 @@
         const h=direct.h;
         lake.history={type:'direct',source:'NSIDC G01377',lakecode:h.lakecode,name:h.name,distanceKm:direct.d,matchMethod:direct.matchMethod,records:Number(h.records)||0,firstYear:h.first_year,lastYear:h.last_year,medianDoy:Number(h.median_doy),p10Doy:Number(h.p10_doy),p20Doy:Number(h.p20_doy),p25Doy:Number(h.p25_doy),p75Doy:Number(h.p75_doy),p80Doy:Number(h.p80_doy),p90Doy:Number(h.p90_doy),doys:Array.isArray(h.iceout_doys)?h.iceout_doys.map(Number).filter(Number.isFinite):[],trendDaysDecade:h.trend_days_decade};
       }else{
-        const nearby=ranked.filter(x=>x.d<=500&&Number(x.h.records)>=15).slice(0,16);
+        // Held-out optimization: use fewer/closer analogs and favor similar elevation/depth.
+        const nearby=ranked.filter(x=>x.d<=500&&Number(x.h.records)>=15).slice(0,8);
         if(nearby.length>=3){
           let num=0,den=0;
           for(const x of nearby){
             const expected=morphologyBaselineDoy(histLakeObject(x.h));
             const residual=Number(x.h.median_doy)-expected;
-            const w=Math.sqrt(Number(x.h.records))*Math.exp(-x.d/220);
+            const elevSim=(Number(lake.elev)>0&&Number(x.h.elevation_m)>0)?Math.exp(-Math.abs(Number(lake.elev)-Number(x.h.elevation_m))/250):1;
+            const depthSim=(Number(lake.depthM)>0&&Number(x.h.mean_depth_m)>0)?Math.exp(-Math.abs(Math.log(Number(lake.depthM)/Number(x.h.mean_depth_m)))/2):1;
+            const w=Math.sqrt(Number(x.h.records))*Math.exp(-x.d/140)*elevSim*depthSim;
             num+=residual*w;den+=w;
           }
           if(den>0){
