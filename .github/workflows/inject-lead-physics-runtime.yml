@@ -1,0 +1,74 @@
+name: Inject lead-aware seasonal physics runtime
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - seasonal-physics
+    paths:
+      - scripts/inject_lead_physics_runtime.py
+      - api/seasonal-physics.js
+      - scripts/inject-ga4.mjs
+      - north-america/data/seasonal-physics/lead-models.json
+      - .github/workflows/inject-lead-physics-runtime.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: lead-physics-runtime-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Inject validated lead-aware runtime
+        run: python scripts/inject_lead_physics_runtime.py
+      - name: Check browser and API JavaScript syntax
+        run: |
+          node --check north-america/app.js
+          node --check api/seasonal-physics.js
+      - name: Smoke-test API validation path
+        run: |
+          node - <<'NODE'
+          const handler=require('./api/seasonal-physics.js');
+          let code=0,body=null;
+          const res={setHeader(){},status(v){code=v;return this;},json(v){body=v;return v;}};
+          Promise.resolve(handler({method:'GET',query:{lat:'0',lon:'0'}},res)).then(()=>{
+            if(code!==400||!body?.error)process.exit(1);
+            console.log('API validation smoke test passed');
+          }).catch(e=>{console.error(e);process.exit(1);});
+          NODE
+      - name: Build static output and protect API source
+        run: |
+          node scripts/inject-ga4.mjs
+          test -f public/north-america/app.js
+          test ! -e public/api
+      - name: Commit runtime safely
+        run: |
+          git config user.name "ice-out-model-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add north-america/app.js
+          if git diff --cached --quiet; then
+            echo "Runtime already applied"
+            exit 0
+          fi
+          cp north-america/app.js /tmp/app.js
+          git reset --hard
+          git fetch origin "${GITHUB_REF_NAME}"
+          git checkout -B "${GITHUB_REF_NAME}" "origin/${GITHUB_REF_NAME}"
+          cp /tmp/app.js north-america/app.js
+          git add north-america/app.js
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Apply lead-aware direct-history seasonal physics"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
