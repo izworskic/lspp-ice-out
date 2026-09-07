@@ -20,6 +20,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.ref_name }}
+          fetch-depth: 0
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -27,14 +28,15 @@ jobs:
         run: pip install numpy==2.1.3 scikit-learn==1.5.2
       - name: Run NASA POWER seasonal-physics benchmark
         run: python scripts/benchmark_seasonal_physics.py
-      - name: Commit benchmark products
+      - name: Commit benchmark result
         run: |
           git config user.name "ice-out-physics-bot"
           git config user.email "actions@users.noreply.github.com"
-          git add north-america/data/seasonal-physics/benchmark.json north-america/data/seasonal-physics/features.json
+          git add north-america/data/seasonal-physics/benchmark.json
           if git diff --cached --quiet; then
             echo "No seasonal physics benchmark changes"
           else
             git commit -m "Update seasonal physics benchmark"
+            git pull --rebase origin ${{ github.ref_name }}
             git push origin HEAD:${{ github.ref_name }}
           fi
