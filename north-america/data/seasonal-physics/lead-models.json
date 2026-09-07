@@ -1,0 +1,274 @@
+{
+  "version": 1,
+  "source_ice": "NSIDC G01377",
+  "source_weather": "NASA POWER daily T2M UTC",
+  "validation": "rolling-origin lake histories plus GroupKFold holding out whole lakes",
+  "selected_lakes": 100,
+  "weather_lakes_succeeded": 100,
+  "weather_failures": [],
+  "lead_days": [
+    45,
+    30,
+    21,
+    14,
+    7
+  ],
+  "results": {
+    "45": {
+      "cases": 2067,
+      "lakes": 100,
+      "baseline": {
+        "n": 2067,
+        "mae": 8.798,
+        "median_abs_error": 7.0,
+        "p80_abs_error": 14.0,
+        "p90_abs_error": 20.0,
+        "bias_days": 3.612
+      },
+      "physics": {
+        "n": 2067,
+        "mae": 6.893,
+        "median_abs_error": 5.153,
+        "p80_abs_error": 11.366,
+        "p90_abs_error": 15.609,
+        "bias_days": -0.004
+      },
+      "relative_mae_improvement": 0.2165,
+      "improved_fraction": 0.6023,
+      "passes": true,
+      "model": {
+        "feature_order": [
+          "fdd_anom_per_100Cday",
+          "tdd_anom_per_50Cday",
+          "last14_temp_anom_C",
+          "warm14_anom_per_50Cday"
+        ],
+        "mean": [
+          -0.424566,
+          0.081465,
+          0.397495,
+          0.068323
+        ],
+        "scale": [
+          2.204717,
+          0.216909,
+          3.874592,
+          0.168523
+        ],
+        "coef_scaled": [
+          4.239082,
+          -1.681557,
+          -1.694656,
+          -0.114765
+        ],
+        "intercept": -3.611514,
+        "alpha": 12.0
+      }
+    },
+    "30": {
+      "cases": 2067,
+      "lakes": 100,
+      "baseline": {
+        "n": 2067,
+        "mae": 8.798,
+        "median_abs_error": 7.0,
+        "p80_abs_error": 14.0,
+        "p90_abs_error": 20.0,
+        "bias_days": 3.612
+      },
+      "physics": {
+        "n": 2067,
+        "mae": 6.141,
+        "median_abs_error": 4.844,
+        "p80_abs_error": 9.74,
+        "p90_abs_error": 13.313,
+        "bias_days": -0.001
+      },
+      "relative_mae_improvement": 0.302,
+      "improved_fraction": 0.6536,
+      "passes": true,
+      "model": {
+        "feature_order": [
+          "fdd_anom_per_100Cday",
+          "tdd_anom_per_50Cday",
+          "last14_temp_anom_C",
+          "warm14_anom_per_50Cday"
+        ],
+        "mean": [
+          -0.495124,
+          0.184565,
+          0.382487,
+          0.146811
+        ],
+        "scale": [
+          2.345954,
+          0.483935,
+          3.613289,
+          0.396061
+        ],
+        "coef_scaled": [
+          3.761667,
+          -4.712655,
+          -2.348364,
+          1.735485
+        ],
+        "intercept": -3.611514,
+        "alpha": 12.0
+      }
+    },
+    "21": {
+      "cases": 2067,
+      "lakes": 100,
+      "baseline": {
+        "n": 2067,
+        "mae": 8.798,
+        "median_abs_error": 7.0,
+        "p80_abs_error": 14.0,
+        "p90_abs_error": 20.0,
+        "bias_days": 3.612
+      },
+      "physics": {
+        "n": 2067,
+        "mae": 5.465,
+        "median_abs_error": 4.193,
+        "p80_abs_error": 8.621,
+        "p90_abs_error": 11.664,
+        "bias_days": -0.001
+      },
+      "relative_mae_improvement": 0.3788,
+      "improved_fraction": 0.6831,
+      "passes": true,
+      "model": {
+        "feature_order": [
+          "fdd_anom_per_100Cday",
+          "tdd_anom_per_50Cday",
+          "last14_temp_anom_C",
+          "warm14_anom_per_50Cday"
+        ],
+        "mean": [
+          -0.489599,
+          0.185244,
+          0.163175,
+          0.12314
+        ],
+        "scale": [
+          2.407749,
+          0.676629,
+          3.221245,
+          0.485245
+        ],
+        "coef_scaled": [
+          3.151127,
+          -5.640504,
+          -3.099272,
+          2.391144
+        ],
+        "intercept": -3.611514,
+        "alpha": 12.0
+      }
+    },
+    "14": {
+      "cases": 2067,
+      "lakes": 100,
+      "baseline": {
+        "n": 2067,
+        "mae": 8.798,
+        "median_abs_error": 7.0,
+        "p80_abs_error": 14.0,
+        "p90_abs_error": 20.0,
+        "bias_days": 3.612
+      },
+      "physics": {
+        "n": 2067,
+        "mae": 4.978,
+        "median_abs_error": 3.949,
+        "p80_abs_error": 7.497,
+        "p90_abs_error": 10.489,
+        "bias_days": 0.0
+      },
+      "relative_mae_improvement": 0.4342,
+      "improved_fraction": 0.6831,
+      "passes": true,
+      "model": {
+        "feature_order": [
+          "fdd_anom_per_100Cday",
+          "tdd_anom_per_50Cday",
+          "last14_temp_anom_C",
+          "warm14_anom_per_50Cday"
+        ],
+        "mean": [
+          -0.480703,
+          0.19935,
+          0.136707,
+          0.111929
+        ],
+        "scale": [
+          2.428661,
+          0.823623,
+          2.918154,
+          0.528491
+        ],
+        "coef_scaled": [
+          2.688575,
+          -6.971073,
+          -3.879532,
+          3.9443
+        ],
+        "intercept": -3.611514,
+        "alpha": 12.0
+      }
+    },
+    "7": {
+      "cases": 2067,
+      "lakes": 100,
+      "baseline": {
+        "n": 2067,
+        "mae": 8.798,
+        "median_abs_error": 7.0,
+        "p80_abs_error": 14.0,
+        "p90_abs_error": 20.0,
+        "bias_days": 3.612
+      },
+      "physics": {
+        "n": 2067,
+        "mae": 4.823,
+        "median_abs_error": 3.639,
+        "p80_abs_error": 7.293,
+        "p90_abs_error": 10.082,
+        "bias_days": 0.0
+      },
+      "relative_mae_improvement": 0.4518,
+      "improved_fraction": 0.7049,
+      "passes": true,
+      "model": {
+        "feature_order": [
+          "fdd_anom_per_100Cday",
+          "tdd_anom_per_50Cday",
+          "last14_temp_anom_C",
+          "warm14_anom_per_50Cday"
+        ],
+        "mean": [
+          -0.479554,
+          0.239342,
+          0.235178,
+          0.117334
+        ],
+        "scale": [
+          2.437994,
+          0.967277,
+          2.738865,
+          0.576632
+        ],
+        "coef_scaled": [
+          2.632548,
+          -7.851258,
+          -3.159362,
+          4.247983
+        ],
+        "intercept": -3.611514,
+        "alpha": 12.0
+      }
+    }
+  },
+  "deployment_rule": "Only use a lead model where passes=true. Interpolate model-predicted residual corrections between adjacent passing lead models; do not extrapolate beyond 45 or inside 7 days without a separate observational/satellite layer."
+}
