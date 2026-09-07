@@ -1,0 +1,389 @@
+{
+  "version": 1,
+  "question": "Does observed snow depth add held-out predictive skill beyond the validated temperature-physics model?",
+  "ice_source": "NSIDC G01377",
+  "temperature_source": "NASA POWER daily T2M UTC",
+  "snow_source": "NOAA/NCEI GHCN-Daily SNWD",
+  "snow_station_rule": "nearest usable SNWD station within 100 km; per-case winter coverage >=65% and recent-14-day coverage >=8 observations",
+  "validation": "rolling-origin feature anomalies; GroupKFold holds out whole lakes; temperature-only and temperature+snow are compared on identical snow-observed cases",
+  "selected_lakes": 100,
+  "temperature_lakes": 100,
+  "snow_station_lakes": 99,
+  "temperature_failures": [],
+  "snow_station_failures": [
+    {
+      "lakecode": "DMR1",
+      "lake": "LAKE MENDOTA"
+    }
+  ],
+  "lead_days": [
+    45,
+    30,
+    21,
+    14,
+    7
+  ],
+  "results": {
+    "45": {
+      "cases": 852,
+      "lakes": 69,
+      "median_station_km": 8.1,
+      "temperature_only": {
+        "n": 852,
+        "mae": 6.838,
+        "median_abs_error": 4.668,
+        "p80_abs_error": 11.905,
+        "p90_abs_error": 15.763,
+        "bias_days": 0.021
+      },
+      "temperature_plus_snow": {
+        "n": 852,
+        "mae": 6.847,
+        "median_abs_error": 4.875,
+        "p80_abs_error": 12.107,
+        "p90_abs_error": 15.629,
+        "bias_days": 0.043
+      },
+      "relative_mae_improvement_vs_temperature": -0.0013,
+      "improved_fraction_vs_temperature": 0.5094,
+      "passes": false,
+      "release_gate": {
+        "minimum_relative_mae_improvement_vs_temperature": 0.03,
+        "minimum_lakes": 25
+      },
+      "model_temp_plus_snow": {
+        "feature_order": [
+          "fdd_anom_per_100Cday",
+          "tdd_anom_per_50Cday",
+          "last14_temp_anom_C",
+          "warm14_anom_per_50Cday",
+          "snowdepth_cutoff_anom_per_100mm",
+          "snowdepth_mean14_anom_per_100mm",
+          "snowcovered_days_anom_per_10d",
+          "max_snowdepth_anom_per_100mm"
+        ],
+        "mean": [
+          -0.209272,
+          0.081533,
+          0.270871,
+          0.06258,
+          0.351587,
+          0.313486,
+          -0.246127,
+          0.18277
+        ],
+        "scale": [
+          2.151864,
+          0.232367,
+          3.804657,
+          0.180948,
+          2.07044,
+          1.821608,
+          1.58842,
+          1.925501
+        ],
+        "coef_scaled": [
+          3.501374,
+          -1.551956,
+          -1.986246,
+          -0.753284,
+          -0.964506,
+          0.84744,
+          0.269849,
+          0.583148
+        ],
+        "intercept": -3.545188,
+        "alpha": 12.0
+      }
+    },
+    "30": {
+      "cases": 853,
+      "lakes": 69,
+      "median_station_km": 8.1,
+      "temperature_only": {
+        "n": 853,
+        "mae": 6.085,
+        "median_abs_error": 4.702,
+        "p80_abs_error": 9.648,
+        "p90_abs_error": 12.993,
+        "bias_days": 0.016
+      },
+      "temperature_plus_snow": {
+        "n": 853,
+        "mae": 6.096,
+        "median_abs_error": 4.749,
+        "p80_abs_error": 9.744,
+        "p90_abs_error": 13.063,
+        "bias_days": 0.01
+      },
+      "relative_mae_improvement_vs_temperature": -0.0018,
+      "improved_fraction_vs_temperature": 0.4818,
+      "passes": false,
+      "release_gate": {
+        "minimum_relative_mae_improvement_vs_temperature": 0.03,
+        "minimum_lakes": 25
+      },
+      "model_temp_plus_snow": {
+        "feature_order": [
+          "fdd_anom_per_100Cday",
+          "tdd_anom_per_50Cday",
+          "last14_temp_anom_C",
+          "warm14_anom_per_50Cday",
+          "snowdepth_cutoff_anom_per_100mm",
+          "snowdepth_mean14_anom_per_100mm",
+          "snowcovered_days_anom_per_10d",
+          "max_snowdepth_anom_per_100mm"
+        ],
+        "mean": [
+          -0.318928,
+          0.185617,
+          0.511651,
+          0.146315,
+          0.483828,
+          0.371169,
+          -0.262544,
+          0.166682
+        ],
+        "scale": [
+          2.283757,
+          0.507831,
+          3.611231,
+          0.416701,
+          2.299976,
+          2.133467,
+          1.786819,
+          1.956376
+        ],
+        "coef_scaled": [
+          3.572092,
+          -5.09271,
+          -1.856808,
+          1.916948,
+          1.074213,
+          -0.421211,
+          0.30101,
+          -0.244727
+        ],
+        "intercept": -3.47714,
+        "alpha": 12.0
+      }
+    },
+    "21": {
+      "cases": 850,
+      "lakes": 70,
+      "median_station_km": 8.1,
+      "temperature_only": {
+        "n": 850,
+        "mae": 5.295,
+        "median_abs_error": 4.074,
+        "p80_abs_error": 8.502,
+        "p90_abs_error": 11.102,
+        "bias_days": 0.005
+      },
+      "temperature_plus_snow": {
+        "n": 850,
+        "mae": 5.271,
+        "median_abs_error": 4.076,
+        "p80_abs_error": 8.506,
+        "p90_abs_error": 11.401,
+        "bias_days": 0.003
+      },
+      "relative_mae_improvement_vs_temperature": 0.0045,
+      "improved_fraction_vs_temperature": 0.5259,
+      "passes": false,
+      "release_gate": {
+        "minimum_relative_mae_improvement_vs_temperature": 0.03,
+        "minimum_lakes": 25
+      },
+      "model_temp_plus_snow": {
+        "feature_order": [
+          "fdd_anom_per_100Cday",
+          "tdd_anom_per_50Cday",
+          "last14_temp_anom_C",
+          "warm14_anom_per_50Cday",
+          "snowdepth_cutoff_anom_per_100mm",
+          "snowdepth_mean14_anom_per_100mm",
+          "snowcovered_days_anom_per_10d",
+          "max_snowdepth_anom_per_100mm"
+        ],
+        "mean": [
+          -0.27778,
+          0.173306,
+          0.106366,
+          0.129636,
+          0.6081,
+          0.526034,
+          -0.209176,
+          0.228106
+        ],
+        "scale": [
+          2.349603,
+          0.71454,
+          3.303149,
+          0.50876,
+          1.875526,
+          2.066381,
+          1.963762,
+          1.995825
+        ],
+        "coef_scaled": [
+          2.829107,
+          -5.220443,
+          -2.651283,
+          1.869098,
+          1.264179,
+          -0.457198,
+          0.819741,
+          -0.284066
+        ],
+        "intercept": -3.354118,
+        "alpha": 12.0
+      }
+    },
+    "14": {
+      "cases": 838,
+      "lakes": 70,
+      "median_station_km": 8.1,
+      "temperature_only": {
+        "n": 838,
+        "mae": 4.875,
+        "median_abs_error": 3.891,
+        "p80_abs_error": 7.231,
+        "p90_abs_error": 10.514,
+        "bias_days": 0.011
+      },
+      "temperature_plus_snow": {
+        "n": 838,
+        "mae": 4.837,
+        "median_abs_error": 3.767,
+        "p80_abs_error": 7.35,
+        "p90_abs_error": 10.567,
+        "bias_days": 0.013
+      },
+      "relative_mae_improvement_vs_temperature": 0.0078,
+      "improved_fraction_vs_temperature": 0.5334,
+      "passes": false,
+      "release_gate": {
+        "minimum_relative_mae_improvement_vs_temperature": 0.03,
+        "minimum_lakes": 25
+      },
+      "model_temp_plus_snow": {
+        "feature_order": [
+          "fdd_anom_per_100Cday",
+          "tdd_anom_per_50Cday",
+          "last14_temp_anom_C",
+          "warm14_anom_per_50Cday",
+          "snowdepth_cutoff_anom_per_100mm",
+          "snowdepth_mean14_anom_per_100mm",
+          "snowcovered_days_anom_per_10d",
+          "max_snowdepth_anom_per_100mm"
+        ],
+        "mean": [
+          -0.2799,
+          0.162213,
+          0.081308,
+          0.089235,
+          0.68426,
+          0.629287,
+          -0.10531,
+          0.273431
+        ],
+        "scale": [
+          2.370993,
+          0.852571,
+          2.952662,
+          0.515063,
+          1.485796,
+          1.679699,
+          2.063955,
+          1.985034
+        ],
+        "coef_scaled": [
+          2.190664,
+          -6.226621,
+          -3.475786,
+          3.283023,
+          1.451389,
+          -0.350235,
+          0.954569,
+          -0.044838
+        ],
+        "intercept": -3.315632,
+        "alpha": 12.0
+      }
+    },
+    "7": {
+      "cases": 835,
+      "lakes": 69,
+      "median_station_km": 8.1,
+      "temperature_only": {
+        "n": 835,
+        "mae": 4.607,
+        "median_abs_error": 3.535,
+        "p80_abs_error": 7.321,
+        "p90_abs_error": 9.77,
+        "bias_days": 0.008
+      },
+      "temperature_plus_snow": {
+        "n": 835,
+        "mae": 4.447,
+        "median_abs_error": 3.361,
+        "p80_abs_error": 7.013,
+        "p90_abs_error": 9.371,
+        "bias_days": 0.013
+      },
+      "relative_mae_improvement_vs_temperature": 0.0347,
+      "improved_fraction_vs_temperature": 0.5772,
+      "passes": true,
+      "release_gate": {
+        "minimum_relative_mae_improvement_vs_temperature": 0.03,
+        "minimum_lakes": 25
+      },
+      "model_temp_plus_snow": {
+        "feature_order": [
+          "fdd_anom_per_100Cday",
+          "tdd_anom_per_50Cday",
+          "last14_temp_anom_C",
+          "warm14_anom_per_50Cday",
+          "snowdepth_cutoff_anom_per_100mm",
+          "snowdepth_mean14_anom_per_100mm",
+          "snowcovered_days_anom_per_10d",
+          "max_snowdepth_anom_per_100mm"
+        ],
+        "mean": [
+          -0.290822,
+          0.222476,
+          0.245284,
+          0.100397,
+          0.398332,
+          0.538727,
+          -0.037725,
+          0.261174
+        ],
+        "scale": [
+          2.376741,
+          0.98281,
+          2.701548,
+          0.554702,
+          0.976882,
+          1.248804,
+          2.180737,
+          1.98929
+        ],
+        "coef_scaled": [
+          2.028813,
+          -7.088291,
+          -1.696594,
+          2.874028,
+          1.104274,
+          0.75557,
+          0.998064,
+          -0.092002
+        ],
+        "intercept": -3.533533,
+        "alpha": 12.0
+      }
+    }
+  },
+  "deployment_rule": "Only add snow features at lead times with passes=true; otherwise retain temperature-only physics. GHCN point snow depth is a benchmark signal, not assumed lake-surface snow depth."
+}
