@@ -11,13 +11,12 @@ Data discipline:
 - model evaluation uses grouped cross-validation by lakecode, so no target lake appears
   in both train and test folds
 """
-import csv, datetime as dt, io, json, math, statistics, time, urllib.parse, urllib.request
+import csv, datetime as dt, io, json, math, statistics, time, urllib.parse, urllib.request, urllib.error
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 
 import numpy as np
-from sklearn.compose import TransformedTargetRegressor
 from sklearn.linear_model import Ridge
 from sklearn.model_selection import GroupKFold
 from sklearn.pipeline import Pipeline
@@ -32,7 +31,7 @@ NSIDC='https://noaadata.apps.nsidc.org/NOAA/G01377/liag_freeze_thaw_table.csv'
 POWER='https://power.larc.nasa.gov/api/temporal/daily/point'
 START_YEAR=1982
 END_YEAR=2025
-MAX_LAKES=140
+MAX_LAKES=100
 MIN_PRIOR_ICE=10
 MIN_PRIOR_CLIMATE=8
 FORECAST_LEAD_DAYS=30
@@ -50,7 +49,13 @@ def fetch_json(url,tries=4):
     for i in range(tries):
         try:
             req=urllib.request.Request(url,headers={'User-Agent':'chrisizworski-ice-out/1.0'})
-            with urllib.request.urlopen(req,timeout=90) as r:return json.loads(r.read().decode('utf-8'))
+            with urllib.request.urlopen(req,timeout=120) as r:return json.loads(r.read().decode('utf-8'))
+        except urllib.error.HTTPError as e:
+            try:detail=e.read().decode('utf-8','replace')[:1000]
+            except Exception:detail=''
+            last=RuntimeError(f'HTTP {e.code}: {detail}')
+            if e.code==422:break
+            time.sleep(1.5*(i+1))
         except Exception as e:
             last=e;time.sleep(1.5*(i+1))
     raise last
@@ -76,7 +81,6 @@ def select_lakes(summary,events):
         if h.get('records',0)>=20 and recent>=10 and 41<=float(h['lat'])<=72:
             cand.append((recent,h))
     cand.sort(key=lambda x:(-x[0],-x[1].get('records',0)))
-    # Geographic diversity: first pass one lake per coarse 2-degree cell, then fill by record count.
     out=[];seen=set()
     for _,h in cand:
         cell=(math.floor(float(h['lat'])/2),math.floor(float(h['lon'])/2))
@@ -91,7 +95,9 @@ def select_lakes(summary,events):
     return out
 
 def power_url(h):
-    q={'parameters':'T2M','community':'AG','longitude':str(h['lon']),'latitude':str(h['lat']),'start':'19810101','end':f'{END_YEAR}1231','format':'JSON','user':'chrisizworski-ice-out'}
+    # POWER Daily API accepts these documented query arguments. UTC makes all lake/year
+    # comparisons use one explicit time standard.
+    q={'parameters':'T2M','community':'AG','longitude':str(h['lon']),'latitude':str(h['lat']),'start':'19810101','end':f'{END_YEAR}1231','format':'JSON','time-standard':'UTC'}
     return POWER+'?'+urllib.parse.urlencode(q)
 def fetch_power(h):
     j=fetch_json(power_url(h));par=j.get('properties',{}).get('parameter',{}).get('T2M',{})
@@ -153,8 +159,8 @@ def grouped_cv(cases):
     for n,(tr,te) in enumerate(gkf.split(X,y,groups),1):
         model=Pipeline([('scale',StandardScaler()),('ridge',Ridge(alpha=12.0))])
         model.fit(X[tr],y[tr]);pred[te]=model.predict(X[te]);fold_meta.append({'fold':n,'train_n':len(tr),'test_n':len(te),'test_lakes':len(set(groups[te]))})
-    base_err=-y # prior median - observed
-    physics_err=pred-y # (prior median + predicted residual) - observed
+    base_err=-y
+    physics_err=pred-y
     full=Pipeline([('scale',StandardScaler()),('ridge',Ridge(alpha=12.0))]);full.fit(X,y)
     scaler=full.named_steps['scale'];ridge=full.named_steps['ridge']
     return base_err,physics_err,pred,fold_meta,{'feature_order':['fdd_anom_per_100Cday','tdd_anom_per_50Cday','last14_temp_anom_C','warm14_anom_per_50Cday'],'mean':[round(float(v),6) for v in scaler.mean_],'scale':[round(float(v),6) for v in scaler.scale_],'coef_scaled':[round(float(v),6) for v in ridge.coef_],'intercept':round(float(ridge.intercept_),6),'alpha':12.0}
@@ -173,13 +179,14 @@ with ThreadPoolExecutor(max_workers=4) as ex:
             failures.append({'lakecode':h['lakecode'],'lake':h['name'],'error':str(e)});print('FAIL',h['lakecode'],e)
 
 cases=build_cases(lakes,events,weather_by)
-if len(cases)<300 or len({c['lakecode'] for c in cases})<30:raise RuntimeError(f'Insufficient benchmark sample: {len(cases)} cases / {len(set(c["lakecode"] for c in cases))} lakes')
+case_lakes=len({c['lakecode'] for c in cases})
+if len(cases)<300 or case_lakes<30:raise RuntimeError(f'Insufficient benchmark sample: {len(cases)} cases / {case_lakes} lakes')
 base_err,phys_err,pred,folds,model=grouped_cv(cases)
 base=metrics(base_err);physics=metrics(phys_err)
 improved=sum(abs(phys_err[i])<abs(base_err[i]) for i in range(len(cases)))/len(cases)
 relative=(base['mae']-physics['mae'])/base['mae'] if base['mae'] else 0
 worst=sorted([{'lake':c['lake'],'year':c['year'],'observed':c['observed'],'prior_median':c['prior_median'],'physics_pred':round(c['prior_median']+float(pred[i]),2),'base_error':round(float(base_err[i]),2),'physics_error':round(float(phys_err[i]),2)} for i,c in enumerate(cases)],key=lambda r:abs(r['physics_error']),reverse=True)[:25]
-out={'version':1,'question':f'Do season-to-date temperature anomalies improve ice-out prediction {FORECAST_LEAD_DAYS} days before prior median?','ice_source':'NSIDC G01377','weather_source':'NASA POWER daily T2M','data_discipline':'Each case uses only earlier years for its lake prior/climate anomaly; grouped CV holds out entire lakes from regression training.','selected_lakes':len(lakes),'weather_lakes_succeeded':len(weather_by),'weather_failures':failures,'cases':len(cases),'case_lakes':len(set(c['lakecode'] for c in cases)),'baseline_prior_median':base,'seasonal_physics_grouped_cv':physics,'improved_fraction':round(improved,4),'relative_mae_improvement':round(relative,4),'release_gate':{'minimum_relative_mae_improvement':0.08,'maximum_physics_mae_days':7.5,'passes':bool(relative>=0.08 and physics['mae']<=7.5)},'model':model,'folds':folds,'worst_errors':worst,'notes':['NASA POWER meteorology is coarse-scale; anomalies are used to reduce terrain/elevation bias.','This test does not yet include snowpack, satellite state, wind or radiation.','A passing result qualifies temperature physics as an additional model layer; it does not by itself validate final probabilities.']}
+out={'version':2,'question':f'Do season-to-date temperature anomalies improve ice-out prediction {FORECAST_LEAD_DAYS} days before prior median?','ice_source':'NSIDC G01377','weather_source':'NASA POWER daily T2M','weather_time_standard':'UTC','data_discipline':'Each case uses only earlier years for its lake prior/climate anomaly; grouped CV holds out entire lakes from regression training.','selected_lakes':len(lakes),'weather_lakes_succeeded':len(weather_by),'weather_failures':failures,'cases':len(cases),'case_lakes':case_lakes,'baseline_prior_median':base,'seasonal_physics_grouped_cv':physics,'improved_fraction':round(improved,4),'relative_mae_improvement':round(relative,4),'release_gate':{'minimum_relative_mae_improvement':0.08,'maximum_physics_mae_days':7.5,'passes':bool(relative>=0.08 and physics['mae']<=7.5)},'model':model,'folds':folds,'worst_errors':worst,'notes':['NASA POWER meteorology is coarse-scale; anomalies are used to reduce terrain/elevation bias.','This test does not yet include snowpack, satellite state, wind or radiation.','A passing result qualifies temperature physics as an additional model layer; it does not by itself validate final probabilities.']}
 OUT.write_text(json.dumps(out,indent=2),encoding='utf-8')
-FEATURES.write_text(json.dumps({'version':1,'cases':cases},separators=(',',':')),encoding='utf-8')
+FEATURES.write_text(json.dumps({'version':2,'cases':cases},separators=(',',':')),encoding='utf-8')
 print(json.dumps(out,indent=2))
