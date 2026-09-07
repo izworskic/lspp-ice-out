@@ -144,7 +144,7 @@
     let probability;
     if(lake.history?.type==='direct' && Array.isArray(lake.history.doys) && lake.history.doys.length>=5){
       // Rolling-origin validation favors a lightly smoothed empirical CDF over a generic S-curve.
-      // A positive seasonal shift means breakup is running early, so compare target+shift to history.
+      // correctionDays is positive for a later season, so evaluate the historical CDF against target-correction.
       probability=lake.history.doys.reduce((sum,d)=>sum+1/(1+Math.exp(-(targetDoy-correctionDays-d)/3)),0)/lake.history.doys.length;
     }else{
       probability=1/(1+Math.exp(-(targetDoy-median)/scale));
@@ -167,7 +167,7 @@
       : lake.history?.type==='regional' ? 'Moderate'
       : isRegional(lake) ? 'Low' : isOfficial(lake) ? 'Moderate' : 'Moderate';
     if(!isRegional(lake) && (lake.lat>60 || lake.area==='huge')) confidence='Low–moderate';
-    if(state.weatherError && activeSeason(today)) confidence='Low';
+    if(state.weatherError && activeSeason(today) && !seasonalPhysicsApplied) confidence='Low';
     return {base,correctionDays,physicsCorrection,forecastShift,median,p10,p90,winLo,winHi,probability,confidence,applyWeather:seasonalPhysicsApplied||forecastFallbackApplied,seasonalPhysicsApplied,forecastFallbackApplied,physicsLead:baselineMedianDoy(lake)-doy(today)};
   }
 
