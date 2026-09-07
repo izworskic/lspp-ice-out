@@ -6,16 +6,19 @@
   const activeSeason = (d=today) => d.getMonth() >= 1 && d.getMonth() <= 6;
   const nextSpringYear = now.getMonth() >= 7 ? now.getFullYear()+1 : now.getFullYear();
   const dynamicLakes = new Map();
+  const hydrolakesCache = new Map();
+  let hydroManifest = null;
   const state = {
     lake: benchmarkLakes.find(x=>x.id==='lake-vermilion-mn') || benchmarkLakes[0],
     weather:null, weatherError:null, targetTouched:false, ndsi:false, sensor:'modis',
-    searchSeq:0, nearbySeq:0
+    searchSeq:0, nearbySeq:0, enrichSeq:0
   };
 
   const depthAdj = {shallow:-4, medium:0, deep:4, verydeep:8};
   const sizeAdj = {small:-2, medium:0, large:2, huge:5};
   const US_GNIS = 'https://carto.nationalmap.gov/arcgis/rest/services/geonames/MapServer/7/query';
   const CA_NAMES = 'https://geogratis.gc.ca/services/geoname/en/geonames.json';
+  const HYDRO_BASE = 'data/hydrolakes';
 
   function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
   function fmtDate(d){return d.toISOString().slice(0,10);}
@@ -31,7 +34,16 @@
     return 2*R*Math.asin(Math.sqrt(s));
   }
   function allKnownLakes(){return [...benchmarkLakes,...dynamicLakes.values()];}
-  function isRegional(lake){return lake.registry==='official';}
+  function isOfficial(lake){return lake?.registry==='official';}
+  function isRegional(lake){return isOfficial(lake) && !lake.enriched;}
+  function areaClass(km2){
+    if(!Number.isFinite(km2))return 'medium';
+    if(km2<2)return 'small'; if(km2<50)return 'medium'; if(km2<500)return 'large'; return 'huge';
+  }
+  function depthClass(m){
+    if(!Number.isFinite(m)||m<=0)return 'medium';
+    if(m<3)return 'shallow'; if(m<12)return 'medium'; if(m<35)return 'deep'; return 'verydeep';
+  }
 
   // Transparent phase-1 continental climatology. Official-registry lakes use latitude-first
   // regional guidance until HydroLAKES morphology + historical calibration are attached.
@@ -56,6 +68,7 @@
     const median = Math.round(base - shift);
     let spread = lake.area==='huge' || lake.depth==='verydeep' ? 15 : lake.depth==='deep' ? 12 : 10;
     if(isRegional(lake)) spread = lake.lat>60 ? 22 : 18;
+    else if(isOfficial(lake) && lake.enriched) spread = Math.max(spread,13);
     const targetDoy = doy(targetDate);
     const scale = Math.max(4.8, spread/2.1);
     const probability = 1/(1+Math.exp(-(targetDoy-median)/scale));
@@ -63,7 +76,7 @@
     const p90 = Math.round(median + spread);
     const winLo = Math.round(median - spread*.45);
     const winHi = Math.round(median + spread*.45);
-    let confidence = isRegional(lake) ? 'Low' : 'Moderate';
+    let confidence = isRegional(lake) ? 'Low' : isOfficial(lake) ? 'Moderate' : 'Moderate';
     if(!isRegional(lake) && (lake.lat>60 || lake.area==='huge')) confidence='Low–moderate';
     if(state.weatherError && activeSeason(today)) confidence='Low';
     return {base,shift,median,p10,p90,winLo,winHi,probability,confidence,applyWeather};
@@ -85,6 +98,12 @@
       if(m.applyWeather) return `This is a regional low-confidence estimate for an officially named lake. The current 7-day thaw signal shifts the broad climatology by ${Math.abs(m.shift).toFixed(1)} days; lake morphology and historical calibration are still pending.`;
       return `This officially named lake is available immediately, but its morphology/history enrichment is still pending. The result stays broad and low-confidence rather than inventing lake-specific precision.`;
     }
+    if(isOfficial(lake) && lake.enriched){
+      const morph=`${lake.areaKm2.toFixed(lake.areaKm2<10?1:0)} km², ${lake.depthM>0?`${lake.depthM.toFixed(1)} m estimated mean depth`:'depth unavailable'}, ${Math.round(lake.elev||0)} m elevation`;
+      if(!activeSeason(today)) return `${lake.name} has been matched to HydroLAKES morphology (${morph}). That sharpens the regional climatology, but historical lake-specific ice-out calibration is still pending.`;
+      if(m.applyWeather) return `HydroLAKES morphology (${morph}) and the current 7-day thaw trajectory are both active. Historical lake-specific ice-out calibration is still pending, so confidence remains moderate.`;
+      return `HydroLAKES morphology is attached (${morph}); historical lake-specific ice-out calibration is still pending.`;
+    }
     if(!activeSeason(today)) return `For ${targetText}, this beta uses ${lake.name}'s latitude, elevation, basin depth class and size to establish a transparent regional climatology. Live weather is shown below but is not applied outside the spring breakup season.`;
     if(m.applyWeather){
       const dir = m.shift>1 ? 'pulling the window earlier' : m.shift<-1 ? 'pushing the window later' : 'close to climatological pace';
@@ -95,12 +114,65 @@
 
   function defaultTarget(lake){return fromDoy(nextSpringYear,baselineMedianDoy(lake));}
 
+
+  // HYDROLAKES MORPHOMETRY — derived static shards, no database server required.
+  async function getHydroManifest(){
+    if(hydroManifest)return hydroManifest;
+    const r=await fetch(`${HYDRO_BASE}/manifest.json`,{cache:'force-cache'});
+    if(!r.ok)throw new Error(`HydroLAKES manifest ${r.status}`);
+    hydroManifest=await r.json(); return hydroManifest;
+  }
+  function hydroShardKey(lat,lon,size){
+    const y=Math.floor(lat/size)*size, x=Math.floor(lon/size)*size;
+    const ys=y>=0?`+${String(y).padStart(2,'0')}`:`-${String(Math.abs(y)).padStart(2,'0')}`;
+    const xs=x>=0?`+${String(x).padStart(3,'0')}`:`-${String(Math.abs(x)).padStart(3,'0')}`;
+    return `lat${ys}_lon${xs}`;
+  }
+  async function loadHydroShard(key){
+    if(hydrolakesCache.has(key))return hydrolakesCache.get(key);
+    const p=fetch(`${HYDRO_BASE}/${key}.json`,{cache:'force-cache'}).then(async r=>r.ok?await r.json():[]).catch(()=>[]);
+    hydrolakesCache.set(key,p); return p;
+  }
+  function chooseHydroMatch(rows,lake){
+    const c=rows.map(r=>({row:r,d:distanceKm(lake,{lat:Number(r[1]),lng:Number(r[2])})})).filter(x=>Number.isFinite(x.d)).sort((a,b)=>a.d-b.d);
+    const first=c[0],second=c[1]; if(!first)return null;
+    const clear=first.d<=1.5 || (first.d<=5 && (!second||second.d>first.d*1.8)) || (first.d<=10 && (!second||second.d>first.d*3));
+    if(!clear)return null;
+    const r=first.row;
+    return {hydrolakesId:Number(r[0]),hydroDistanceKm:first.d,areaKm2:Number(r[3]),depthM:Number(r[4]),elev:Number(r[5]),shoreDev:Number(r[6]),volumeMcm:Number(r[7]),lakeType:Number(r[8])};
+  }
+  async function findHydroMatch(lake){
+    const mf=await getHydroManifest(),size=Number(mf.shard_size_degrees)||2;
+    const center=hydroShardKey(lake.lat,lake.lng,size);
+    const core=await loadHydroShard(center);
+    let match=chooseHydroMatch(core,lake); if(match)return match;
+    const y0=Math.floor(lake.lat/size)*size,x0=Math.floor(lake.lng/size)*size,keys=[];
+    for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++){
+      const k=hydroShardKey(y0+dy*size,x0+dx*size,size); if(k!==center)keys.push(k);
+    }
+    const rows=[...core,...(await Promise.all(keys.map(loadHydroShard))).flat()];
+    return chooseHydroMatch(rows,lake);
+  }
+  async function enrichLake(lake){
+    if(!isOfficial(lake)||lake.enriched||lake.enrichAttempted)return;
+    lake.enrichAttempted=true; const token=++state.enrichSeq;
+    try{
+      const match=await findHydroMatch(lake); if(!match)return;
+      Object.assign(lake,match,{enriched:true}); lake.area=areaClass(lake.areaKm2); lake.depth=depthClass(lake.depthM);
+      if(state.lake.id===lake.id&&token===state.enrichSeq){
+        if(!state.targetTouched)$('targetDate').value=fmtDate(defaultTarget(lake));
+        ensureMarker(lake).setIcon(markerIcon(true,false)); renderModel();
+      }
+    }catch(e){console.warn('HydroLAKES enrichment unavailable',e);}
+  }
+
   // MAP
   const map=L.map('map',{center:[48,-92],zoom:4,zoomControl:false,attributionControl:true,minZoom:3,maxZoom:12});
   L.control.zoom({position:'bottomright'}).addTo(map);
   L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:19,opacity:.45,attribution:'CARTO'}).addTo(map);
   map.attributionControl.addAttribution('<a href="https://earthdata.nasa.gov/gibs" target="_blank" rel="noopener">NASA GIBS</a>');
   map.attributionControl.addAttribution('Lake names: USGS GNIS / NRCan CGNDB');
+  map.attributionControl.addAttribution('Morphometry: HydroLAKES / HydroSHEDS');
 
   const markers=new Map();
   function markerIcon(active=false,regional=false){
@@ -254,14 +326,16 @@
     const j=await r.json(); const items=Array.isArray(j)?j:(j.items||j.results||[]); return items.map(caItemToLake).filter(Boolean);
   }
 
-  function rememberLake(lake){if(isRegional(lake))dynamicLakes.set(lake.id,lake);return lake;}
+  function rememberLake(lake){if(isOfficial(lake))dynamicLakes.set(lake.id,lake);return lake;}
 
   function renderModel(){
     const lake=state.lake; const target=new Date($('targetDate').value+'T12:00:00'); if(Number.isNaN(target.getTime()))return;
     const m=lakeModel(lake,target); const p=Math.round(m.probability*100); const st=statusFor(m.probability);
-    const meta=isRegional(lake)
-      ? `${lake.region} · ${lake.country==='US'?'United States':'Canada'} · official lake name · regional model`
-      : `${lake.region} · ${lake.country==='US'?'United States':'Canada'} · ${lake.depth} basin · ${lake.area} lake`;
+    const meta=isOfficial(lake)&&lake.enriched
+      ? `${lake.region} · ${lake.country==='US'?'United States':'Canada'} · HydroLAKES ${lake.areaKm2.toFixed(lake.areaKm2<10?1:0)} km² · ${lake.depthM>0?`${lake.depthM.toFixed(1)} m avg depth`:'depth unavailable'}`
+      : isRegional(lake)
+        ? `${lake.region} · ${lake.country==='US'?'United States':'Canada'} · official lake name · regional model`
+        : `${lake.region} · ${lake.country==='US'?'United States':'Canada'} · ${lake.depth} basin · ${lake.area} lake`;
     $('lakeName').textContent=lake.name; $('lakeMeta').textContent=meta;
     $('prob').textContent=`${p}%`; $('probBar').style.width=`${p}%`; $('statusChip').textContent=st[0]; $('statusChip').style.color=st[1];
     $('window').textContent=`Most likely window: ${shortDate(fromDoy(target.getFullYear(),m.winLo))}–${shortDate(fromDoy(target.getFullYear(),m.winHi))}`;
@@ -299,15 +373,15 @@
     if(!lake)return; rememberLake(lake); ensureMarker(lake); state.lake=lake;
     markers.forEach((m,id)=>{const obj=allKnownLakes().find(x=>x.id===id);m.setIcon(markerIcon(id===lake.id,obj?isRegional(obj):false));});
     if(!state.targetTouched)$('targetDate').value=fmtDate(defaultTarget(lake));
-    if(fly)map.flyTo([lake.lat,lake.lng], isRegional(lake)?8:(lake.area==='huge'?6:7),{duration:.65});
-    $('search').value=''; $('results').classList.remove('show'); renderModel(); refreshWeather();
+    if(fly)map.flyTo([lake.lat,lake.lng], isOfficial(lake)?8:(lake.area==='huge'?6:7),{duration:.65});
+    $('search').value=''; $('results').classList.remove('show'); renderModel(); refreshWeather(); enrichLake(lake);
   }
 
   let searchTimer=null;
   function resultMarkup(local,remote,errors=[]){
     const rows=[];
     if(local.length){rows.push('<div class="result-head">Calibrated benchmark lakes</div>');local.forEach(l=>rows.push(`<div class="result" data-id="${escapeHtml(l.id)}"><b>${escapeHtml(l.name)}</b><span>${escapeHtml(l.region)} · calibrated beta lake</span></div>`));}
-    if(remote.length){rows.push('<div class="result-head">Official lake registries</div>');remote.forEach(l=>rows.push(`<div class="result" data-id="${escapeHtml(l.id)}"><b>${escapeHtml(l.name)}</b><span>${escapeHtml(l.region)} · ${escapeHtml(l.source)} · regional estimate</span></div>`));}
+    if(remote.length){rows.push('<div class="result-head">Official lake registries</div>');remote.forEach(l=>rows.push(`<div class="result" data-id="${escapeHtml(l.id)}"><b>${escapeHtml(l.name)}</b><span>${escapeHtml(l.region)} · ${escapeHtml(l.source)} · morphology auto-match</span></div>`));}
     if(!local.length&&!remote.length)rows.push(`<div class="result"><span>${errors.length?'Official registry lookup unavailable.':'No matching official lake found.'}</span></div>`);
     return rows.join('');
   }
@@ -340,7 +414,7 @@
   $('imageryDate').addEventListener('change',updateImagery);
   $('sensor').addEventListener('change',e=>{state.sensor=e.target.value;updateImagery();});
   $('ndsiBtn').addEventListener('click',()=>{state.ndsi=!state.ndsi;$('ndsiBtn').classList.toggle('active',state.ndsi);updateImagery();});
-  $('fitBtn').addEventListener('click',()=>map.flyTo([state.lake.lat,state.lake.lng],isRegional(state.lake)?8:(state.lake.area==='huge'?6:7),{duration:.6}));
+  $('fitBtn').addEventListener('click',()=>map.flyTo([state.lake.lat,state.lake.lng],isOfficial(state.lake)?8:(state.lake.area==='huge'?6:7),{duration:.6}));
 
   $('seasonPill').textContent=activeSeason(today)?'LIVE SPRING MODEL':'OFF-SEASON · SPRING OUTLOOK';
   $('seasonPill').classList.toggle('offseason',!activeSeason(today));
