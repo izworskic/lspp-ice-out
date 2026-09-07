@@ -1,10 +1,12 @@
-# LSPP Ice-Out
-> An ice-out probability tracker for the inland lakes of Lake Superior Provincial Park, Ontario, by Chris Izworski: live MODIS satellite imagery and an empirical ice-out model for each lake.
-
-The model is anchored on real Wawa Lake ice records (2012-2023), extended with Lake Opeongo proxy data, and depth-adjusted per lake class. Key lakes: Mijinemungshing, Gamitagama, Old Woman, Mirimoki, Crescent, Rabbit Blanket, Fenton.
+# Lake Ice-Out Tools by Chris Izworski
+> Satellite-backed lake ice-out monitoring and probability tools for Lake Superior Provincial Park and a North American beta covering benchmark lakes across the northern United States and Canada.
 
 ## Key pages
-- [Ice-out map](https://lspp-ice-out.vercel.app/): NASA GIBS MODIS true-color and NDSI snow/ice overlays with per-lake probabilities
+- [LSPP Ice-Out Monitor](https://lspp-ice-out.vercel.app/): NASA GIBS MODIS/VIIRS true-color and NDSI snow/ice overlays with the original Lake Superior Provincial Park empirical model.
+- [North America Lake Ice-Out Forecast](https://lspp-ice-out.vercel.app/north-america/): lake search, target-date ice-out probability, live U.S./Canadian forecast thaw drivers, NASA imagery replay and nearby-lake comparison.
+
+## Model status
+The LSPP monitor remains the established local implementation. The North American page is a beta architecture intended for spring 2027. Its current climatology is transparent and morphology-based; lake-specific historical calibration and automated satellite open-water classification are planned model layers and are not represented as complete.
 
 ## Author
-Chris Izworski (https://chrisizworski.com), Michigan angler who fishes LSPP at first ice-out each spring. Related: Michigan Trout Report (https://michigantroutreport.com), Michigan Phenology (https://phenology.chrisizworski.com).
+Chris Izworski (https://chrisizworski.com). Related: Michigan Trout Report (https://michigantroutreport.com), Great Lakes Levels (https://greatlakeslevels.org), and Michigan Phenology (https://phenology.chrisizworski.com).
