@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+from pathlib import Path
+p=Path('north-america/app.js')
+s=p.read_text(encoding='utf-8')
+old="""    const targetDoy = doy(targetDate);\n    const scale = Math.max(4.8, spread/2.1);\n    const probability = 1/(1+Math.exp(-(targetDoy-median)/scale));\n    const p10 = Math.round(median - spread);\n    const p90 = Math.round(median + spread);\n    const winLo = Math.round(median - spread*.45);\n    const winHi = Math.round(median + spread*.45);"""
+new="""    const targetDoy = doy(targetDate);\n    const scale = Math.max(4.8, spread/2.1);\n    let probability;\n    if(lake.history?.type==='direct' && Array.isArray(lake.history.doys) && lake.history.doys.length>=5){\n      // Rolling-origin validation favors a lightly smoothed empirical CDF over a generic S-curve.\n      // A positive seasonal shift means breakup is running early, so compare target+shift to history.\n      probability=lake.history.doys.reduce((sum,d)=>sum+1/(1+Math.exp(-(targetDoy+shift-d)/3)),0)/lake.history.doys.length;\n    }else{\n      probability=1/(1+Math.exp(-(targetDoy-median)/scale));\n    }\n    let p10 = Math.round(median - spread), p90 = Math.round(median + spread);\n    let winLo = Math.round(median - spread*.45), winHi = Math.round(median + spread*.45);\n    if(lake.history?.type==='direct'){\n      const h=lake.history;\n      if(Number.isFinite(h.p10Doy))p10=Math.round(h.p10Doy-shift);\n      if(Number.isFinite(h.p90Doy))p90=Math.round(h.p90Doy-shift);\n      if(Number.isFinite(h.p25Doy))winLo=Math.round(h.p25Doy-shift);\n      else if(Number.isFinite(h.p20Doy))winLo=Math.round(h.p20Doy-shift);\n      if(Number.isFinite(h.p75Doy))winHi=Math.round(h.p75Doy-shift);\n      else if(Number.isFinite(h.p80Doy))winHi=Math.round(h.p80Doy-shift);\n    }"""
+if old not in s:raise SystemExit('lakeModel probability block not found')
+s=s.replace(old,new,1)
+old2="""        lake.history={type:'direct',source:'NSIDC G01377',lakecode:h.lakecode,name:h.name,distanceKm:direct.d,records:Number(h.records)||0,firstYear:h.first_year,lastYear:h.last_year,medianDoy:Number(h.median_doy),p10Doy:Number(h.p10_doy),p90Doy:Number(h.p90_doy),trendDaysDecade:h.trend_days_decade};"""
+new2="""        lake.history={type:'direct',source:'NSIDC G01377',lakecode:h.lakecode,name:h.name,distanceKm:direct.d,records:Number(h.records)||0,firstYear:h.first_year,lastYear:h.last_year,medianDoy:Number(h.median_doy),p10Doy:Number(h.p10_doy),p20Doy:Number(h.p20_doy),p25Doy:Number(h.p25_doy),p75Doy:Number(h.p75_doy),p80Doy:Number(h.p80_doy),p90Doy:Number(h.p90_doy),doys:Array.isArray(h.iceout_doys)?h.iceout_doys.map(Number).filter(Number.isFinite):[],trendDaysDecade:h.trend_days_decade};"""
+if old2 not in s:raise SystemExit('direct history attachment block not found')
+s=s.replace(old2,new2,1)
+p.write_text(s,encoding='utf-8')
+print('Injected empirically calibrated direct-history probability runtime')
