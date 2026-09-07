@@ -1,0 +1,240 @@
+{
+  "version": 1,
+  "validation": "Seasonal corrections are whole-lake OOS. Interval widths/offsets are selected on deterministic 80% lakes and checked on untouched 20% lakes.",
+  "direct": {
+    "45": {
+      "cases": 2067,
+      "lakes": 100,
+      "train_n": 1502,
+      "test_n": 565,
+      "symmetric_halfwidth_days": {
+        "p50": 5.1,
+        "p80": 11.59
+      },
+      "asymmetric_offsets_days": {
+        "p25": -4.73,
+        "p75": 5.45,
+        "p10": -12.39,
+        "p90": 11.04
+      },
+      "heldout_coverage": {
+        "symmetric50": 0.4885,
+        "symmetric80": 0.8283,
+        "asymmetric50": 0.4867,
+        "asymmetric80": 0.823
+      },
+      "heldout_median_abs_error": 5.227
+    },
+    "30": {
+      "cases": 2067,
+      "lakes": 100,
+      "train_n": 1502,
+      "test_n": 565,
+      "symmetric_halfwidth_days": {
+        "p50": 4.82,
+        "p80": 9.84
+      },
+      "asymmetric_offsets_days": {
+        "p25": -4.61,
+        "p75": 5.0,
+        "p10": -9.56,
+        "p90": 10.11
+      },
+      "heldout_coverage": {
+        "symmetric50": 0.4903,
+        "symmetric80": 0.8106,
+        "asymmetric50": 0.4903,
+        "asymmetric80": 0.8053
+      },
+      "heldout_median_abs_error": 4.973
+    },
+    "21": {
+      "cases": 2067,
+      "lakes": 100,
+      "train_n": 1502,
+      "test_n": 565,
+      "symmetric_halfwidth_days": {
+        "p50": 4.19,
+        "p80": 8.58
+      },
+      "asymmetric_offsets_days": {
+        "p25": -4.05,
+        "p75": 4.34,
+        "p10": -8.2,
+        "p90": 9.21
+      },
+      "heldout_coverage": {
+        "symmetric50": 0.4973,
+        "symmetric80": 0.7947,
+        "asymmetric50": 0.4973,
+        "asymmetric80": 0.8018
+      },
+      "heldout_median_abs_error": 4.23
+    },
+    "14": {
+      "cases": 2067,
+      "lakes": 100,
+      "train_n": 1502,
+      "test_n": 565,
+      "symmetric_halfwidth_days": {
+        "p50": 3.95,
+        "p80": 7.55
+      },
+      "asymmetric_offsets_days": {
+        "p25": -3.69,
+        "p75": 4.16,
+        "p10": -7.51,
+        "p90": 7.57
+      },
+      "heldout_coverage": {
+        "symmetric50": 0.5009,
+        "symmetric80": 0.8159,
+        "asymmetric50": 0.5009,
+        "asymmetric80": 0.8177
+      },
+      "heldout_median_abs_error": 3.927
+    },
+    "7": {
+      "cases": 2067,
+      "lakes": 100,
+      "train_n": 1502,
+      "test_n": 565,
+      "symmetric_halfwidth_days": {
+        "p50": 3.68,
+        "p80": 7.36
+      },
+      "asymmetric_offsets_days": {
+        "p25": -3.23,
+        "p75": 3.9,
+        "p10": -7.47,
+        "p90": 7.33
+      },
+      "heldout_coverage": {
+        "symmetric50": 0.5204,
+        "symmetric80": 0.8106,
+        "asymmetric50": 0.5097,
+        "asymmetric80": 0.8159
+      },
+      "heldout_median_abs_error": 3.584
+    }
+  },
+  "regional": {
+    "45": {
+      "cases": 2065,
+      "lakes": 99,
+      "train_n": 1500,
+      "test_n": 565,
+      "symmetric_halfwidth_days": {
+        "p50": 6.05,
+        "p80": 13.49
+      },
+      "asymmetric_offsets_days": {
+        "p25": -5.58,
+        "p75": 6.41,
+        "p10": -14.62,
+        "p90": 12.02
+      },
+      "heldout_coverage": {
+        "symmetric50": 0.4885,
+        "symmetric80": 0.8319,
+        "asymmetric50": 0.4867,
+        "asymmetric80": 0.8106
+      },
+      "heldout_median_abs_error": 6.282
+    },
+    "30": {
+      "cases": 2065,
+      "lakes": 99,
+      "train_n": 1500,
+      "test_n": 565,
+      "symmetric_halfwidth_days": {
+        "p50": 5.56,
+        "p80": 11.65
+      },
+      "asymmetric_offsets_days": {
+        "p25": -5.19,
+        "p75": 5.77,
+        "p10": -11.86,
+        "p90": 11.49
+      },
+      "heldout_coverage": {
+        "symmetric50": 0.485,
+        "symmetric80": 0.8124,
+        "asymmetric50": 0.4832,
+        "asymmetric80": 0.8106
+      },
+      "heldout_median_abs_error": 5.851
+    },
+    "21": {
+      "cases": 2065,
+      "lakes": 99,
+      "train_n": 1500,
+      "test_n": 565,
+      "symmetric_halfwidth_days": {
+        "p50": 4.97,
+        "p80": 10.64
+      },
+      "asymmetric_offsets_days": {
+        "p25": -4.52,
+        "p75": 5.37,
+        "p10": -10.78,
+        "p90": 10.36
+      },
+      "heldout_coverage": {
+        "symmetric50": 0.4991,
+        "symmetric80": 0.8195,
+        "asymmetric50": 0.4956,
+        "asymmetric80": 0.8088
+      },
+      "heldout_median_abs_error": 4.997
+    },
+    "14": {
+      "cases": 2065,
+      "lakes": 99,
+      "train_n": 1500,
+      "test_n": 565,
+      "symmetric_halfwidth_days": {
+        "p50": 4.72,
+        "p80": 9.42
+      },
+      "asymmetric_offsets_days": {
+        "p25": -4.05,
+        "p75": 5.23,
+        "p10": -9.76,
+        "p90": 9.02
+      },
+      "heldout_coverage": {
+        "symmetric50": 0.5009,
+        "symmetric80": 0.8106,
+        "asymmetric50": 0.4973,
+        "asymmetric80": 0.8159
+      },
+      "heldout_median_abs_error": 4.659
+    },
+    "7": {
+      "cases": 2065,
+      "lakes": 99,
+      "train_n": 1500,
+      "test_n": 565,
+      "symmetric_halfwidth_days": {
+        "p50": 4.71,
+        "p80": 9.3
+      },
+      "asymmetric_offsets_days": {
+        "p25": -4.08,
+        "p75": 5.08,
+        "p10": -9.9,
+        "p90": 8.96
+      },
+      "heldout_coverage": {
+        "symmetric50": 0.5062,
+        "symmetric80": 0.8142,
+        "asymmetric50": 0.5204,
+        "asymmetric80": 0.8142
+      },
+      "heldout_median_abs_error": 4.616
+    }
+  },
+  "weather_failures": [],
+  "deployment_rule": "Prefer asymmetric 25/75 and 10/90 offsets where held-out coverage is near 50%/80%; otherwise use symmetric half-width. Interpolate bounds between adjacent lead models."
+}
