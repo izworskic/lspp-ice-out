@@ -214,7 +214,7 @@
     if(isRegional(lake)){
       const registry = lake.source || 'official geographic-name registry';
       if(!activeSeason(today)) return `For ${targetText}, ${lake.name} is resolved from ${registry}. Until its HydroLAKES morphology and historical ice-out calibration are attached, the date range is deliberately broad and latitude-driven. Live weather is shown but not applied outside spring breakup season.`;
-      if(m.applyWeather) return `This is a regional low-confidence estimate for an officially named lake. The current 7-day thaw signal shifts the broad climatology by ${Math.abs(m.shift).toFixed(1)} days; lake morphology and historical calibration are still pending.`;
+      if(m.applyWeather) return `This is a regional low-confidence estimate for an officially named lake. The current 7-day thaw signal shifts the broad climatology by ${Math.abs(m.forecastShift).toFixed(1)} days; lake morphology and historical calibration are still pending.`;
       return `This officially named lake is available immediately, but its morphology/history enrichment is still pending. The result stays broad and low-confidence rather than inventing lake-specific precision.`;
     }
     if(isOfficial(lake) && lake.enriched){
@@ -225,8 +225,8 @@
     }
     if(!activeSeason(today)) return `For ${targetText}, this beta uses ${lake.name}'s latitude, elevation, basin depth class and size to establish a transparent regional climatology. Live weather is shown below but is not applied outside the spring breakup season.`;
     if(m.applyWeather){
-      const dir = m.shift>1 ? 'pulling the window earlier' : m.shift<-1 ? 'pushing the window later' : 'close to climatological pace';
-      return `The current 7-day thaw signal is ${dir}. The live forecast contributes ${Math.abs(m.shift).toFixed(1)} days of adjustment, capped so short-range weather cannot overwhelm the lake baseline.`;
+      const dir = m.forecastShift>1 ? 'pulling the window earlier' : m.forecastShift<-1 ? 'pushing the window later' : 'close to climatological pace';
+      return `The current 7-day thaw signal is ${dir}. The live forecast contributes ${Math.abs(m.forecastShift).toFixed(1)} days of adjustment, capped so short-range weather cannot overwhelm the lake baseline.`;
     }
     return `The lake baseline is active, but fresh operational weather could not be applied. Probability remains climatology-driven until the forecast feed refreshes.`;
   }
@@ -563,7 +563,9 @@
     markers.forEach((m,id)=>{const obj=allKnownLakes().find(x=>x.id===id);m.setIcon(markerIcon(id===lake.id,obj?isRegional(obj):false));});
     if(!state.targetTouched)$('targetDate').value=fmtDate(defaultTarget(lake));
     if(fly)map.flyTo([lake.lat,lake.lng], isOfficial(lake)?8:(lake.area==='huge'?6:7),{duration:.65});
-    $('search').value=''; $('results').classList.remove('show'); renderModel(); refreshWeather(); enrichLake(lake).finally(()=>attachHistory(lake));
+    $('search').value=''; $('results').classList.remove('show'); renderModel(); refreshWeather();
+    if(lake.history?.type==='direct'||lake.history?.type==='regional')refreshSeasonalPhysics(lake);
+    enrichLake(lake).finally(()=>attachHistory(lake));
   }
 
   let searchTimer=null;
