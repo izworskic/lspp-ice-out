@@ -1,0 +1,46 @@
+{
+  "method": "rolling-origin temporal validation; each test year uses only earlier observations from that lake",
+  "source": "NSIDC G01377",
+  "eligible_lakes": 300,
+  "test_cases": 12598,
+  "metrics": {
+    "prior_all_median": {
+      "n": 12598,
+      "mae": 8.112,
+      "median_abs_error": 6.5,
+      "p80_abs_error": 12.5,
+      "p90_abs_error": 17,
+      "bias_days": 1.926
+    },
+    "prior_15yr_median": {
+      "n": 12598,
+      "mae": 8.177,
+      "median_abs_error": 7.0,
+      "p80_abs_error": 13,
+      "p90_abs_error": 17,
+      "bias_days": 1.138
+    },
+    "trend_projection": {
+      "n": 12598,
+      "mae": 8.3,
+      "median_abs_error": 6.763,
+      "p80_abs_error": 12.886,
+      "p90_abs_error": 17.197,
+      "bias_days": 0.691
+    },
+    "blend_recent_trend": {
+      "n": 12598,
+      "mae": 8.141,
+      "median_abs_error": 6.618,
+      "p80_abs_error": 12.604,
+      "p90_abs_error": 16.801,
+      "bias_days": 0.981
+    }
+  },
+  "best_by_mae": "prior_all_median",
+  "notes": [
+    "Trend slope is clipped to +/-0.6 days/year to limit extrapolation.",
+    "Recent median uses preceding 15 calendar years when at least five observations exist.",
+    "Blend = 65% recent median + 35% clipped trend projection."
+  ]
+}

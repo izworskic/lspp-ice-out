@@ -1,0 +1,223 @@
+{
+  "method": "leave-one-lake-out; target lake never contributes to its regional correction",
+  "eligibility": "NSIDC lakes with >=15 usable ice-out records",
+  "baseline": {
+    "n": 297,
+    "mae": 9.12,
+    "median_abs_error": 7,
+    "p80_abs_error": 14,
+    "p90_abs_error": 19.0,
+    "bias_days": 3.79
+  },
+  "regional_residual": {
+    "n": 288,
+    "mae": 5.1,
+    "median_abs_error": 3.5,
+    "p80_abs_error": 8.5,
+    "p90_abs_error": 12,
+    "bias_days": 1.06
+  },
+  "regional_improved_fraction": 0.688,
+  "worst_regional_errors": [
+    {
+      "lake": "SALMON ARM HARBOUR (SHUSWAP LAKE)",
+      "country": "CANADA",
+      "observed": 85.0,
+      "baseline": 130,
+      "regional": 115,
+      "base_error": 45.0,
+      "regional_error": 30.0,
+      "neighbors": 8
+    },
+    {
+      "lake": "OKANAGAN LAKE",
+      "country": "CANADA",
+      "observed": 83.5,
+      "baseline": 128,
+      "regional": 113,
+      "base_error": 44.5,
+      "regional_error": 29.5,
+      "neighbors": 7
+    },
+    {
+      "lake": "KALAMALKA LAKE",
+      "country": "CANADA",
+      "observed": 84,
+      "baseline": 128,
+      "regional": 113,
+      "base_error": 44,
+      "regional_error": 29,
+      "neighbors": 7
+    },
+    {
+      "lake": "PONKAPOAG POND",
+      "country": "UNITED STATES",
+      "observed": 69.0,
+      "baseline": 94,
+      "regional": 95,
+      "base_error": 25.0,
+      "regional_error": 26.0,
+      "neighbors": 16
+    },
+    {
+      "lake": "LAKE MINNEWANKA",
+      "country": "CANADA",
+      "observed": 137.0,
+      "baseline": 132,
+      "regional": 117,
+      "base_error": -5.0,
+      "regional_error": -20.0,
+      "neighbors": 8
+    },
+    {
+      "lake": "LAKE SUPERIOR AT MADELINE ISLAND",
+      "country": "UNITED STATES",
+      "observed": 92,
+      "baseline": 115,
+      "regional": 111,
+      "base_error": 23,
+      "regional_error": 19,
+      "neighbors": 16
+    },
+    {
+      "lake": "HOUGHTONS (HOOSICWHISICK) POND",
+      "country": "UNITED STATES",
+      "observed": 76.0,
+      "baseline": 94,
+      "regional": 94,
+      "base_error": 18.0,
+      "regional_error": 18.0,
+      "neighbors": 16
+    },
+    {
+      "lake": "UNNAMED LAKE NORTH OF STATION",
+      "country": "CANADA",
+      "observed": 186.5,
+      "baseline": 219,
+      "regional": 204,
+      "base_error": 32.5,
+      "regional_error": 17.5,
+      "neighbors": 3
+    },
+    {
+      "lake": "MOHANSIC",
+      "country": "UNITED STATES",
+      "observed": 73.5,
+      "baseline": 92,
+      "regional": 91,
+      "base_error": 18.5,
+      "regional_error": 17.5,
+      "neighbors": 16
+    },
+    {
+      "lake": "WILLIAMS LAKE",
+      "country": "CANADA",
+      "observed": 104.0,
+      "baseline": 136,
+      "regional": 121,
+      "base_error": 32.0,
+      "regional_error": 17.0,
+      "neighbors": 9
+    },
+    {
+      "lake": "BUFFALO HARBOR TO LONG POINT",
+      "country": "UNITED STATES",
+      "observed": 115,
+      "baseline": 102,
+      "regional": 98,
+      "base_error": -13,
+      "regional_error": -17,
+      "neighbors": 16
+    },
+    {
+      "lake": "FRAME LAKE",
+      "country": "CANADA",
+      "observed": 148,
+      "baseline": 179,
+      "regional": 164,
+      "base_error": 31,
+      "regional_error": 16,
+      "neighbors": 6
+    },
+    {
+      "lake": "LAKE SUPERIOR AT BAYFIELD",
+      "country": "UNITED STATES",
+      "observed": 95.0,
+      "baseline": 115,
+      "regional": 111,
+      "base_error": 20.0,
+      "regional_error": 16.0,
+      "neighbors": 16
+    },
+    {
+      "lake": "ENNADAI LAKE",
+      "country": "CANADA",
+      "observed": 184,
+      "baseline": 174,
+      "regional": 169,
+      "base_error": -10,
+      "regional_error": -15,
+      "neighbors": 6
+    },
+    {
+      "lake": "LAKE KATHLYN",
+      "country": "CANADA",
+      "observed": 117.0,
+      "baseline": 147,
+      "regional": 132,
+      "base_error": 30.0,
+      "regional_error": 15.0,
+      "neighbors": 4
+    },
+    {
+      "lake": "LONG LAKE",
+      "country": "CANADA",
+      "observed": 149,
+      "baseline": 179,
+      "regional": 164,
+      "base_error": 30,
+      "regional_error": 15,
+      "neighbors": 6
+    },
+    {
+      "lake": "FARNSWORTH LAKE",
+      "country": "CANADA",
+      "observed": 171.5,
+      "baseline": 164,
+      "regional": 157,
+      "base_error": -7.5,
+      "regional_error": -14.5,
+      "neighbors": 4
+    },
+    {
+      "lake": "LAKE EON",
+      "country": "CANADA",
+      "observed": 161,
+      "baseline": 135,
+      "regional": 147,
+      "base_error": -26,
+      "regional_error": -14,
+      "neighbors": 6
+    },
+    {
+      "lake": "NISUTLIN BAY",
+      "country": "CANADA",
+      "observed": 141.0,
+      "baseline": 170,
+      "regional": 155,
+      "base_error": 29.0,
+      "regional_error": 14.0,
+      "neighbors": 4
+    },
+    {
+      "lake": "UNNAMED LAKE",
+      "country": "CANADA",
+      "observed": 182.0,
+      "baseline": 211,
+      "regional": 196,
+      "base_error": 29.0,
+      "regional_error": 14.0,
+      "neighbors": 4
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+name: Build NSIDC ice-out calibration
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - historical-calibration
+    paths:
+      - scripts/build_nsidc_calibration.py
+      - .github/workflows/build-nsidc-calibration.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build North American calibration set
+        run: python scripts/build_nsidc_calibration.py
+      - name: Commit calibration data
+        run: |
+          git config user.name "ice-out-data-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add north-america/data/ice-history/nsidc-calibration.json
+          if git diff --cached --quiet; then
+            echo "No calibration changes"
+          else
+            git commit -m "Build NSIDC North American ice-out calibration"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
