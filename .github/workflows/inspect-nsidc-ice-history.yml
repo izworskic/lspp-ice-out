@@ -1,0 +1,38 @@
+name: Inspect NSIDC ice history
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - historical-calibration
+    paths:
+      - scripts/inspect_nsidc_ice_history.py
+      - .github/workflows/inspect-nsidc-ice-history.yml
+
+permissions:
+  contents: write
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Download and inspect NSIDC G01377
+        run: python scripts/inspect_nsidc_ice_history.py
+      - name: Commit schema snapshot
+        run: |
+          git config user.name "ice-out-data-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add north-america/data/ice-history/nsidc-schema.json
+          if git diff --cached --quiet; then
+            echo "No schema changes"
+          else
+            git commit -m "Inspect NSIDC G01377 ice history schema"
+            git push origin HEAD:${{ github.ref_name }}
+          fi
