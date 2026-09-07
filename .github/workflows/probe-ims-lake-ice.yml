@@ -1,0 +1,49 @@
+name: Probe IMS lake-ice signal
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - seasonal-physics
+    paths:
+      - scripts/probe_ims_lake_ice.py
+      - .github/workflows/probe-ims-lake-ice.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ims-signal-probe-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install raster dependencies
+        run: pip install numpy==2.1.3 rasterio==1.4.3 pyproj==3.7.0
+      - name: Probe historical IMS ice classes
+        run: python scripts/probe_ims_lake_ice.py
+      - name: Commit probe report safely
+        run: |
+          git config user.name "ice-out-satellite-bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add north-america/data/satellite/ims-signal-probe.json
+          if git diff --cached --quiet; then exit 0; fi
+          cp north-america/data/satellite/ims-signal-probe.json /tmp/ims-signal-probe.json
+          git reset --hard
+          git fetch origin "${GITHUB_REF_NAME}"
+          git checkout -B "${GITHUB_REF_NAME}" "origin/${GITHUB_REF_NAME}"
+          mkdir -p north-america/data/satellite
+          cp /tmp/ims-signal-probe.json north-america/data/satellite/ims-signal-probe.json
+          git add north-america/data/satellite/ims-signal-probe.json
+          if git diff --cached --quiet; then exit 0; fi
+          git commit -m "Update historical IMS lake-ice signal probe"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
