@@ -4,23 +4,24 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Lake Ice-Out Forecast — Northern U.S. & Canada</title>
-<meta name="description" content="Lake-specific ice-out probability for northern U.S. and Canadian lakes using lake climatology, live weather forecasts and NASA satellite imagery." />
+<meta name="description" content="Search official U.S. and Canadian lake names for ice-out probability, live thaw forecasts and NASA satellite imagery." />
 <link rel="canonical" href="https://lspp-ice-out.vercel.app/north-america/" />
 <meta property="og:title" content="Lake Ice-Out Forecast — Northern U.S. & Canada" />
-<meta property="og:description" content="When will your lake open? Lake-specific ice-out probability, thaw drivers and NASA satellite replay." />
+<meta property="og:description" content="When will your lake open? Search official U.S. and Canadian lakes for ice-out probability, thaw drivers and NASA satellite replay." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://lspp-ice-out.vercel.app/north-america/" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://gibs.earthdata.nasa.gov" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
 <link rel="stylesheet" href="styles.css" />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Lake Ice-Out Forecast","applicationCategory":"WeatherApplication","operatingSystem":"Web","description":"Lake-specific ice-out probability and satellite monitoring for northern United States and Canada."}</script>
+<link rel="stylesheet" href="registry.css" />
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Lake Ice-Out Forecast","applicationCategory":"WeatherApplication","operatingSystem":"Web","description":"Official-lake search, ice-out probability and satellite monitoring for northern United States and Canada."}</script>
 </head>
 <body>
 <div class="app">
   <header class="topbar">
     <div class="brand"><div class="brandmark">ICE</div><div><strong>Lake Ice-Out Forecast</strong><small>Northern U.S. + Canada</small></div></div>
-    <div class="searchwrap"><input id="search" autocomplete="off" placeholder="Search a lake, state or province…" aria-label="Search lakes"/><div id="results" class="results"></div></div>
+    <div class="searchwrap"><input id="search" autocomplete="off" placeholder="Search any official U.S. or Canadian lake…" aria-label="Search official lakes"/><div id="results" class="results"></div></div>
     <div class="pill" id="seasonPill">Spring model</div>
   </header>
   <div class="layout">
@@ -32,11 +33,11 @@
         <button class="control" id="ndsiBtn">NDSI snow/ice</button>
         <button class="control" id="fitBtn">Selected lake</button>
       </div>
-      <div class="legend" id="legend">NASA imagery is visual evidence. The beta does not infer open-water percentage from pixels yet; that classification pipeline is the next model layer.</div>
+      <div class="legend" id="legend">NASA imagery is visual evidence. Automatic open-water classification is the next model layer; the beta does not fabricate a pixel-derived percentage.</div>
     </main>
     <aside class="side" aria-live="polite">
       <section class="section">
-        <div class="eyebrow">North American beta</div>
+        <div class="eyebrow">Continental lake search beta</div>
         <h1 class="lake-title" id="lakeName">Lake Vermilion</h1>
         <div class="sub" id="lakeMeta"></div>
         <div class="hero">
@@ -66,7 +67,7 @@
       </section>
       <section class="section">
         <h3>What this model uses</h3>
-        <div class="sources">Lake latitude, elevation, approximate basin/depth class and size establish the current beta climatology. Live NWS forecasts are used for U.S. lakes; ECCC PROGNOS GDPS is queried for Canadian lakes. NASA GIBS supplies MODIS/VIIRS true-color and NDSI imagery. During the active spring season, near-term thaw-degree accumulation shifts the lake’s modeled breakup window. Lake-specific historical calibration and automatic satellite open-water classification are intentionally not represented as complete yet.</div>
+        <div class="sources">The search layer now reaches the federal U.S. GNIS hydrographic registry and Canada's authoritative CGNDB lake names, so the app is no longer limited to a fixed lake list. The original benchmark lakes retain stronger morphology-aware beta treatment. Newly discovered official lakes are immediately usable with NASA imagery and live NWS/ECCC weather, but are deliberately labeled low-confidence regional estimates until HydroLAKES morphometry and lake-specific historical calibration are attached. During active spring breakup, near-term thaw-degree accumulation can shift the forecast window.</div>
       </section>
       <section class="section"><div class="warning"><strong>Not an ice-safety tool.</strong> Ice-out probability does not estimate ice thickness or whether ice can support people, vehicles or equipment.</div></section>
     </aside>
