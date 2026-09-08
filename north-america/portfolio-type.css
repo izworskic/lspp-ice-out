@@ -1,0 +1,71 @@
+:root{
+  --font-body:Georgia,"Times New Roman",serif;
+  --font-ui:Arial,Helvetica,sans-serif;
+}
+
+/* Match the typography system used across Chris Izworski's primary tools:
+   editorial serif for the answer/content, compact sans for operational UI. */
+html,body{
+  font-family:var(--font-body);
+}
+
+/* Primary content and answer typography */
+.identity strong,
+.searchwrap input,
+.result b,
+.lake-heading h1,
+.prob,
+.window,
+.reason,
+.metric b,
+.decision-block p,
+.intel-title h2,
+.driver strong,
+.nearitem b,
+.nearitem .np,
+.method-panel summary,
+.method-body p{
+  font-family:var(--font-body);
+}
+
+.searchwrap input{
+  font-size:16px;
+  font-weight:400;
+}
+
+.lake-heading h1{
+  font-weight:400;
+}
+
+.prob{
+  font-weight:700;
+}
+
+/* Operational labels, map controls, metadata, and compact status UI */
+.brandmark,
+.identity small,
+.search-zone>label,
+.search-icon,
+.result span,
+.result-head,
+.pill,
+.control,
+.legend,
+.eyebrow,
+.lake-meta,
+.status-chip,
+.prob-label,
+.metric span,
+.date-row label,
+.mode-note,
+.planning-hint,
+.intel-title span,
+.intel-title small,
+.driver small,
+.driver em,
+.nearitem small,
+.loading,
+.safety,
+.leaflet-control-attribution{
+  font-family:var(--font-ui);
+}
