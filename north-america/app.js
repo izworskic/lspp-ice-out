@@ -701,7 +701,7 @@
   function resultMarkup(local,remote,errors=[]){
     const rows=[];
     if(local.length){rows.push('<div class="result-head">Calibrated benchmark lakes</div>');local.forEach(l=>rows.push(`<div class="result" data-id="${escapeHtml(l.id)}"><b>${escapeHtml(l.name)}</b><span>${escapeHtml(l.region)} · calibrated beta lake</span></div>`));}
-    if(remote.length){rows.push('<div class="result-head">Official lake registries</div>');remote.forEach(l=>rows.push(`<div class="result" data-id="${escapeHtml(l.id)}"><b>${escapeHtml(l.name)}</b><span>${escapeHtml(l.region)} · ${escapeHtml(l.source)} · morphology auto-match</span></div>`));}
+    if(remote.length){rows.push('<div class="result-head">Official lake database</div>');remote.forEach(l=>{const place=l.county?`${l.county} County · ${l.region}`:l.region;rows.push(`<div class="result" data-id="${escapeHtml(l.id)}"><b>${escapeHtml(l.name)}</b><span>${escapeHtml(place)} · ${escapeHtml(l.source)} · morphology auto-match</span></div>`);});}
     if(!local.length&&!remote.length)rows.push(`<div class="result"><span>${errors.length?'Official registry lookup unavailable.':'No matching official lake found.'}</span></div>`);
     return rows.join('');
   }
