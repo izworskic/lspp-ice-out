@@ -567,7 +567,7 @@
     const p=ft?.properties||{}, co=ft?.geometry?.coordinates||[];
     const lat=Number(co[1]), lng=Number(co[0]); if(!Number.isFinite(lat)||!Number.isFinite(lng))return null;
     const fid=String(p.gaz_id||p.OBJECTID||`${lat},${lng}`);
-    return {id:`gnis-${fid}`,name:p.gaz_name||'Unnamed lake',region:p.state_alpha||p.county_name||'United States',country:'US',lat,lng,depth:'medium',area:'medium',elev:0,registry:'official',source:'USGS GNIS',sourceId:fid,featureClass:p.gaz_featureclass||'Hydrographic feature'};
+    return {id:`gnis-${fid}`,name:p.gaz_name||'Unnamed lake',region:p.state_alpha||p.county_name||'United States',country:'US',lat,lng,depth:'medium',area:'medium',elev:0,registry:'official',source:'USGS GNIS',sourceId:fid,featureClass:p.gaz_featureclass||'Hydrographic feature',county:String(p.county_name||'')};
   }
 
   function caItemToLake(item){
@@ -629,11 +629,12 @@
     const p=currentOpen?100:Math.round(m.probability*100);
     const st=currentOpen?['Open water season','#48d597']:statusFor(m.probability);
     const historyTag=lake.history?.type==='direct'?` · ${lake.history.records} historical ice-out dates`:lake.history?.type==='regional'?` · ${lake.history.stationCount}-lake regional history calibration`:'';
+    const place=lake.county?`${lake.county} County · ${lake.region}`:lake.region;
     const meta=(isOfficial(lake)&&lake.enriched
-      ? `${lake.region} · ${lake.country==='US'?'United States':'Canada'} · HydroLAKES ${lake.areaKm2.toFixed(lake.areaKm2<10?1:0)} km² · ${lake.depthM>0?`${lake.depthM.toFixed(1)} m avg depth`:'depth unavailable'}`
+      ? `${place} · ${lake.country==='US'?'United States':'Canada'} · HydroLAKES ${lake.areaKm2.toFixed(lake.areaKm2<10?1:0)} km² · ${lake.depthM>0?`${lake.depthM.toFixed(1)} m avg depth`:'depth unavailable'}`
       : isRegional(lake)
-        ? `${lake.region} · ${lake.country==='US'?'United States':'Canada'} · official lake name · regional model`
-        : `${lake.region} · ${lake.country==='US'?'United States':'Canada'} · ${lake.depth} basin · ${lake.area} lake`)+historyTag;
+        ? `${place} · ${lake.country==='US'?'United States':'Canada'} · official lake name · regional model`
+        : `${place} · ${lake.country==='US'?'United States':'Canada'} · ${lake.depth} basin · ${lake.area} lake`)+historyTag;
     $('lakeName').textContent=lake.name; $('lakeMeta').textContent=meta;
     $('prob').textContent=`${p}%`; $('probBar').style.width=`${p}%`; $('statusChip').textContent=st[0]; $('statusChip').style.color=st[1];
     $('probLabel').textContent=currentOpen?`${today.getFullYear()} ice-out complete`:'chance of ice-out by target date';
@@ -685,7 +686,7 @@
     }
   }
 
-  function nearMarkup(arr,target){return arr.map(x=>{const m=lakeModel(x.lake,target);return `<div class="nearitem" data-id="${escapeHtml(x.lake.id)}"><div><b>${escapeHtml(x.lake.name)}</b><small>${Math.round(x.d)} km · ${escapeHtml(x.lake.region)}</small></div><div class="np">${Math.round(m.probability*100)}%</div></div>`;}).join('');}
+  function nearMarkup(arr,target){return arr.map(x=>{const m=lakeModel(x.lake,target),place=x.lake.county?`${x.lake.county} County · ${x.lake.region}`:x.lake.region;return `<div class="nearitem" data-id="${escapeHtml(x.lake.id)}"><div><b>${escapeHtml(x.lake.name)}</b><small>${Math.round(x.d)} km · ${escapeHtml(place)}</small></div><div class="np">${Math.round(m.probability*100)}%</div></div>`;}).join('');}
   function bindNearby(){document.querySelectorAll('.nearitem').forEach(el=>el.addEventListener('click',()=>{const l=allKnownLakes().find(x=>x.id===el.dataset.id);if(l)selectLake(l,true);}));}
 
   function selectLake(lake,fly=false){
