@@ -1,105 +1,123 @@
 #!/usr/bin/env python3
-"""Build a static Canadian lake-name index from NRCan's weekly CGNDB national CSV.
+"""Build a static Canadian lake-name index from NRCan CGNDB.
 
-Output records use the same compact schema as the U.S. index:
+Uses the authoritative Canadian Geographical Names feature service and writes
+compact prefix shards with the same schema as the U.S. GNIS lake index:
 [id, name, province_code, province_name, country, lat, lon, feature_class, location]
 """
 from __future__ import annotations
-import csv, io, json, re, unicodedata, urllib.request, zipfile
+import json, re, time, unicodedata, urllib.parse, urllib.request
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
 
-SOURCE = "https://www.download-telecharger.services.geo.ca/pub/nrcan_rncan/vector/geobase_cgn_toponyme/prov_csv_eng/cgn_canada_csv_eng.zip"
+SERVICE = "https://maps-cartes.services.geo.ca/server_serveur/rest/services/NRCan/canadian_geographical_names_en/MapServer/0"
 OUT = Path("north-america/data/lake-index-ca")
 UA = "ChrisIzworski-LakeIceOut/1.0 (+https://chrisizworski.com)"
-GENERIC = {"lake", "lac", "reservoir", "pond", "flowage"}
+GENERIC = {"lake","lac","reservoir","pond","flowage"}
 PROVINCES = {
     "AB":"Alberta","BC":"British Columbia","MB":"Manitoba","NB":"New Brunswick",
     "NL":"Newfoundland and Labrador","NS":"Nova Scotia","NT":"Northwest Territories",
     "NU":"Nunavut","ON":"Ontario","PE":"Prince Edward Island","QC":"Quebec",
     "SK":"Saskatchewan","YT":"Yukon"
 }
-PROVINCE_BY_NAME = {v.lower(): k for k,v in PROVINCES.items()}
-PROVINCE_BY_NAME.update({"québec":"QC","quebec":"QC","newfoundland & labrador":"NL","nwt":"NT"})
-
+PROVINCE_BY_NAME = {v.lower():k for k,v in PROVINCES.items()}
+PROVINCE_BY_NAME.update({"quebec":"QC","québec":"QC","newfoundland & labrador":"NL","nwt":"NT"})
 
 def norm(v):
-    s=unicodedata.normalize("NFD", str(v or ""))
+    s=unicodedata.normalize("NFD",str(v or ""))
     s="".join(c for c in s if unicodedata.category(c)!="Mn")
-    return re.sub(r"[^a-z0-9]+", " ", s.lower()).strip()
+    return re.sub(r"[^a-z0-9]+"," ",s.lower()).strip()
 
 def core(v): return " ".join(t for t in norm(v).split() if t not in GENERIC)
 def shard(v):
-    c=re.sub(r"[^a-z0-9]", "", core(v) or norm(v))
+    c=re.sub(r"[^a-z0-9]","",core(v) or norm(v))
     return (c[:2] if len(c)>=2 else (c+"_")[:2]) or "__"
-def pick(row,*names):
-    d={norm(k):str(v or "").strip() for k,v in row.items()}
-    for n in names:
-        x=d.get(norm(n),"")
-        if x: return x
-    return ""
-def f(v):
-    try: return float(str(v).strip())
-    except: return None
-
-def province_code(value):
-    raw=str(value or "").strip()
-    if raw.upper() in PROVINCES: return raw.upper()
+def province_code(v):
+    raw=str(v or "").strip()
+    if raw.upper() in PROVINCES:return raw.upper()
     return PROVINCE_BY_NAME.get(raw.lower()) or PROVINCE_BY_NAME.get(norm(raw),"")
+def get_json(url, params=None, timeout=120):
+    if params: url += ("&" if "?" in url else "?") + urllib.parse.urlencode(params)
+    req=urllib.request.Request(url,headers={"User-Agent":UA,"Accept":"application/json"})
+    with urllib.request.urlopen(req,timeout=timeout) as r:
+        data=json.loads(r.read().decode("utf-8"))
+    if isinstance(data,dict) and data.get("error"): raise RuntimeError(data["error"])
+    return data
 
-def is_lake(row):
-    concise=pick(row,"Concise Code","ConciseCode","Concise Term","ConciseTerm","Feature Type","FeatureType")
-    generic=pick(row,"Generic Term","GenericTerm","Generic","Feature Class","FeatureClass")
-    c=norm(concise); g=norm(generic)
-    if c.startswith("lake") or c=="lake" or "lake lake" in c: return True
-    if g in {"lake","lac","reservoir","réservoir","reservoirs","lakes"}: return True
-    # CGNDB concise values commonly carry LAKE as the compact code.
-    if str(concise).strip().upper()=="LAKE": return True
-    return False
+def field_map(meta):
+    out={}
+    for f in meta.get("fields",[]):
+        name=f.get("name",""); alias=f.get("alias","")
+        out[norm(name)]=name; out[norm(alias)]=name
+    return out
+
+def find_field(fm,*needles):
+    for needle in needles:
+        n=norm(needle)
+        if n in fm:return fm[n]
+    for k,v in fm.items():
+        if any(norm(x) in k for x in needles):return v
+    return ""
+
+def attr(attrs, field): return attrs.get(field) if field else None
 
 def main():
-    req=urllib.request.Request(SOURCE,headers={"User-Agent":UA})
-    with urllib.request.urlopen(req,timeout=240) as r: blob=r.read()
-    print("Downloaded CGNDB bytes:",len(blob))
-    with zipfile.ZipFile(io.BytesIO(blob)) as z:
-        members=[m for m in z.infolist() if m.filename.lower().endswith(".csv")]
-        if not members: raise RuntimeError("CGNDB ZIP has no CSV")
-        member=max(members,key=lambda m:m.file_size)
-        raw=z.read(member).decode("utf-8-sig",errors="replace")
-    sample=raw[:20000]
-    try: dialect=csv.Sniffer().sniff(sample,delimiters=",;|\t")
-    except csv.Error: dialect=csv.excel
-    reader=csv.DictReader(io.StringIO(raw),dialect=dialect)
-    print("CGNDB member:",member.filename,"bytes:",member.file_size)
-    print("CGNDB fields:",reader.fieldnames)
+    meta=get_json(SERVICE,{"f":"json"})
+    fm=field_map(meta)
+    print("CGNDB service fields:",[(f.get("name"),f.get("alias")) for f in meta.get("fields",[])])
+    name_f=find_field(fm,"geographical name","geoname","name")
+    key_f=find_field(fm,"cgndb key","key","unique id","identifier")
+    province_f=find_field(fm,"province territory","province - territory","province")
+    concise_f=find_field(fm,"concise code","concise term","concise")
+    generic_f=find_field(fm,"generic term","generic")
+    location_f=find_field(fm,"location")
+    oid_f=meta.get("objectIdField") or find_field(fm,"objectid")
+    print("Resolved fields:",dict(name=name_f,key=key_f,province=province_f,concise=concise_f,generic=generic_f,location=location_f,oid=oid_f))
+    if not (name_f and key_f and province_f and oid_f): raise AssertionError("Required CGNDB fields not resolved")
+
+    # Fetch authoritative feature IDs once, then page in deterministic batches.
+    ids=get_json(SERVICE+"/query",{"where":"1=1","returnIdsOnly":"true","f":"json"}).get("objectIds") or []
+    if len(ids)<100000: raise AssertionError(f"CGNDB object id set unexpectedly small: {len(ids)}")
+    print("CGNDB total object ids:",len(ids))
+    batch_size=1000
     rows=[]; concise_counts=Counter(); generic_counts=Counter(); province_counts=Counter()
-    for r in reader:
-        concise=pick(r,"Concise Code","ConciseCode","Concise Term","ConciseTerm","Feature Type","FeatureType")
-        generic=pick(r,"Generic Term","GenericTerm","Generic","Feature Class","FeatureClass")
-        concise_counts[concise]+=1; generic_counts[generic]+=1
-        if not is_lake(r): continue
-        name=pick(r,"Geographical Name","GeographicalName","Geoname","Name","Official Name","OfficialName")
-        key=pick(r,"CGNDB Key","CGNDBKey","Key","Unique ID","UniqueID","Identifier","Id")
-        province_raw=pick(r,"Province - Territory","Province/Territory","Province Territory","Province","Province Name","ProvinceName")
-        pc=province_code(province_raw)
-        lat=f(pick(r,"Latitude","Latitude Decimal","LatitudeDecimal","Lat"))
-        lon=f(pick(r,"Longitude","Longitude Decimal","LongitudeDecimal","Long","Lon"))
-        location=pick(r,"Location","Location Name","LocationName")
-        if not (name and key and pc and lat is not None and lon is not None): continue
-        province_counts[pc]+=1
-        rows.append([f"cgndb-{key}",name,pc,PROVINCES[pc],"CA",round(lat,6),round(lon,6),"Lake",location])
+    for i in range(0,len(ids),batch_size):
+        batch=ids[i:i+batch_size]
+        data=get_json(SERVICE+"/query",{
+            "objectIds":",".join(map(str,batch)),"outFields":"*","returnGeometry":"true",
+            "outSR":"4326","f":"json"
+        },timeout=180)
+        for ft in data.get("features",[]):
+            a=ft.get("attributes") or {}; g=ft.get("geometry") or {}
+            concise=str(attr(a,concise_f) or ""); generic=str(attr(a,generic_f) or "")
+            concise_counts[concise]+=1; generic_counts[generic]+=1
+            c=norm(concise); ge=norm(generic)
+            lake = str(concise).strip().upper()=="LAKE" or c.startswith("lake") or ge in {"lake","lac","reservoir","reservoirs","lakes"}
+            if not lake: continue
+            name=str(attr(a,name_f) or "").strip(); key=str(attr(a,key_f) or "").strip()
+            pc=province_code(attr(a,province_f)); lat=g.get("y"); lon=g.get("x")
+            location=str(attr(a,location_f) or "").strip()
+            try: lat=float(lat); lon=float(lon)
+            except: continue
+            if not (name and key and pc): continue
+            province_counts[pc]+=1
+            rows.append([f"cgndb-{key}",name,pc,PROVINCES[pc],"CA",round(lat,6),round(lon,6),"Lake",location])
+        if i and i%25000==0: print("processed",i,"objects; lakes",len(rows))
+        time.sleep(.02)
+
     print("Top concise:",concise_counts.most_common(25))
     print("Top generic:",generic_counts.most_common(25))
     print("Lake counts by province:",sorted(province_counts.items()))
     if len(rows)<25000: raise AssertionError(f"Canadian lake index unexpectedly small: {len(rows)}")
     checks={
-        "lake nipigon on": any(norm(r[1])=="lake nipigon" and r[2]=="ON" for r in rows),
-        "lake winnipeg mb": any(norm(r[1])=="lake winnipeg" and r[2]=="MB" for r in rows),
-        "great bear lake nt": any(norm(r[1])=="great bear lake" and r[2]=="NT" for r in rows),
+        "lake nipigon on":any(norm(r[1])=="lake nipigon" and r[2]=="ON" for r in rows),
+        "lake winnipeg mb":any(norm(r[1])=="lake winnipeg" and r[2]=="MB" for r in rows),
+        "great bear lake nt":any(norm(r[1])=="great bear lake" and r[2]=="NT" for r in rows),
     }
     print("Release checks:",checks)
     if not all(checks.values()): raise AssertionError(f"Canadian release lake missing: {checks}")
+
     OUT.mkdir(parents=True,exist_ok=True)
     for old in OUT.glob("*.json"): old.unlink()
     shards=defaultdict(list)
@@ -108,12 +126,11 @@ def main():
         vals.sort(key=lambda r:(norm(r[1]),r[2],r[0]))
         (OUT/f"{k}.json").write_text(json.dumps(vals,ensure_ascii=False,separators=(",",":")),encoding="utf-8")
     manifest={
-        "version":1,"generated_at":datetime.now(timezone.utc).isoformat(),"records":len(rows),
-        "ca_records":len(rows),"shards":len(shards),"source":SOURCE,
-        "source_name":"Natural Resources Canada Canadian Geographical Names Database (CGNDB)",
+        "version":1,"generated_at":datetime.now(timezone.utc).isoformat(),"records":len(rows),"ca_records":len(rows),
+        "shards":len(shards),"source":SERVICE,"source_name":"Natural Resources Canada Canadian Geographical Names Database (CGNDB)",
         "record_schema":["id","name","region_code","region_name","country","lat","lon","feature_class","location"]
     }
     (OUT/"manifest.json").write_text(json.dumps(manifest,indent=2,ensure_ascii=False),encoding="utf-8")
     print("Canadian lake records:",len(rows),"shards:",len(shards))
 
-if __name__=="__main__": main()
+if __name__=="__main__":main()
