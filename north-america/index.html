@@ -4,44 +4,58 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Lake Ice-Out Forecast — Northern U.S. & Canada</title>
-<meta name="description" content="Search official U.S. and Canadian lake names for ice-out probability, live thaw forecasts, HydroLAKES morphometry and NASA satellite imagery." />
+<meta name="description" content="Search official U.S. and Canadian lakes for current ice-out status, next spring outlook, live thaw drivers, nearby lake comparisons and NASA satellite imagery." />
 <link rel="canonical" href="https://lspp-ice-out.vercel.app/north-america/" />
 <meta property="og:title" content="Lake Ice-Out Forecast — Northern U.S. & Canada" />
-<meta property="og:description" content="When will your lake open? Search official U.S. and Canadian lakes for ice-out probability, thaw drivers and NASA satellite replay." />
+<meta property="og:description" content="Is your lake open yet? Search official lakes for current status, ice-out timing, thaw drivers, nearby comparisons and satellite imagery." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://lspp-ice-out.vercel.app/north-america/" />
 <meta name="twitter:card" content="summary_large_image" />
 <link rel="preconnect" href="https://gibs.earthdata.nasa.gov" />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
-<link rel="stylesheet" href="styles.css" />
+<link rel="stylesheet" href="styles.css?v=persona-v1" />
 <link rel="stylesheet" href="registry.css" />
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Lake Ice-Out Forecast","applicationCategory":"WeatherApplication","operatingSystem":"Web","description":"Official-lake search, HydroLAKES morphometry, ice-out probability and satellite monitoring for northern United States and Canada."}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Lake Ice-Out Forecast","applicationCategory":"WeatherApplication","operatingSystem":"Web","description":"Current lake ice-out status, seasonal outlook, thaw drivers, official lake search and satellite monitoring for the northern United States and Canada."}</script>
 </head>
 <body>
 <div class="app">
   <header class="topbar">
     <div class="brand"><div class="brandmark">ICE</div><div><strong>Lake Ice-Out Forecast</strong><small>Northern U.S. + Canada</small></div></div>
-    <div class="searchwrap"><input id="search" autocomplete="off" placeholder="Search any official U.S. or Canadian lake…" aria-label="Search official lakes"/><div id="results" class="results"></div></div>
     <div class="pill" id="seasonPill">Spring model</div>
   </header>
-  <div class="layout">
-    <main class="mapcol">
-      <div id="map"></div>
-      <div class="maptools">
-        <label class="control">Imagery date <input id="imageryDate" type="date"/></label>
-        <select class="control" id="sensor"><option value="modis">MODIS Terra</option><option value="viirs">VIIRS SNPP</option><option value="aqua">MODIS Aqua</option></select>
-        <button class="control" id="ndsiBtn">NDSI snow/ice</button>
-        <button class="control" id="fitBtn">Selected lake</button>
+
+  <main class="page-shell">
+    <section class="intro-panel" aria-labelledby="pageTitle">
+      <div class="intro-copy">
+        <div class="eyebrow">Lake conditions + spring outlook</div>
+        <h1 id="pageTitle">When will your lake open?</h1>
+        <p>Start with the lake. Get today’s seasonal reality first, then the next ice-out outlook, live thaw signals, nearby lake comparisons and satellite evidence.</p>
       </div>
-      <div class="legend" id="legend">NASA imagery is visual evidence. Automatic open-water classification is the next model layer; the beta does not fabricate a pixel-derived percentage.</div>
-    </main>
-    <aside class="side" aria-live="polite">
-      <section class="section">
-        <div class="eyebrow">Continental lake search beta</div>
-        <h1 class="lake-title" id="lakeName">Lake Vermilion</h1>
-        <div class="sub" id="lakeMeta"></div>
+      <div class="search-card">
+        <label for="search">Find your lake</label>
+        <div class="searchwrap">
+          <span class="search-icon" aria-hidden="true">⌕</span>
+          <input id="search" autocomplete="off" placeholder="Search Black Lake MI, Torch Lake, Lake Nipigon…" aria-label="Search official U.S. and Canadian lakes"/>
+          <div id="results" class="results"></div>
+        </div>
+        <div class="search-help">Search official U.S. and Canadian lake names. Add a state or province when names repeat.</div>
+      </div>
+    </section>
+
+    <section class="answer-grid" aria-live="polite">
+      <article class="answer-card">
+        <div class="answer-head">
+          <div>
+            <div class="eyebrow">Selected lake</div>
+            <h2 class="lake-title" id="lakeName">Lake Vermilion</h2>
+            <div class="sub" id="lakeMeta"></div>
+          </div>
+          <div class="status-chip" id="statusChip">Loading</div>
+        </div>
         <div class="hero">
-          <div class="hero-top"><div><div class="prob" id="prob">--%</div><div class="prob-label" id="probLabel">chance of ice-out by target date</div></div><div class="status-chip" id="statusChip">Loading</div></div>
+          <div class="hero-top">
+            <div><div class="prob" id="prob">--%</div><div class="prob-label" id="probLabel">chance of ice-out by target date</div></div>
+          </div>
           <div class="window" id="window">Most likely window: —</div>
           <div class="reason" id="reason">Loading lake model.</div>
           <div class="grid3">
@@ -50,31 +64,72 @@
             <div class="metric"><span>Confidence</span><b id="confidence">—</b></div>
           </div>
         </div>
-      </section>
-      <section class="section">
-        <h3>Target date</h3>
-        <div class="row"><span>Ice-out by</span><input id="targetDate" type="date" class="control" /></div>
-        <div class="bar"><span id="probBar" style="width:0%"></span></div>
-        <div class="sub" id="modeNote"></div>
-      </section>
-      <section class="section">
-        <h3>Live thaw drivers</h3>
+      </article>
+
+      <article class="meaning-card">
+        <div class="eyebrow">Decision support</div>
+        <h2>What this means</h2>
+        <p class="meaning-summary" id="meaningSummary">Loading the practical interpretation for this lake.</p>
+        <div class="persona-list">
+          <div class="persona-row"><div class="persona-tag">Anglers</div><p id="anglerMeaning">Use the opening window and nearby lake comparisons to time a fishing trip.</p></div>
+          <div class="persona-row"><div class="persona-tag">Trip planners</div><p id="plannerMeaning">Use the probability, range and confidence together before committing to a date.</p></div>
+          <div class="persona-row"><div class="persona-tag">Cabin & lake life</div><p id="ownerMeaning">Today’s seasonal state is separated from next spring’s forecast so the page reflects what is actually happening now.</p></div>
+        </div>
+      </article>
+    </section>
+
+    <section class="planning-card section-card">
+      <div class="section-heading">
+        <div><div class="eyebrow">Plan around a date</div><h2 id="planningTitle">Ice-out outlook</h2></div>
+        <div class="planning-date"><label for="targetDate">Ice-out by</label><input id="targetDate" type="date" class="control" /></div>
+      </div>
+      <div class="bar"><span id="probBar" style="width:0%"></span></div>
+      <div class="sub mode-note" id="modeNote"></div>
+    </section>
+
+    <section class="intel-grid">
+      <article class="section-card">
+        <div class="section-heading compact"><div><div class="eyebrow">Current signal</div><h2>Live thaw drivers</h2></div></div>
         <div id="weatherDrivers"><div class="loading">Loading live forecast…</div></div>
-      </section>
-      <section class="section">
-        <h3>Nearby lake comparison</h3>
+      </article>
+      <article class="section-card">
+        <div class="section-heading compact"><div><div class="eyebrow">Alternatives nearby</div><h2>Nearby lakes to compare</h2></div></div>
+        <p class="section-kicker">Useful when another lake may open earlier, later, or simply gives you a nearby benchmark.</p>
         <div class="near" id="nearby"></div>
-      </section>
-      <section class="section">
-        <h3>What this model uses</h3>
-        <div class="sources">Search now reaches official U.S. GNIS and Canadian CGNDB lake names instead of a fixed list. When a newly selected lake has an unambiguous match in the derived HydroLAKES index, the model automatically adds lake area, estimated mean depth, elevation, shoreline development and volume; ambiguous matches remain broad and low-confidence rather than being guessed. NASA GIBS supplies MODIS/VIIRS true-color and NDSI imagery, while live NWS/ECCC forecasts provide thaw-degree guidance during active spring breakup. Lake-specific historical ice-out calibration and automatic satellite open-water classification remain the next major model layers.</div>
-      </section>
-      <section class="section"><div class="warning"><strong>Not an ice-safety tool.</strong> Ice-out probability does not estimate ice thickness or whether ice can support people, vehicles or equipment.</div></section>
-    </aside>
-  </div>
+      </article>
+    </section>
+
+    <section class="map-section section-card">
+      <div class="section-heading map-heading">
+        <div><div class="eyebrow">Visual evidence</div><h2>Satellite view and lake location</h2><p class="section-kicker">Step through imagery dates to separate persistent lake ice from moving cloud and compare the model with what the lake looks like.</p></div>
+      </div>
+      <div class="mapcol">
+        <div id="map"></div>
+        <div class="maptools">
+          <label class="control">Imagery date <input id="imageryDate" type="date"/></label>
+          <select class="control" id="sensor" aria-label="Satellite sensor"><option value="modis">MODIS Terra</option><option value="viirs">VIIRS SNPP</option><option value="aqua">MODIS Aqua</option></select>
+          <button class="control" id="ndsiBtn">NDSI snow/ice</button>
+          <button class="control" id="fitBtn">Selected lake</button>
+        </div>
+        <div class="legend" id="legend">NASA imagery is visual evidence. Automatic open-water classification is not inferred when the pixels do not support it.</div>
+      </div>
+    </section>
+
+    <details class="method-card section-card">
+      <summary>How this forecast is built</summary>
+      <div class="method-body">
+        <p>Lake names come from official U.S. GNIS and Canadian CGNDB sources. U.S. search is backed by the local static lake index so common names remain searchable and can be separated by county and state.</p>
+        <p>When a lake has an unambiguous HydroLAKES match, the model adds lake area, estimated mean depth, elevation, shoreline development and volume. Historical ice-out observations are used directly where a safe match exists; otherwise nearby long-record lakes provide regional calibration.</p>
+        <p>During active spring breakup, validated seasonal freezing/thaw physics and operational weather signals can adjust the historical baseline. NASA GIBS imagery remains visual evidence rather than a fabricated automatic open-water percentage.</p>
+      </div>
+    </details>
+
+    <section class="safety-card"><strong>Not an ice-safety tool.</strong> Ice-out probability does not estimate ice thickness or whether ice can support people, vehicles or equipment.</section>
+  </main>
 </div>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
 <script src="lakes.js"></script>
 <script src="app.js?v=lake-search-v3"></script>
+<script src="ux.js?v=persona-v1"></script>
 </body>
 </html>
