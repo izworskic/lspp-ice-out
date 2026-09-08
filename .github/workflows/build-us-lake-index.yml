@@ -5,7 +5,7 @@ on:
     branches: [feature/us-lake-database]
     paths:
       - scripts/build_us_lake_index.py
-      - scripts/patch_static_lake_database_runtime.py
+      - scripts/patch_search_result_county.py
       - .github/workflows/build-us-lake-index.yml
   workflow_dispatch:
 
@@ -39,30 +39,33 @@ jobs:
           rows=json.loads((p/'bl.json').read_text())
           hits=[r for r in rows if r[4]=='US' and r[2]=='MI' and r[1].lower()=='black lake']
           assert hits, 'Black Lake MI missing'
-          # Simulate the release-critical parser: query suffix MI becomes a state filter,
-          # while the name portion selects the bl shard.
-          q='black lake mi'; state='MI'; name='black lake'
+          name='black lake'; state='MI'
           key=re.sub('[^a-z0-9]','',name.replace('lake','').strip())[:2]
           assert key=='bl'
           ranked=[r for r in rows if r[2]==state and r[1].lower()==name]
-          assert ranked
+          assert len(ranked)>=1
           print('Black Lake MI:', ranked)
           print('records:',m['us_records'],'shards:',m['shards'])
           PY
-      - name: Apply static database runtime
-        run: python scripts/patch_static_lake_database_runtime.py
-      - name: Validate browser runtime
+      - name: Disambiguate duplicate names by county
+        run: python scripts/patch_search_result_county.py
+      - name: Validate browser database runtime
         run: |
           node --check north-america/app.js
           grep -q "const LAKE_INDEX_BASE = 'data/lake-index'" north-america/app.js
           grep -q "function splitLakeRegionQuery" north-america/app.js
           grep -q "searchStaticUSLakeIndex(q)" north-america/app.js
           grep -q "USGS GNIS lake database" north-america/app.js
-      - name: Commit database and runtime
+          grep -q "const place=l.county?" north-america/app.js
+      - name: Commit validated database runtime
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add north-america/data/lake-index north-america/app.js
-          git commit -m 'Use complete USGS GNIS lake database for search'
+          if git diff --cached --quiet; then
+            echo 'Validated database/runtime unchanged'
+            exit 0
+          fi
+          git commit -m 'Disambiguate lake database results by county'
           git pull --rebase origin feature/us-lake-database
           git push origin HEAD:feature/us-lake-database
