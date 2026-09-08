@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "generated_at": "2026-09-08T00:12:51.058484+00:00",
+  "records": 143058,
+  "us_records": 143058,
+  "ca_records": 0,
+  "shards": 667,
+  "source": "https://prd-tnm.s3.amazonaws.com/StagedProducts/GeographicNames/DomesticNames/DomesticNames_National_Text.zip",
+  "record_schema": [
+    "id",
+    "name",
+    "region_code",
+    "region_name",
+    "country",
+    "lat",
+    "lon",
+    "feature_class",
+    "county"
+  ]
+}
