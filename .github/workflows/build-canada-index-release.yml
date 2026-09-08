@@ -16,7 +16,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
-      - name: Build authoritative Canadian lake index from NRCan feature service
+      - name: Build authoritative Canadian lake index from weekly CGNDB CSV
         run: python scripts/build_canada_lake_index.py
       - name: Release gates
         run: |
