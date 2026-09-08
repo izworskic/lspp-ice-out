@@ -16,94 +16,23 @@
 <link rel="stylesheet" href="styles.css?v=workspace-v1" />
 <link rel="stylesheet" href="registry.css" />
 <link rel="stylesheet" href="portfolio-type.css?v=portfolio-type-v1" />
+<script>if(location.hostname==='lspp-ice-out.vercel.app'){location.replace('https://chrisizworski.com/national-tools/ice-out/'+location.search+location.hash);}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Lake Ice-Out Forecast","applicationCategory":"WeatherApplication","operatingSystem":"Web","description":"Ice-out status, seasonal outlook, official lake search and satellite monitoring for northern United States and Canada."}</script>
 </head>
 <body>
 <div class="app">
   <header class="toolbar">
-    <div class="identity">
-      <div class="brandmark">ICE</div>
-      <div><strong>Lake Ice-Out Forecast</strong><small>Northern U.S. + Canada</small></div>
-    </div>
-    <div class="search-zone">
-      <label for="search">Find a lake</label>
-      <div class="searchwrap">
-        <span class="search-icon" aria-hidden="true">⌕</span>
-        <input id="search" autocomplete="off" placeholder="Black Lake MI · Lake Nipigon ON · Lake Winnipeg MB" aria-label="Search northern U.S. and Canadian lakes" />
-        <div id="results" class="results"></div>
-      </div>
-    </div>
+    <div class="identity"><div class="brandmark">ICE</div><div><strong>Lake Ice-Out Forecast</strong><small>Northern U.S. + Canada</small></div></div>
+    <div class="search-zone"><label for="search">Find a lake</label><div class="searchwrap"><span class="search-icon" aria-hidden="true">⌕</span><input id="search" autocomplete="off" placeholder="Black Lake MI · Lake Nipigon ON · Lake Winnipeg MB" aria-label="Search northern U.S. and Canadian lakes" /><div id="results" class="results"></div></div></div>
     <div class="pill" id="seasonPill">Spring model</div>
   </header>
-
   <main class="workspace-shell" aria-live="polite">
     <section class="workspace">
-      <div class="map-pane">
-        <div id="map"></div>
-        <div class="maptools">
-          <label class="control map-date">Imagery <input id="imageryDate" type="date" /></label>
-          <select class="control" id="sensor" aria-label="Satellite sensor"><option value="modis">MODIS Terra</option><option value="viirs">VIIRS SNPP</option><option value="aqua">MODIS Aqua</option></select>
-          <button class="control" id="ndsiBtn">NDSI ice/snow</button>
-          <button class="control" id="fitBtn">Selected lake</button>
-        </div>
-        <div class="legend" id="legend">NASA imagery is visual evidence. Step through dates to distinguish persistent lake ice from cloud.</div>
-      </div>
-
-      <aside class="lake-panel">
-        <div class="lake-heading">
-          <div>
-            <div class="eyebrow">Selected lake</div>
-            <h1 id="lakeName">Lake Vermilion</h1>
-            <div class="lake-meta" id="lakeMeta"></div>
-          </div>
-          <div class="status-chip" id="statusChip">Loading</div>
-        </div>
-
-        <div class="primary-readout">
-          <div class="prob-row"><div class="prob" id="prob">--%</div><div class="prob-label" id="probLabel">chance of ice-out by target date</div></div>
-          <div class="window" id="window">Most likely window: —</div>
-          <p class="reason" id="reason">Loading lake model.</p>
-          <div class="metrics">
-            <div class="metric"><span>Median</span><b id="median">—</b></div>
-            <div class="metric"><span>80% range</span><b id="range">—</b></div>
-            <div class="metric"><span>Confidence</span><b id="confidence">—</b></div>
-          </div>
-        </div>
-
-        <div class="decision-block">
-          <div class="eyebrow">What matters now</div>
-          <p id="decisionSummary">Loading practical guidance for this lake.</p>
-        </div>
-
-        <div class="date-block">
-          <div class="date-row"><label for="targetDate">Ice-out by</label><input id="targetDate" type="date" class="control" /></div>
-          <div class="bar"><span id="probBar" style="width:0%"></span></div>
-          <div class="mode-note" id="modeNote"></div>
-          <div class="planning-hint" id="planningHint"></div>
-        </div>
-      </aside>
+      <div class="map-pane"><div id="map"></div><div class="maptools"><label class="control map-date">Imagery <input id="imageryDate" type="date" /></label><select class="control" id="sensor" aria-label="Satellite sensor"><option value="modis">MODIS Terra</option><option value="viirs">VIIRS SNPP</option><option value="aqua">MODIS Aqua</option></select><button class="control" id="ndsiBtn">NDSI ice/snow</button><button class="control" id="fitBtn">Selected lake</button></div><div class="legend" id="legend">NASA imagery is visual evidence. Step through dates to distinguish persistent lake ice from cloud.</div></div>
+      <aside class="lake-panel"><div class="lake-heading"><div><div class="eyebrow">Selected lake</div><h1 id="lakeName">Lake Vermilion</h1><div class="lake-meta" id="lakeMeta"></div></div><div class="status-chip" id="statusChip">Loading</div></div><div class="primary-readout"><div class="prob-row"><div class="prob" id="prob">--%</div><div class="prob-label" id="probLabel">chance of ice-out by target date</div></div><div class="window" id="window">Most likely window: —</div><p class="reason" id="reason">Loading lake model.</p><div class="metrics"><div class="metric"><span>Median</span><b id="median">—</b></div><div class="metric"><span>80% range</span><b id="range">—</b></div><div class="metric"><span>Confidence</span><b id="confidence">—</b></div></div></div><div class="decision-block"><div class="eyebrow">What matters now</div><p id="decisionSummary">Loading practical guidance for this lake.</p></div><div class="date-block"><div class="date-row"><label for="targetDate">Ice-out by</label><input id="targetDate" type="date" class="control" /></div><div class="bar"><span id="probBar" style="width:0%"></span></div><div class="mode-note" id="modeNote"></div><div class="planning-hint" id="planningHint"></div></div></aside>
     </section>
-
-    <section class="intel-strip">
-      <article class="intel-panel">
-        <div class="intel-title"><div><span>LIVE</span><h2>Thaw signal</h2></div><small>Operational weather around the selected lake</small></div>
-        <div id="weatherDrivers"><div class="loading">Loading live forecast…</div></div>
-      </article>
-      <article class="intel-panel nearby-panel">
-        <div class="intel-title"><div><span>NEARBY</span><h2>Compare lakes</h2></div><small>Tap a lake to switch the map and outlook</small></div>
-        <div class="near" id="nearby"></div>
-      </article>
-    </section>
-
-    <details class="method-panel">
-      <summary>Data and forecast method</summary>
-      <div class="method-body">
-        <p>Lake names come from authoritative national sources: USGS GNIS in the United States and Natural Resources Canada’s Canadian Geographical Names Database in Canada. Search runs through the same lake-search endpoint for both countries.</p>
-        <p>Where an unambiguous HydroLAKES match exists, the model adds lake area, estimated mean depth, elevation, shoreline development and volume. Historical ice-out observations are attached only when the match is safe; otherwise nearby long-record lakes provide regional calibration.</p>
-        <p>During active spring breakup, validated seasonal freezing/thaw physics and operational NWS or ECCC weather can adjust the historical baseline. NASA GIBS imagery is shown as visual evidence rather than converted into an unsupported open-water percentage.</p>
-      </div>
-    </details>
-
+    <section class="intel-strip"><article class="intel-panel"><div class="intel-title"><div><span>LIVE</span><h2>Thaw signal</h2></div><small>Operational weather around the selected lake</small></div><div id="weatherDrivers"><div class="loading">Loading live forecast…</div></div></article><article class="intel-panel nearby-panel"><div class="intel-title"><div><span>NEARBY</span><h2>Compare lakes</h2></div><small>Tap a lake to switch the map and outlook</small></div><div class="near" id="nearby"></div></article></section>
+    <details class="method-panel"><summary>Data and forecast method</summary><div class="method-body"><p>Lake names come from authoritative national sources: USGS GNIS in the United States and Natural Resources Canada’s Canadian Geographical Names Database in Canada. Search runs through the same lake-search endpoint for both countries.</p><p>Where an unambiguous HydroLAKES match exists, the model adds lake area, estimated mean depth, elevation, shoreline development and volume. Historical ice-out observations are attached only when the match is safe; otherwise nearby long-record lakes provide regional calibration.</p><p>During active spring breakup, validated seasonal freezing/thaw physics and operational NWS or ECCC weather can adjust the historical baseline. NASA GIBS imagery is shown as visual evidence rather than converted into an unsupported open-water percentage.</p></div></details>
     <div class="safety"><strong>Not an ice-safety tool.</strong> Ice-out probability does not estimate ice thickness or whether ice can support people, vehicles or equipment.</div>
   </main>
 </div>
