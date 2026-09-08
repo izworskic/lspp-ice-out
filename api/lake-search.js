@@ -1,7 +1,7 @@
 'use strict';
 
 const US_DATA_COMMIT='32ff7eb7a5d39e368d14294e38f59b9f46dd415d';
-const CA_DATA_COMMIT='cdbef3c78fd3c227d9230db819057662ea146866';
+const CA_DATA_COMMIT='0fbfee6236572b4ede0def5b513c3c06ded04d26';
 const US_INDEX_BASE=`https://cdn.jsdelivr.net/gh/izworskic/lspp-ice-out@${US_DATA_COMMIT}/north-america/data/lake-index`;
 const CA_INDEX_BASE=`https://cdn.jsdelivr.net/gh/izworskic/lspp-ice-out@${CA_DATA_COMMIT}/north-america/data/lake-index-ca`;
 
