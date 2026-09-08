@@ -1,0 +1,54 @@
+name: Build static lake search index
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - feature/static-lake-database
+    paths:
+      - scripts/build_lake_search_index.py
+      - .github/workflows/build-lake-search-index.yml
+
+permissions:
+  contents: write
+
+jobs:
+  build-index:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/static-lake-database
+          fetch-depth: 2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build GNIS + CGNDB lake database
+        run: python scripts/build_lake_search_index.py
+      - name: Validate critical lake recall and index size
+        run: |
+          python - <<'PY'
+          import json, pathlib
+          root=pathlib.Path('north-america/data/lake-index')
+          m=json.loads((root/'manifest.json').read_text())
+          assert m['records'] > 20000, m
+          assert m['us_records'] > 10000, m
+          assert m['ca_records'] > 10000, m
+          bl=json.loads((root/'bl.json').read_text())
+          hits=[r for r in bl if r[4]=='US' and r[2]=='MI' and r[1].lower()=='black lake']
+          assert hits, 'Black Lake MI missing from static database'
+          print('Black Lake MI', hits[:10])
+          print('manifest', {k:m[k] for k in ('records','us_records','ca_records','shards')})
+          PY
+      - name: Commit generated lake database
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add north-america/data/lake-index
+          if git diff --cached --quiet; then
+            echo 'Lake index unchanged'
+            exit 0
+          fi
+          git commit -m 'Build static North America lake search database'
+          git push origin HEAD:feature/static-lake-database
