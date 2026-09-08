@@ -17,6 +17,7 @@ UA = "ChrisIzworski-LakeIceOut/1.0 (+https://chrisizworski.com)"
 GENERIC = {"lake","lac","reservoir","pond","flowage"}
 STATE_NAMES = {
 'AL':'Alabama','AK':'Alaska','AZ':'Arizona','AR':'Arkansas','CA':'California','CO':'Colorado','CT':'Connecticut','DE':'Delaware','FL':'Florida','GA':'Georgia','HI':'Hawaii','ID':'Idaho','IL':'Illinois','IN':'Indiana','IA':'Iowa','KS':'Kansas','KY':'Kentucky','LA':'Louisiana','ME':'Maine','MD':'Maryland','MA':'Massachusetts','MI':'Michigan','MN':'Minnesota','MS':'Mississippi','MO':'Missouri','MT':'Montana','NE':'Nebraska','NV':'Nevada','NH':'New Hampshire','NJ':'New Jersey','NM':'New Mexico','NY':'New York','NC':'North Carolina','ND':'North Dakota','OH':'Ohio','OK':'Oklahoma','OR':'Oregon','PA':'Pennsylvania','RI':'Rhode Island','SC':'South Carolina','SD':'South Dakota','TN':'Tennessee','TX':'Texas','UT':'Utah','VT':'Vermont','VA':'Virginia','WA':'Washington','WV':'West Virginia','WI':'Wisconsin','WY':'Wyoming','DC':'District of Columbia','PR':'Puerto Rico','VI':'U.S. Virgin Islands','GU':'Guam','MP':'Northern Mariana Islands','AS':'American Samoa'}
+STATE_CODES = {v.lower(): k for k, v in STATE_NAMES.items()}
 
 def norm(v):
     s=unicodedata.normalize('NFD',str(v or ''))
@@ -43,8 +44,6 @@ def main():
         members=[x for x in z.infolist() if x.filename.lower().endswith(('.txt','.csv'))]
         if not members: raise RuntimeError('GNIS ZIP has no text data')
         print('GNIS text members:',[(x.filename,x.file_size) for x in members])
-        # Prefer the DomesticNames table explicitly. National packages can include
-        # additional text tables, and the largest member is not guaranteed to be it.
         domestic=[x for x in members if 'domesticnames' in x.filename.lower()]
         member=max(domestic or members,key=lambda x:x.file_size)
         raw=z.read(member).decode('utf-8-sig',errors='replace')
@@ -60,12 +59,13 @@ def main():
         if fc.lower() not in {'lake','reservoir'}: continue
         name=pick(r,'feature_name','feature name','gnis_name','featurename')
         fid=pick(r,'feature_id','gnis_id','gnisid','featureid')
-        state=pick(r,'state_alpha','state alpha','statealpha').upper()
+        state_name=pick(r,'state_name','state name','statename')
+        state=pick(r,'state_alpha','state alpha','statealpha').upper() or STATE_CODES.get(state_name.lower(),'')
         county=pick(r,'county_name','county name','countyname')
         lat=f(pick(r,'prim_lat_dec','primary_lat_dec','primary latitude','primlatdec'))
         lon=f(pick(r,'prim_long_dec','primary_long_dec','primary longitude','primlongdec'))
         if not (name and fid and state and lat is not None and lon is not None): continue
-        rows.append([f'gnis-{fid}',name,state,STATE_NAMES.get(state,state),'US',round(lat,6),round(lon,6),fc,county])
+        rows.append([f'gnis-{fid}',name,state,state_name or STATE_NAMES.get(state,state),'US',round(lat,6),round(lon,6),fc,county])
     print('Top feature classes:',sorted(classes.items(),key=lambda kv:kv[1],reverse=True)[:30])
     if len(rows)<10000: raise AssertionError(f'GNIS lake index unexpectedly small: {len(rows)}')
     black=[r for r in rows if r[2]=='MI' and norm(r[1])=='black lake']
