@@ -1,0 +1,40 @@
+name: Build Canada lake index release
+on:
+  push:
+    branches: [fix/canada-map-workspace]
+    paths: ['.github/workflows/build-canada-index-release.yml']
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/canada-map-workspace
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - name: Build authoritative Canadian lake index
+        run: python scripts/build_canada_lake_index.py
+      - name: Release gates
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('north-america/data/lake-index-ca/manifest.json').read_text())
+          assert m['ca_records'] >= 25000, m
+          def rows(key): return json.loads(Path(f'north-america/data/lake-index-ca/{key}.json').read_text())
+          assert any(r[1].lower()=='lake nipigon' and r[2]=='ON' and r[4]=='CA' for r in rows('ni'))
+          assert any(r[1].lower()=='lake winnipeg' and r[2]=='MB' and r[4]=='CA' for r in rows('wi'))
+          assert any(r[1].lower()=='great bear lake' and r[2]=='NT' and r[4]=='CA' for r in rows('gr'))
+          print(m)
+          PY
+      - name: Commit generated Canadian index
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add north-america/data/lake-index-ca scripts/build_canada_lake_index.py
+          git commit -m 'Build authoritative Canadian lake search index'
+          git push origin HEAD:fix/canada-map-workspace
