@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "generated_at": "2026-09-08T02:08:33.503460+00:00",
+  "records": 136248,
+  "ca_records": 136248,
+  "shards": 408,
+  "source": "https://ftp.maps.canada.ca/pub/nrcan_rncan/vector/geobase_cgn_toponyme/prov_csv_eng/cgn_canada_csv_eng.zip",
+  "source_member": "cgn_canada_csv_eng.csv",
+  "source_name": "Natural Resources Canada Canadian Geographical Names Database (CGNDB)",
+  "record_schema": [
+    "id",
+    "name",
+    "region_code",
+    "region_name",
+    "country",
+    "lat",
+    "lon",
+    "feature_class",
+    "location"
+  ],
+  "release_checks": {
+    "lake nipigon on": true,
+    "lake winnipeg mb": true,
+    "great bear lake nt": true
+  }
+}

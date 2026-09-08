@@ -510,16 +510,15 @@
   function indexedLakeRecord(r){
     if(!Array.isArray(r)||r.length<8)return null;
     const lat=Number(r[5]),lng=Number(r[6]);if(!Number.isFinite(lat)||!Number.isFinite(lng))return null;
-    return {id:String(r[0]),name:String(r[1]||'Unnamed lake'),regionCode:String(r[2]||''),region:String(r[3]||r[2]||'United States'),country:String(r[4]||'US'),lat,lng,depth:'medium',area:'medium',elev:0,registry:'official',source:'USGS GNIS lake database',sourceId:String(r[0]).replace(/^gnis-/,''),featureClass:String(r[7]||'Lake'),county:String(r[8]||'')};
+    const country=String(r[4]||'US'), extra=String(r[8]||'');
+    return {id:String(r[0]),name:String(r[1]||'Unnamed lake'),regionCode:String(r[2]||''),region:String(r[3]||r[2]||(country==='CA'?'Canada':'United States')),country,lat,lng,depth:'medium',area:'medium',elev:0,registry:'official',source:country==='CA'?'NRCan CGNDB lake database':'USGS GNIS lake database',sourceId:String(r[0]).replace(/^(gnis|cgndb)-/,''),featureClass:String(r[7]||'Lake'),county:country==='US'?extra:'',location:country==='CA'?extra:''};
   }
-  async function searchStaticUSLakeIndex(value){
-    const parsed=splitLakeRegionQuery(value);if(!parsed.nameQuery||parsed.nameQuery.length<2)return [];
+  async function searchStaticLakeIndex(value){
     const r=await fetch(`/api/lake-search?q=${encodeURIComponent(value)}`,{cache:'no-store'});
     if(!r.ok)throw new Error(`Lake database ${r.status}`);
     const payload=await r.json();
-    let rows=(Array.isArray(payload?.rows)?payload.rows:[]).map(indexedLakeRecord).filter(Boolean).filter(x=>x.country==='US');
-    if(parsed.regionCode)rows=rows.filter(x=>x.regionCode===parsed.regionCode);
-    return rankLakeResults(parsed.nameQuery,rows,40);
+    const rows=(Array.isArray(payload?.rows)?payload.rows:[]).map(indexedLakeRecord).filter(Boolean);
+    return rankLakeResults(payload?.name_query||value,rows,50);
   }
 
   function searchVariants(value){
@@ -629,7 +628,7 @@
     const p=currentOpen?100:Math.round(m.probability*100);
     const st=currentOpen?['Open water season','#48d597']:statusFor(m.probability);
     const historyTag=lake.history?.type==='direct'?` · ${lake.history.records} historical ice-out dates`:lake.history?.type==='regional'?` · ${lake.history.stationCount}-lake regional history calibration`:'';
-    const place=lake.county?`${lake.county} County · ${lake.region}`:lake.region;
+    const place=lake.country==='US'&&lake.county?`${lake.county} County · ${lake.region}`:lake.country==='CA'&&lake.location?`${lake.location} · ${lake.region}`:lake.region;
     const meta=(isOfficial(lake)&&lake.enriched
       ? `${place} · ${lake.country==='US'?'United States':'Canada'} · HydroLAKES ${lake.areaKm2.toFixed(lake.areaKm2<10?1:0)} km² · ${lake.depthM>0?`${lake.depthM.toFixed(1)} m avg depth`:'depth unavailable'}`
       : isRegional(lake)
@@ -638,7 +637,7 @@
     $('lakeName').textContent=lake.name; $('lakeMeta').textContent=meta;
     $('prob').textContent=`${p}%`; $('probBar').style.width=`${p}%`; $('statusChip').textContent=st[0]; $('statusChip').style.color=st[1];
     $('probLabel').textContent=currentOpen?`${today.getFullYear()} ice-out complete`:'chance of ice-out by target date';
-    const metricLabels=document.querySelectorAll('.grid3 .metric span');
+    const metricLabels=document.querySelectorAll('.metrics .metric span');
     if(metricLabels.length>=3){
       metricLabels[0].textContent=currentOpen?'Next spring median':'Median';
       metricLabels[1].textContent=currentOpen?'Next spring 80% range':'80% range';
@@ -686,7 +685,7 @@
     }
   }
 
-  function nearMarkup(arr,target){return arr.map(x=>{const m=lakeModel(x.lake,target),place=x.lake.county?`${x.lake.county} County · ${x.lake.region}`:x.lake.region;return `<div class="nearitem" data-id="${escapeHtml(x.lake.id)}"><div><b>${escapeHtml(x.lake.name)}</b><small>${Math.round(x.d)} km · ${escapeHtml(place)}</small></div><div class="np">${Math.round(m.probability*100)}%</div></div>`;}).join('');}
+  function nearMarkup(arr,target){return arr.map(x=>{const m=lakeModel(x.lake,target),place=x.lake.country==='US'&&x.lake.county?`${x.lake.county} County · ${x.lake.region}`:x.lake.country==='CA'&&x.lake.location?`${x.lake.location} · ${x.lake.region}`:x.lake.region;return `<div class="nearitem" data-id="${escapeHtml(x.lake.id)}"><div><b>${escapeHtml(x.lake.name)}</b><small>${Math.round(x.d)} km · ${escapeHtml(place)}</small></div><div class="np">${Math.round(m.probability*100)}%</div></div>`;}).join('');}
   function bindNearby(){document.querySelectorAll('.nearitem').forEach(el=>el.addEventListener('click',()=>{const l=allKnownLakes().find(x=>x.id===el.dataset.id);if(l)selectLake(l,true);}));}
 
   function selectLake(lake,fly=false){
@@ -703,25 +702,24 @@
   function resultMarkup(local,remote,errors=[]){
     const rows=[];
     if(local.length){rows.push('<div class="result-head">Calibrated benchmark lakes</div>');local.forEach(l=>rows.push(`<div class="result" data-id="${escapeHtml(l.id)}"><b>${escapeHtml(l.name)}</b><span>${escapeHtml(l.region)} · calibrated beta lake</span></div>`));}
-    if(remote.length){rows.push('<div class="result-head">Official lake database</div>');remote.forEach(l=>{const place=l.county?`${l.county} County · ${l.region}`:l.region;rows.push(`<div class="result" data-id="${escapeHtml(l.id)}"><b>${escapeHtml(l.name)}</b><span>${escapeHtml(place)} · ${escapeHtml(l.source)} · morphology auto-match</span></div>`);});}
+    if(remote.length){rows.push('<div class="result-head">Official North America lake search</div>');remote.forEach(l=>{const place=l.country==='US'&&l.county?`${l.county} County · ${l.region}`:l.country==='CA'&&l.location?`${l.location} · ${l.region}`:l.region;rows.push(`<div class="result" data-id="${escapeHtml(l.id)}"><b>${escapeHtml(l.name)}</b><span>${escapeHtml(place)} · ${l.country==='CA'?'Canada':'United States'} · ${escapeHtml(l.source)}</span></div>`);});}
     if(!local.length&&!remote.length)rows.push(`<div class="result"><span>${errors.length?'Official registry lookup unavailable.':'No matching official lake found.'}</span></div>`);
     return rows.join('');
   }
 
   async function runOfficialSearch(q,local){
-    const seq=++state.searchSeq, parsed=splitLakeRegionQuery(q);
-    $('results').innerHTML=resultMarkup(local,[])+`<div class="result loading-row"><span>Searching lake database + official registries…</span></div>`;
+    const seq=++state.searchSeq;
+    $('results').innerHTML=resultMarkup(local,[])+`<div class="result loading-row"><span>Searching official U.S. + Canadian lakes…</span></div>`;
     $('results').classList.add('show'); bindSearchResults();
-    const tasks=[searchStaticUSLakeIndex(q),searchUSOfficial(q)];
-    if(!parsed.regionCode)tasks.push(searchCAOfficial(q));
-    const settled=await Promise.allSettled(tasks);
-    if(seq!==state.searchSeq||normalizeLakeSearchName($('search').value)!==normalizeLakeSearchName(q))return;
-    const errors=settled.filter(x=>x.status==='rejected').map(x=>x.reason?.message||'lookup error');
-    let rows=settled.flatMap(x=>x.status==='fulfilled'?x.value:[]).map(rememberLake);
-    if(parsed.regionCode)rows=rows.filter(x=>x.country!=='US'||x.regionCode===parsed.regionCode||x.region===parsed.regionCode);
-    const ranked=rankLakeResults(parsed.nameQuery||q,rows,32);
-    const dedup=new Map(); ranked.forEach(l=>{if(!local.some(x=>x.id===l.id))dedup.set(l.id,l);});
-    $('results').innerHTML=resultMarkup(local,[...dedup.values()].slice(0,28),errors); $('results').classList.add('show'); bindSearchResults();
+    try{
+      const remote=(await searchStaticLakeIndex(q)).map(rememberLake);
+      if(seq!==state.searchSeq||normalizeLakeSearchName($('search').value)!==normalizeLakeSearchName(q))return;
+      const dedup=new Map();remote.forEach(l=>{if(!local.some(x=>x.id===l.id))dedup.set(l.id,l);});
+      $('results').innerHTML=resultMarkup(local,[...dedup.values()].slice(0,32),[]);$('results').classList.add('show');bindSearchResults();
+    }catch(e){
+      if(seq!==state.searchSeq)return;
+      $('results').innerHTML=resultMarkup(local,[],[e.message||'lookup error']);$('results').classList.add('show');bindSearchResults();
+    }
   }
 
   function bindSearchResults(){document.querySelectorAll('.result[data-id]').forEach(el=>el.addEventListener('click',()=>{const l=allKnownLakes().find(x=>x.id===el.dataset.id);if(l)selectLake(l,true);}));}
