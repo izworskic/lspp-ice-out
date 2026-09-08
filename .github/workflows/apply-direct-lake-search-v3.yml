@@ -1,0 +1,31 @@
+name: Apply direct lake search v3
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/apply-direct-lake-search-v3.yml']
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/direct-lake-search-v3
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+      - run: python scripts/patch_direct_lake_search.py
+      - run: node --check north-america/app.js
+      - name: Assert direct API path
+        run: |
+          grep -F 'fetch(`/api/lake-search?q=${encodeURIComponent(value)}`' north-america/app.js
+          ! grep -F 'fetch(`${LAKE_INDEX_BASE}/${key}.json`' north-america/app.js
+      - name: Commit patch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add north-america/app.js
+          git commit -m 'Use direct same-origin lake search API'
+          git push origin HEAD:fix/direct-lake-search-v3
