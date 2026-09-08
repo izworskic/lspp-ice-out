@@ -29,6 +29,8 @@ jobs:
           grep -F 'class="map-pane"' north-america/index.html
           grep -F 'background:#fff' north-america/styles.css
           ! grep -F 'persona-row' north-america/index.html
+          grep -F "CA_NAMES='https://geogratis.gc.ca/services/geoname/en/geonames.json'" api/lake-search.js
+          grep -F "ontario:'ON'" api/lake-search.js
       - name: Commit runtime integration
         run: |
           git config user.name 'github-actions[bot]'
