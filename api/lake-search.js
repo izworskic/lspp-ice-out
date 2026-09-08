@@ -40,7 +40,7 @@ async function searchUS(parsed,key){
 function provinceCode(item){const p=item?.province?.description||item?.province?.term||item?.province||'';return CA_CODE_BY_NAME[normalize(p)]||CA_REGIONS[normalize(p)]||'';}
 async function searchCanada(parsed){
   if(parsed.country==='US')return [];
-  const params=new URLSearchParams({q:parsed.nameQuery,category:'O',concise:'LAKE',num:'100','sort-field':'name',expand:'items.status,items.concise,items.generic,items.province',select:'items.status.term,items.concise.term,items.generic.term,items.province.description'});
+  const params=new URLSearchParams({q:parsed.nameQuery,category:'O,P,M',concise:'LAKE',num:'100','sort-field':'name',expand:'items.status,items.concise,items.generic,items.province',select:'items.status.term,items.concise.term,items.generic.term,items.province.description'});
   const r=await fetch(`${CA_NAMES}?${params.toString()}`,{headers:{Accept:'application/json','User-Agent':'ChrisIzworski-LakeIceOut/1.0'}});
   if(!r.ok)throw new Error(`NRCan CGNDB ${r.status}`);
   const j=await r.json(); const items=Array.isArray(j)?j:(j.items||j.results||[]); const rows=[];
