@@ -7,6 +7,10 @@
   const openWaterSeason = (d=today) => d.getMonth() === 7 || d.getMonth() === 8; // Aug-Sep: spring ice-out is complete, before the next freeze-up cycle.
   const sameDay = (a,b) => a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
   const nextSpringYear = now.getMonth() >= 7 ? now.getFullYear()+1 : now.getFullYear();
+  // October starts the next winter's planning cycle, not an observed freeze-up.
+  const winterStartYear = today.getMonth() >= 9 ? today.getFullYear() : today.getFullYear() - 1;
+  const winterLabel = winterStartYear + '–' + String(winterStartYear + 1).slice(-2);
+  const winterPlanning = today.getMonth() >= 9 || today.getMonth() === 0;
   const dynamicLakes = new Map();
   const hydrolakesCache = new Map();
   let hydroManifest = null;
@@ -662,7 +666,9 @@
       $('confidence').textContent=m.confidence; $('reason').textContent=reasonFor(lake,m,target);
       $('modeNote').textContent = activeSeason(today) && target.getFullYear()===today.getFullYear()
         ? (m.seasonalPhysicsApplied?'Live spring mode: validated season-to-date freezing/thaw physics is adjusting the historical baseline.':m.forecastFallbackApplied?'Live spring mode: seasonal physics is unavailable, so the short-range thaw forecast is a bounded fallback.':'Spring mode: waiting for a validated seasonal signal; climatology is carrying the result.')
-        : `Off-season outlook: live weather is visible but not applied to the ${target.getFullYear()} spring estimate.`;
+        : winterPlanning
+          ? `Winter ${winterLabel} planning · Spring ${target.getFullYear()} outlook only. No current lake freeze-up or ice-out observation is verified here; last winter's records are historical calibration, not today's lake state.`
+          : `Off-season outlook: live weather is visible but not applied to the ${target.getFullYear()} spring estimate.`;
     }
     renderNearby(target);
   }
@@ -741,7 +747,7 @@
   $('ndsiBtn').addEventListener('click',()=>{state.ndsi=!state.ndsi;$('ndsiBtn').classList.toggle('active',state.ndsi);updateImagery();});
   $('fitBtn').addEventListener('click',()=>map.flyTo([state.lake.lat,state.lake.lng],isOfficial(state.lake)?8:(state.lake.area==='huge'?6:7),{duration:.6}));
 
-  $('seasonPill').textContent=activeSeason(today)?'LIVE SPRING MODEL':openWaterSeason(today)?'OPEN-WATER SEASON':'OFF-SEASON · SPRING OUTLOOK';
+  $('seasonPill').textContent=activeSeason(today)?'LIVE SPRING MODEL':openWaterSeason(today)?'OPEN-WATER SEASON':winterPlanning?`WINTER ${winterLabel} · NEXT SPRING OUTLOOK`:'OFF-SEASON · SPRING OUTLOOK';
   $('seasonPill').classList.toggle('offseason',!activeSeason(today));
   const imageryDefault = activeSeason(today) ? new Date(today.getTime()-86400000) : new Date(now.getFullYear(),3,25);
   $('imageryDate').value=fmtDate(imageryDefault);
