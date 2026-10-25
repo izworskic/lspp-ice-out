@@ -1,0 +1,20 @@
+name: Lake ice-out November rollover
+on:
+  pull_request:
+    paths:
+      - 'north-america/app.js'
+      - 'tests/ice-out-season-rollover.test.mjs'
+      - '.github/workflows/ice-out-rollover.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --check north-america/app.js
+      - run: node --test tests/ice-out-season-rollover.test.mjs
