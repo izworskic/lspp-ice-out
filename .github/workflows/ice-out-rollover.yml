@@ -3,6 +3,12 @@ on:
   pull_request:
     paths:
       - 'north-america/app.js'
+      - 'north-america/index.html'
+      - 'vercel.json'
+      - 'sitemap.xml'
+      - 'llms.txt'
+      - 'scripts/inject-ga4.mjs'
+      - 'tests/canonical-migration.test.mjs'
       - 'tests/ice-out-season-rollover.test.mjs'
       - '.github/workflows/ice-out-rollover.yml'
   workflow_dispatch:
@@ -17,4 +23,6 @@ jobs:
         with:
           node-version: '22'
       - run: node --check north-america/app.js
-      - run: node --test tests/ice-out-season-rollover.test.mjs
+      - run: node --test tests/*.test.mjs
+      - run: node scripts/inject-ga4.mjs
+      - run: node --test tests/canonical-migration.test.mjs

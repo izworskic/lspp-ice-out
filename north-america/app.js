@@ -26,12 +26,12 @@
   const US_GNIS = 'https://carto.nationalmap.gov/arcgis/rest/services/geonames/MapServer/7/query';
   const CA_NAMES = 'https://geogratis.gc.ca/services/geoname/en/geonames.json';
   const LAKE_INDEX_BASE = 'data/lake-index';
-  const HYDRO_BASE = 'data/hydrolakes';
-  const HISTORY_URL = 'data/ice-history/nsidc-calibration.json';
-  const PHYSICS_MODELS_URL = 'data/seasonal-physics/lead-models.json';
-  const REGIONAL_PHYSICS_MODELS_URL = 'data/seasonal-physics/regional-plus-physics.json';
-  const PHYSICS_PROBABILITY_URL = 'data/seasonal-physics/probability-calibration.json';
-  const PHYSICS_INTERVALS_URL = 'data/seasonal-physics/postphysics-intervals.json';
+  const HYDRO_BASE = 'https://lspp-ice-out.vercel.app/north-america/data/hydrolakes';
+  const HISTORY_URL = 'https://lspp-ice-out.vercel.app/north-america/data/ice-history/nsidc-calibration.json';
+  const PHYSICS_MODELS_URL = 'https://lspp-ice-out.vercel.app/north-america/data/seasonal-physics/lead-models.json';
+  const REGIONAL_PHYSICS_MODELS_URL = 'https://lspp-ice-out.vercel.app/north-america/data/seasonal-physics/regional-plus-physics.json';
+  const PHYSICS_PROBABILITY_URL = 'https://lspp-ice-out.vercel.app/north-america/data/seasonal-physics/probability-calibration.json';
+  const PHYSICS_INTERVALS_URL = 'https://lspp-ice-out.vercel.app/north-america/data/seasonal-physics/postphysics-intervals.json';
 
   function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
   function fmtDate(d){return d.toISOString().slice(0,10);}
