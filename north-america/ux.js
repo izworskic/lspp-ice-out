@@ -13,22 +13,28 @@
     const median=clean($('median')?.textContent),range=clean($('range')?.textContent),confidence=clean($('confidence')?.textContent);
     const mode=clean($('modeNote')?.textContent).toLowerCase();
     const d=target(),dateLabel=d?d.toLocaleDateString('en-US',{month:'short',day:'numeric'}):'the selected date';
-    const open=status.includes('open water')||label.includes('ice-out complete');
+    const open=status.includes('open-water context')||label.includes('seasonal inference');
+    const spring=mode.startsWith('live spring mode:')||mode.startsWith('spring mode:');
+    const planning=mode.includes('winter ')||mode.includes('off-season')||mode.includes('outlook only');
+    const valid=Number.isFinite(prob)&&prob>=0&&prob<=100&&d&&label.includes('chance of ice-out');
     let summary,hint;
     if(open){
-      summary=`${lake} is in open-water season now. This year’s ice-out is complete; the next useful timing question is the coming spring breakup after winter freeze-up.`;
-      hint=`Next spring: median ${median||'—'}${range?` · 80% range ${range}`:''}${confidence?` · ${confidence} confidence`:''}.`;
-    }else if(status.includes('likely frozen')||status.includes('early chance')){
-      summary=`${lake} is still on the frozen side of the breakup window. Ice-out by ${dateLabel} is ${Number.isFinite(prob)?`${prob}%`:'still unlikely'}.`;
-      hint=`Use ${windowText||'the likely window'} and the later side of ${range||'the forecast range'} when an open lake matters more than being first.`;
-    }else if(status.includes('transition')){
-      summary=`${lake} is in the breakup transition. Ice-out by ${dateLabel} is ${Number.isFinite(prob)?`${prob}%`:'uncertain'}, so the live thaw signal and satellite view matter more now.`;
-      hint=`Watch the next weather updates and imagery before treating a single date as firm${range?`; the current 80% range is ${range}`:''}.`;
+      summary=`${lake} is past its expected spring breakup window according to the seasonal model. Its current ice cover has not been verified.`;
+      hint=`Next spring: median ${median||'not available'}${range?` · 80% range ${range}`:''}${confidence?` · ${confidence} confidence`:''}.`;
+    }else if(!valid||(!spring&&!planning)){
+      summary=`The ice-out outlook for ${lake} is not available yet.`;
+      hint='Wait for the model to load. No current lake condition is established.';
     }else{
-      summary=`${lake} is leaning open by ${dateLabel}${Number.isFinite(prob)?` at ${prob}% probability`:''}. The map and imagery can help confirm whether persistent ice remains.`;
-      hint=`For a higher-confidence plan, favor the later side of ${range||windowText||'the forecast window'} rather than the median alone.`;
+      summary=`For ${lake}, the modeled chance of ice-out by ${dateLabel}, ${d.getFullYear()}, is ${prob}%. This is not an observation of current ice cover.`;
+      if(status.includes('likely frozen')||status.includes('early chance')){
+        hint=`For an open-water trip, consider the later side of ${range||windowText||'the forecast range'}.`;
+      }else if(status.includes('transition')){
+        hint=`The selected date is in the modeled breakup window${range?`; the 80% range is ${range}`:''}.`;
+      }else{
+        hint=`For a higher-confidence plan, favor the later side of ${range||windowText||'the forecast window'} rather than the median alone.`;
+      }
+      hint=planning?`Spring planning only. Live weather does not adjust this off-season estimate. ${hint}`:`${hint} Check current local observations and satellite imagery before traveling.`;
     }
-    if(mode.includes('off-season')&&!open)hint=`This is an off-season outlook; live weather is visible but not yet adjusting the spring estimate. ${hint}`;
     if($('decisionSummary'))$('decisionSummary').textContent=summary;
     if($('planningHint'))$('planningHint').textContent=hint;
   }

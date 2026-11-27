@@ -629,8 +629,8 @@
     const m=lakeModel(lake,target);
     const springTarget=defaultTarget(lake);
     const springModel=currentOpen?lakeModel(lake,springTarget):null;
-    const p=currentOpen?100:Math.round(m.probability*100);
-    const st=currentOpen?['Open water season','#48d597']:statusFor(m.probability);
+    const p=currentOpen?null:Math.round(m.probability*100);
+    const st=currentOpen?['Seasonal open-water context','#48d597']:statusFor(m.probability);
     const historyTag=lake.history?.type==='direct'?` · ${lake.history.records} historical ice-out dates`:lake.history?.type==='regional'?` · ${lake.history.stationCount}-lake regional history calibration`:'';
     const place=lake.country==='US'&&lake.county?`${lake.county} County · ${lake.region}`:lake.country==='CA'&&lake.location?`${lake.location} · ${lake.region}`:lake.region;
     const meta=(isOfficial(lake)&&lake.enriched
@@ -639,8 +639,8 @@
         ? `${place} · ${lake.country==='US'?'United States':'Canada'} · official lake name · regional model`
         : `${place} · ${lake.country==='US'?'United States':'Canada'} · ${lake.depth} basin · ${lake.area} lake`)+historyTag;
     $('lakeName').textContent=lake.name; $('lakeMeta').textContent=meta;
-    $('prob').textContent=`${p}%`; $('probBar').style.width=`${p}%`; $('statusChip').textContent=st[0]; $('statusChip').style.color=st[1];
-    $('probLabel').textContent=currentOpen?`${today.getFullYear()} ice-out complete`:'chance of ice-out by target date';
+    $('prob').textContent=p===null?'Not observed':`${p}%`; $('probBar').style.width=p===null?'0%':`${p}%`; $('statusChip').textContent=st[0]; $('statusChip').style.color=st[1];
+    $('probLabel').textContent=currentOpen?'Seasonal inference, not a lake observation':'chance of ice-out by target date';
     const metricLabels=document.querySelectorAll('.metrics .metric span');
     if(metricLabels.length>=3){
       metricLabels[0].textContent=currentOpen?'Next spring median':'Median';
@@ -657,8 +657,8 @@
       $('range').textContent=`${springLo}–${springHi} ${springYear}`;
       $('confidence').textContent=springModel.confidence;
       const todayText=today.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
-      $('reason').textContent=`As of ${todayText}, this spring's ice-out is already complete, so today's ice-out state is 100%. The next seasonal ice-out cycle does not begin until the lake freezes again. The Spring ${springYear} outlook remains available below.`;
-      $('modeNote').textContent=`Today view: ${today.getFullYear()} ice-out is complete. No new seasonal ice-out cycle is active before freeze-up. Change the target date into Spring ${springYear} to see the next ice-out probability.`;
+      $('reason').textContent=`As of ${todayText}, the seasonal model places this lake well past its expected spring breakup window. Current lake ice cover has not been verified. The Spring ${springYear} outlook remains available below.`;
+      $('modeNote').textContent=`Seasonal open-water context only. No current lake observation is verified. Change the target date into Spring ${springYear} to see the next ice-out probability.`;
     }else{
       $('window').textContent=`Most likely window: ${shortDate(fromDoy(target.getFullYear(),m.winLo))}–${shortDate(fromDoy(target.getFullYear(),m.winHi))}`;
       $('median').textContent=shortDate(fromDoy(target.getFullYear(),m.median));

@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'north-america/app.js'
+      - 'north-america/ux.js'
       - 'north-america/index.html'
       - 'vercel.json'
       - 'sitemap.xml'
@@ -23,6 +24,7 @@ jobs:
         with:
           node-version: '22'
       - run: node --check north-america/app.js
+      - run: node --check north-america/ux.js
       - run: node --test tests/*.test.mjs
       - run: node scripts/inject-ga4.mjs
       - run: node --test tests/canonical-migration.test.mjs
