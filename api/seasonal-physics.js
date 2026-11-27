@@ -1,7 +1,6 @@
 'use strict';
 
 const POWER='https://power.larc.nasa.gov/api/temporal/daily/point';
-const BRANDED_ORIGIN='https://chrisizworski.com';
 
 function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
 function median(xs){
@@ -57,8 +56,6 @@ async function fetchPower(lat,lon,start,end){
 }
 
 module.exports=async function handler(req,res){
-  res.setHeader('Access-Control-Allow-Origin',BRANDED_ORIGIN);
-  res.setHeader('Vary','Origin');
   if(req.method!=='GET'){res.setHeader('Allow','GET');return res.status(405).json({error:'GET only'});}
   try{
     const lat=Number(req.query.lat),lon=Number(req.query.lon);

@@ -1,4 +1,32 @@
 {
   "buildCommand": "node scripts/inject-ga4.mjs",
-  "outputDirectory": "public"
+  "outputDirectory": "public",
+  "redirects": [
+    {
+      "source": "/north-america",
+      "destination": "https://chrisizworski.com/national-tools/ice-out/",
+      "permanent": true
+    },
+    {
+      "source": "/north-america/",
+      "destination": "https://chrisizworski.com/national-tools/ice-out/",
+      "permanent": true
+    },
+    {
+      "source": "/north-america/index.html",
+      "destination": "https://chrisizworski.com/national-tools/ice-out/",
+      "permanent": true
+    }
+  ],
+  "headers": [
+    {
+      "source": "/north-america/data/:path*",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "https://chrisizworski.com"
+        }
+      ]
+    }
+  ]
 }

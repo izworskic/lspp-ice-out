@@ -14,7 +14,7 @@ const TAG=`<!-- Google tag (gtag.js) -->
 </script>`;
 // Keep source-only directories out of the static public bundle. Vercel still sees root /api
 // and deploys those files as serverless functions; copying them into public would expose source.
-const SKIP=new Set(['.git','.vercel','node_modules','public','scripts','api','vercel.json']);
+const SKIP=new Set(['.git','.vercel','node_modules','public','scripts','api','tests','.github','vercel.json']);
 await rm(OUTPUT,{recursive:true,force:true});
 await mkdir(OUTPUT,{recursive:true});
 for(const e of await readdir(ROOT,{withFileTypes:true})){if(SKIP.has(e.name))continue;await cp(path.join(ROOT,e.name),path.join(OUTPUT,e.name),{recursive:true});}

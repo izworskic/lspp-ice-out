@@ -3,7 +3,7 @@
 
 ## Key pages
 - [LSPP Ice-Out Monitor](https://lspp-ice-out.vercel.app/): NASA GIBS MODIS/VIIRS true-color and NDSI snow/ice overlays with the original Lake Superior Provincial Park empirical model.
-- [North America Lake Ice-Out Forecast](https://lspp-ice-out.vercel.app/north-america/): lake search, target-date ice-out probability, live U.S./Canadian forecast thaw drivers, NASA imagery replay and nearby-lake comparison.
+- [North America Lake Ice-Out Forecast](https://chrisizworski.com/national-tools/ice-out/): lake search, target-date ice-out probability, live U.S./Canadian forecast thaw drivers, NASA imagery replay and nearby-lake comparison.
 
 ## Model status
 The LSPP monitor remains the established local implementation. The North American page is a beta architecture intended for spring 2027. Its current climatology is transparent and morphology-based; lake-specific historical calibration and automated satellite open-water classification are planned model layers and are not represented as complete.
