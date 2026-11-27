@@ -115,7 +115,7 @@
 </div>
 <div class="main">
   <div id="map">
-    <div class="fo" id="futureOverlay"><h2>📡 <span>Future Date</span></h2><p>No satellite imagery yet.<br>Latest image at 40% opacity.<br>See sidebar for empirical estimates.</p></div>
+    <div class="fo" id="futureOverlay"><h2>📡 <span>Future Date</span></h2><p>No imagery exists for a future date.<br>Previous-day imagery at 40% opacity, if available.<br>See sidebar for the spring planning reference.</p></div>
     <div class="ndleg" id="ndsiLegend">
       <h4>MODIS NDSI Snow Cover</h4>
       <div class="nr"><div class="ns" style="background:#fff"></div>High snow/ice (NDSI 80-100)</div>
@@ -123,24 +123,24 @@
       <div class="nr"><div class="ns" style="background:#0dffff"></div>Low snow/ice (NDSI 1-40)</div>
       <div class="nr"><div class="ns" style="background:#000"></div>Snow-free land</div>
       <div class="nr"><div class="ns" style="background:rgba(200,200,200,.7)"></div>Cloud (no data)</div>
-      <div class="nr"><div class="ns" style="background:transparent;border:1px dashed var(--dim)"></div>Transparent = open water</div>
-      <div style="margin-top:4px;font-size:9px">Shortwave IR separates cloud from ice.<br>Compare: white in true-color may be cloud<br>but transparent here = confirmed open water.</div>
+      <div class="nr"><div class="ns" style="background:transparent;border:1px dashed var(--dim)"></div>Transparent = unclassified or no visible overlay</div>
+      <div style="margin-top:4px;font-size:9px">NDSI helps distinguish snow/ice from clouds, but transparent pixels may be water, masked data or missing imagery. No pixel here independently confirms open water.</div>
     </div>
   </div>
   <div class="sb">
     <div class="ss">
       <div class="st">Reading the Imagery</div>
-      <div class="note"><strong>Cloud vs Ice:</strong> True-color shows both as white. Toggle <strong>NDSI Snow/Ice</strong> (top bar, or press N) to see algorithmic classification. Step +/- 1 day: clouds move, ice doesn't.</div>
+      <div class="note"><strong>Cloud vs Ice:</strong> True-color shows both as white. Toggle <strong>NDSI Snow/Ice</strong> (top bar, or press N) to see algorithmic classification. Compare neighboring dates: clouds and ice can both move. Missing or obscured imagery is inconclusive.</div>
       <div class="ig">
-        <div class="ig-i"><div class="ig-s" style="background:#0a1628"></div>Open water</div>
+        <div class="ig-i"><div class="ig-s" style="background:#0a1628"></div>Possible open water</div>
         <div class="ig-i"><div class="ig-s" style="background:#e8eef5"></div>Ice OR cloud</div>
         <div class="ig-i"><div class="ig-s" style="background:#c4d8c0"></div>Land/forest</div>
       </div>
     </div>
     <div class="ss">
-      <div class="st">Ice-Out Probability <span class="tag">Empirical</span></div>
+      <div class="st">Spring Ice-Out Outlook <span class="tag">Proxy model</span></div>
       <div style="font-size:10px;color:var(--dim);margin-bottom:6px;line-height:1.4">
-        Based on <strong style="color:var(--text)">real ice-out records</strong>: Wawa Lake (1964-2023, wawa-news.com) adjusted by lake depth/size. Pure count: "X of N years were open by this date." No curve fitting.
+        Planning reference only. The baseline combines Wawa Lake dates (including approximate dates) and illustrative proxy samples derived from Lake Opeongo context, adjusted by lake depth/size. These are not independent observations of these park lakes. The sample share is not a calibrated probability or a current ice observation. Check local conditions before travel; this tool does not assess ice safety.
       </div>
       <div style="font-size:11px;color:var(--text);margin-bottom:8px;font-family:'DM Mono',monospace" id="probDateLabel">--</div>
       <div id="probCards"></div>
@@ -208,7 +208,7 @@ const WAWA_ICEOUT_DOYS = [
   143  // extreme late year
 ].sort((a,b)=>a-b);
 
-const N_YEARS = WAWA_ICEOUT_DOYS.length; // 23 years of data
+const N_YEARS = WAWA_ICEOUT_DOYS.length; // mixed reference samples, not a verified independent year series
 
 // Depth/size adjustment (days added to Wawa baseline)
 // Positive = breaks up later than Wawa
@@ -242,10 +242,13 @@ const LAKES = [
   {name:"Old Woman Bay",short:"OW Bay",lat:47.693,lng:-84.86,fish:"Lake Trout (Superior)",note:"Lake Superior coast. Shelf ice only.",color:"#79c0ff",adj:LAKE_ADJUST.superior,depth:"superior"}
 ];
 
-function dayOfYear(d){return Math.floor((d-new Date(d.getFullYear(),0,0))/864e5)}
+// The baseline uses a fixed 365-day calendar. Use calendar dates, not elapsed local time.
+function dayOfYear(d){return Math.round((Date.UTC(2025,d.getMonth(),Math.min(d.getDate(),d.getMonth()===1?28:31))-Date.UTC(2025,0,0))/864e5)}
+function springReference(d){return d instanceof Date&&Number.isFinite(d.getTime())&&d.getMonth()>=1&&d.getMonth()<=6}
+function springShare(d,adj){return springReference(d)?empiricalProb(dayOfYear(d),adj):null}
 function doyLabel(doy){const d=new Date(2025,0,1);d.setDate(doy);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}
 function probColor(p){if(p<.15)return'var(--ice)';if(p<.4)return'var(--accent)';if(p<.65)return'var(--warm)';return'var(--green)'}
-function probWord(p){if(p<.05)return'Frozen solid';if(p<.2)return'Likely frozen';if(p<.4)return'Some years open';if(p<.6)return'Coin flip';if(p<.8)return'Usually open';if(p<.95)return'Almost always open';return'Ice-free (all years)'}
+function probWord(p){if(p===null)return'Outside spring reference season';if(p===0)return'No modeled samples reach ice-out';if(p===1)return'All modeled samples reach ice-out';return'Modeled spring timing only'}
 
 // Compute empirical earliest/median/latest for a lake
 function lakeStats(adj){
@@ -282,7 +285,7 @@ function updateAll(){
   document.getElementById('futureOverlay').classList.toggle('show',future);
   document.getElementById('dateInput').value=ds;
   const badge=document.getElementById('modeBadge');
-  if(future){badge.className='badge future';badge.textContent='ESTIMATE'}else{const ago=Math.floor((new Date()-curDate)/864e5);if(ago<=2){badge.className='badge live';badge.textContent='LIVE'}else{badge.className='badge hist';badge.textContent='ARCHIVE'}}
+  if(future){badge.className='badge future';badge.textContent='ESTIMATE'}else{const ago=Math.floor((new Date()-curDate)/864e5);if(ago<=2){badge.className='badge live';badge.textContent='RECENT'}else{badge.className='badge hist';badge.textContent='ARCHIVE'}}
   document.getElementById('histTag').textContent=`${curLayer.toUpperCase()} ${L_.start}-2025`;
   updateProbs();updateFilmstrip();
 }
@@ -292,22 +295,22 @@ function updateAll(){
 // ══════════════════════════════════════════════════════
 function updateProbs(){
   const doy=dayOfYear(curDate);
-  document.getElementById('probDateLabel').textContent=curDate.toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'})+' (DOY '+doy+')';
+  document.getElementById('probDateLabel').textContent=curDate.toLocaleDateString('en-US',{weekday:'short',month:'long',day:'numeric',year:'numeric'})+(springReference(curDate)?' | Spring timing reference, not observed ice cover':' | Off-season: no current lake state verified');
   let h='';
   LAKES.forEach(lk=>{
-    const p=empiricalProb(doy,lk.adj);
-    const pct=Math.round(p*100);
-    const c=probColor(p);
+    const p=springShare(curDate,lk.adj);
+    const pct=p===null?null:Math.round(p*100);
+    const c=p===null?'var(--dim)':probColor(p);
     const w=probWord(p);
     const stats=lakeStats(lk.adj);
     // Count how many of N years
-    const openYears=Math.round(p*N_YEARS);
+    const reached=p===null?null:Math.round(p*N_YEARS);
     h+=`<div class="pc">
-      <div class="ph"><div class="ln"><div class="d" style="background:${lk.color}"></div>${lk.short}</div><div class="pp" style="color:${c}">${pct}%</div></div>
-      <div class="bt"><div class="bf" style="width:${pct}%;background:${c}"></div></div>
-      <div class="pm"><span>${w}</span><span>${openYears}/${N_YEARS} years open</span></div>
-      <div class="pm" style="margin-top:2px"><span>${lk.depth} / ${lk.fish.split(',')[0]}</span><span>Med: ${doyLabel(stats.median)}</span></div>
-      <div class="pm" style="margin-top:2px"><span>Earliest: ${doyLabel(stats.earliest)}</span><span>Latest: ${doyLabel(stats.latest)}</span></div>
+      <div class="ph"><div class="ln"><div class="d" style="background:${lk.color}"></div>${lk.short}</div><div class="pp" style="color:${c}">${pct===null?"Not assessed":pct+"%"}</div></div>
+      ${pct===null?"":`<div class="bt"><div class="bf" style="width:${pct}%;background:${c}"></div></div>`}
+      <div class="pm"><span>${w}</span><span>${reached===null?"":`${reached}/${N_YEARS} modeled samples`}</span></div>
+      <div class="pm" style="margin-top:2px"><span>${lk.depth} / ${lk.fish.split(',')[0]}</span><span>Model median: ${doyLabel(stats.median)}</span></div>
+      <div class="pm" style="margin-top:2px"><span>Model earliest: ${doyLabel(stats.earliest)}</span><span>Model latest: ${doyLabel(stats.latest)}</span></div>
     </div>`;
   });
   document.getElementById('probCards').innerHTML=h;
@@ -324,28 +327,28 @@ function updateFilmstrip(){
   const tz=7,tr=45,tc=33;
   let h='';
   for(let y=thisYear;y>=L_.start;y--){
-    const dt=new Date(y,m,d);if(dt>today)continue;
+    const dt=new Date(y,m,d);if(dt>today||dt.getMonth()!==m)continue;
     const ds=fmt(dt),url=`https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/${L_.id}/default/${ds}/${L_.matrix}/${tz}/${tr}/${tc}.${L_.ext}`;
     const isActive=(y===curDate.getFullYear());
     const doy=dayOfYear(dt);
     // Empirical prob for Mijin as reference
-    const p=empiricalProb(doy,LAKE_ADJUST.deep);
-    const pct=Math.round(p*100);
+    const p=springShare(dt,LAKE_ADJUST.deep);
+    const pct=p===null?null:Math.round(p*100);
     h+=`<div class="fy${isActive?' active':''}" onclick="loadYear(${y})">
       <div class="yr">${y}</div>
       <div class="ft"><img src="${url}" loading="lazy" onerror="this.parentElement.style.background='var(--border)';this.style.display='none'"/></div>
       <div class="fl">${ds}</div>
-      <div class="feb">${pct}% emp</div>
+      <div class="feb">${pct===null?"Off-season":pct+"% model"}</div>
     </div>`;
   }
   document.getElementById('filmstrip').innerHTML=h;
 }
-function loadYear(y){curDate=new Date(y,curDate.getMonth(),curDate.getDate());updateAll()}
+function loadYear(y){const d=new Date(y,curDate.getMonth(),curDate.getDate());if(d.getMonth()!==curDate.getMonth())return;curDate=d;updateAll()}
 
 function stepDate(n){curDate.setDate(curDate.getDate()+n);updateAll()}
 function setToday(){curDate=new Date();curDate.setDate(curDate.getDate()-1);updateAll()}
 function setLayer(k){curLayer=k;updateAll()}
-document.getElementById('dateInput').addEventListener('change',function(){curDate=new Date(this.value+'T12:00:00');updateAll()});
+document.getElementById('dateInput').addEventListener('change',function(){const d=new Date(this.value+'T12:00:00');if(!Number.isFinite(d.getTime())){this.value=fmt(curDate);return;}curDate=d;updateAll()});
 
 // ══════════════════════════════════════════════════════
 // MARKERS
@@ -359,8 +362,8 @@ LAKES.forEach((lk,i)=>{
     <div style="color:var(--ice);font-size:11px">${lk.fish}</div>
     <div style="margin:4px 0;font-size:11px">${lk.note}</div>
     <div style="color:var(--dim);font-size:10px;font-family:'DM Mono',monospace">
-      Empirical ice-out (${N_YEARS} years):<br>
-      Earliest: ${doyLabel(stats.earliest)} | Median: ${doyLabel(stats.median)} | Latest: ${doyLabel(stats.latest)}<br>
+      Spring proxy model (${N_YEARS} samples, not lake observations):<br>
+      Model earliest: ${doyLabel(stats.earliest)} | Median: ${doyLabel(stats.median)} | Latest: ${doyLabel(stats.latest)}<br>
       ${lk.lat.toFixed(4)}N, ${Math.abs(lk.lng).toFixed(4)}W
     </div></div>`,{className:'lake-popup',maxWidth:260});
   markers.push(mk);

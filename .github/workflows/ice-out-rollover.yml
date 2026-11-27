@@ -2,6 +2,8 @@ name: Lake ice-out November rollover
 on:
   pull_request:
     paths:
+      - 'index.html'
+      - 'tests/local-park-evidence.test.mjs'
       - 'north-america/app.js'
       - 'north-america/ux.js'
       - 'north-america/index.html'
